@@ -1,4 +1,4 @@
-# $Id: configure.ac,v 1.7 2004-08-09 17:52:51 oops Exp $
+# $Id: configure.ac,v 1.8 2004-08-10 09:38:06 oops Exp $
 AC_PREREQ(2.57)
 
 AC_INIT(kwhois, 3.4, http://devel.oops.org)
@@ -125,29 +125,30 @@ if test "x$with_geoip" != "x"; then
   fi
 
   LDFLAGS="$geoiplib $LDFLAGS"
-fi
-AC_CHECK_LIB(GeoIP, GeoIP_new)
 
-# geoip header check
-if test "$ac_cv_lib_GeoIP_GeoIP_new" = "yes" ; then
-  for i in $with_geoip /usr /usr/local
-  do
-    if test -f "$i/include/GeoIP.h"; then
-      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
-      if test -z "$inschk"; then
-        CPPFLAGS="-I$i/include $CPPFLAGS"
+  AC_CHECK_LIB(GeoIP, GeoIP_new)
+
+  # geoip header check
+  if test "$ac_cv_lib_GeoIP_GeoIP_new" = "yes" ; then
+    for i in $with_geoip /usr /usr/local
+    do
+      if test -f "$i/include/GeoIP.h"; then
+        inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
+        if test -z "$inschk"; then
+          CPPFLAGS="-I$i/include $CPPFLAGS"
+        fi
+        geo_header="GeoIP.h"
+        break
+      elif test -f "$i/include/GeoIP/GeoIP.h"; then
+        inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/GeoIP "`
+        if test -z "$inschk"; then
+          CPPFLAGS="-I$i/include/GeoIP $CPPFLAGS"
+        fi
+        geo_header="GeoIP.h"
+        break
       fi
-      geo_header="GeoIP.h"
-      break
-    elif test -f "$i/include/GeoIP/GeoIP.h"; then
-      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/GeoIP "`
-      if test -z "$inschk"; then
-        CPPFLAGS="-I$i/include/GeoIP $CPPFLAGS"
-      fi
-      geo_header="GeoIP.h"
-      break
-    fi
-  done
+    done
+  fi
 fi
 
 # Checks for header files.

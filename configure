@@ -2795,7 +2795,7 @@ if test "x$with_geoip" != "x"; then
   fi
 
   LDFLAGS="$geoiplib $LDFLAGS"
-fi
+
 
 echo "$as_me:$LINENO: checking for GeoIP_new in -lGeoIP" >&5
 echo $ECHO_N "checking for GeoIP_new in -lGeoIP... $ECHO_C" >&6
@@ -2861,26 +2861,27 @@ _ACEOF
 fi
 
 
-# geoip header check
-if test "$ac_cv_lib_GeoIP_GeoIP_new" = "yes" ; then
-  for i in $with_geoip /usr /usr/local
-  do
-    if test -f "$i/include/GeoIP.h"; then
-      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
-      if test -z "$inschk"; then
-        CPPFLAGS="-I$i/include $CPPFLAGS"
+  # geoip header check
+  if test "$ac_cv_lib_GeoIP_GeoIP_new" = "yes" ; then
+    for i in $with_geoip /usr /usr/local
+    do
+      if test -f "$i/include/GeoIP.h"; then
+        inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
+        if test -z "$inschk"; then
+          CPPFLAGS="-I$i/include $CPPFLAGS"
+        fi
+        geo_header="GeoIP.h"
+        break
+      elif test -f "$i/include/GeoIP/GeoIP.h"; then
+        inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/GeoIP "`
+        if test -z "$inschk"; then
+          CPPFLAGS="-I$i/include/GeoIP $CPPFLAGS"
+        fi
+        geo_header="GeoIP.h"
+        break
       fi
-      geo_header="GeoIP.h"
-      break
-    elif test -f "$i/include/GeoIP/GeoIP.h"; then
-      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/GeoIP "`
-      if test -z "$inschk"; then
-        CPPFLAGS="-I$i/include/GeoIP $CPPFLAGS"
-      fi
-      geo_header="GeoIP.h"
-      break
-    fi
-  done
+    done
+  fi
 fi
 
 # Checks for header files.
