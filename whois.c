@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.9 2004-06-03 11:53:23 oops Exp $"
+#ident "$Id: whois.c,v 1.10 2004-06-03 12:10:46 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@
 #endif
 
 #ifdef HAVE_OLIBC_LIBSTRING_H
-#  ifdef HAVE_LIBOLIBC
+#  ifdef HAVE_LIBOGC
 #    include <olibc/libstring.h>
 #  endif
 #endif
@@ -436,7 +436,7 @@ int main(int argc, char **argv) {
 	if ( ! strcmp (server, DEFAULT_SERVER) )
 		crsformat = 1;
 
-#ifdef HAVE_LIBOLIBC
+#ifdef HAVE_LIBOGC
 	/* use racecode ??? */
 	/*
 	if ( ! check_code (tail) ) {

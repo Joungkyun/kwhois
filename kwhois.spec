@@ -1,8 +1,9 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 3.2
-Release: 1,1
+Version: 3.3
+Release: 1
+Epoch: 2
 Copyright: GPL
 Group: Applications/Internet
 Url: http://www.oops.org/
@@ -49,6 +50,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
+* Thu Jun  3 2004 JoungKyun Kim <http://www.oops.org> 2:3.3-1
+- changed query format for miss search domain
+- fixed some compile warning message
+- update 3.3
+
 * Thu Feb 11 2004 JoungKyun Kim <http://www.oops.org> 3.2-1
 - update 3.2
 - fixed org domain to pir.org

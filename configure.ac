@@ -1,4 +1,4 @@
-# $Id: configure.ac,v 1.2 2004-02-11 13:07:36 oops Exp $
+# $Id: configure.ac,v 1.3 2004-06-03 12:10:46 oops Exp $
 AC_INIT(kwhois, 3.2, http://www.oops.org)
 AC_CONFIG_SRCDIR([i18n.h])
 AC_CONFIG_HEADER([config.h])
@@ -55,7 +55,7 @@ fi
 
 # Checks for libraries.
 AC_CHECK_LIB(resolv,res_mkquery)
-AC_CHECK_LIB(olibc, convert_punycode)
+AC_CHECK_LIB(ogc, convert_punycode)
 
 # Checks for header files.
 AC_CHECK_HEADERS(stdio.h string.h ctype.h limits.h sys/types.h sys/socket.h \
