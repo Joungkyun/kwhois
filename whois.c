@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.10 2004-06-03 12:10:46 oops Exp $"
+#ident "$Id: whois.c,v 1.11 2004-06-03 12:42:10 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,6 +88,7 @@
 
 int check_code ( char *tail );
 int crsformat = 0;
+int crschk    = 0;
 
 void
 alarm_handler(int signum)
@@ -200,7 +201,13 @@ process_query(const char *server, const char *port, const char *query,
 	}
 
 	printf("[%s]\n", server);
-	snprintf(buf, sizeof(buf), "%s%s\r\n", crsformat ? "=" : "",query);
+	crschk++;
+
+	if (crschk)
+	  snprintf(buf, sizeof(buf), "%s\r\n", query);
+	else
+	  snprintf(buf, sizeof(buf), "%s%s\r\n", crsformat ? "=" : "",query);
+
 	send(sd, buf, strlen(buf), 0);
 
 	fflush(stdout);
