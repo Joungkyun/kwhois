@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.4 2004-02-04 14:12:23 oops Exp $
+# $Id: Makefile.in,v 1.5 2004-02-04 14:13:14 oops Exp $
 CC		= @CC@
 CFLAGS		= -Wall @CFLAGS@ @DEFS@
 LDFLAGS		= @LDFLAGS@ @LIBS@
@@ -50,7 +50,7 @@ clean:
 
 distclean: clean
 	-$(RM) Makefile libidn/Makefile libracode/Makefile config.h \
-		config.cache config.log config.status
+	       po/Makefile config.cache config.log config.status
 
 install: po-install
 	$(MKDIR) -p $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/{man1,ko/man1}
