@@ -1,62 +1,77 @@
 Changes by JoungKyun Kim <http://www.oops.org>
-$Id: Changes,v 1.6 2004-06-08 08:32:07 oops Exp $
+$Id: Changes,v 1.7 2004-08-09 16:36:01 oops Exp $
+
+* Tue Aug 10 2004
+  by JoungKyun Kim <http://www.oos.org>
 
 * Tue Jun  8 2004
-- start 3.4
-- added crsnic check function
-- changed query parsing
+  by JoungKyun Kim <http://www.oos.org>
+  - start 3.4
+  - added crsnic check function
+  - changed query parsing
 
 * Thu Jun  3 2004
-- update 3.3
-- changed query format for miss search domain
-- fixed some compile warning message
-- added default server per extensions
-- fixed library miss link
+  by JoungKyun Kim <http://www.oos.org>
+  - update 3.3
+  - changed query format for miss search domain
+  - fixed some compile warning message
+  - added default server per extensions
+  - fixed library miss link
 
 * Wed Feb 11 2004
-- update 3.2
-- changed whois org server to pir.org
-- enabled support non case sensitive domain
+  by JoungKyun Kim <http://www.oos.org>
+  - update 3.2
+  - changed whois org server to pir.org
+  - enabled support non case sensitive domain
 
 * Wed Feb  4 2004
-- update 3.1
-- removed idn library and linked olibc
-- changed convert method from race to puny on dot com multibyte domain
-- rewrite configure.ac
-- rewrite Makefile
+  by JoungKyun Kim <http://www.oos.org>
+  - update 3.1
+  - removed idn library and linked olibc
+  - changed convert method from race to puny on dot com multibyte domain
+  - rewrite configure.ac
+  - rewrite Makefile
 
 * Fri Aug 22 2003
-- update 3.0
-- supported to search multibyte domain (current only euc-kr)
+  by JoungKyun Kim <http://www.oos.org>
+  - update 3.0
+  - supported to search multibyte domain (current only euc-kr)
   한글.kr          => convert punycode with -P option with gnu libidn
   한글.com/net/org => automatic convert racecode with libracode
 
 * Wed Mar 23 2003
-- update 2.3
-- fixed segmantfault in case of no tail
+  by JoungKyun Kim <http://www.oos.org>
+  - update 2.3
+  - fixed segmantfault in case of no tail
 
 * Fri Feb  7 2003
-- update 2.2
-- changed org registra server to whois.networksolutions.com
+  by JoungKyun Kim <http://www.oos.org>
+  - update 2.2
+  - changed org registra server to whois.networksolutions.com
 
 * Sun Sep 15 2002
-- update 2.1
-- enable whole local domain in default
-- modified man file
+  by JoungKyun Kim <http://www.oos.org>
+  - update 2.1
+  - enable whole local domain in default
+  - modified man file
 
 * Thu Sep 13 2002
-- update 2.0
-- added traditional query type
-- added tv, biz, info whois server as default server
+  by JoungKyun Kim <http://www.oos.org>
+  - update 2.0
+  - added traditional query type
+  - added tv, biz, info whois server as default server
 
 * Thu Dec 02 1999
-- updated version 1.2
-- fixed Internic whois server to whois.networksolutions.com from rs.internic.net
+  by JoungKyun Kim <http://www.oos.org>
+  - updated version 1.2
+  - fixed Internic whois server to whois.networksolutions.com from rs.internic.net
 
 * Fri Nov 08 1999
-- updated version 1.1
-- fixed search Handle ID
-- added ko locale
+  by JoungKyun Kim <http://www.oos.org>
+  - updated version 1.1
+  - fixed search Handle ID
+  - added ko locale
 
 * Fri Oct 29 1999
-- packaging kwhois-1.0-1 based on whois of redhat
+  by JoungKyun Kim <http://www.oos.org>
+  - packaging kwhois-1.0-1 based on whois of redhat
