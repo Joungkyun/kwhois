@@ -846,7 +846,6 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-msgfmt=PATH      path of msgfmt binary [default]
   --with-olibc=PATH       path of olibc library. [default]
-  --with-geoip=PATH       path of geoip package.
 
 Some influential environment variables:
   CC          C compiler command
@@ -1290,13 +1289,6 @@ fi;
 # Check whether --with-olibc or --without-olibc was given.
 if test "${with_olibc+set}" = set; then
   withval="$with_olibc"
-
-fi;
-
-
-# Check whether --with-geoip or --without-geoip was given.
-if test "${with_geoip+set}" = set; then
-  withval="$with_geoip"
 
 fi;
 
@@ -2771,117 +2763,6 @@ if test "$ac_cv_lib_ogc_convert_punycode" = "yes" ; then
       break
     fi
   done
-fi
-
-# geoip library check
-if test "x$with_geoip" != "x"; then
-  if test -f "$with_geoip" ; then
-    chk_ext=`echo $with_geoip | ${SED} 's!.*\.\(^.\+\)$!\1!g'`
-    if test "$chk_ext" = "so" -a "$chk_ext" = "a"; then
-      with_geoip=`echo $with_geoip | ${SED} 's!/^/*$!!g'`
-      geoiplib="-L$with_geoip"
-
-      geoipchk=`echo $with_geoip | ${GERP} '/lib$'`
-      if test -n "geoipdchk"; then
-        with_geoip=`echo $with_geoip | ${SED} 's!/lib$!!g'`
-      fi
-    fi
-  elif test -d "$with_geoip" ; then
-    if test -f $with_geoip/lib/libGeoIP.a -o -f $with_geoip/lib/libGeoIP.so; then
-      geoiplib="-L$with_geoip/lib"
-          fi
-  else
-    geoiplib=
-  fi
-
-  LDFLAGS="$geoiplib $LDFLAGS"
-
-
-echo "$as_me:$LINENO: checking for GeoIP_new in -lGeoIP" >&5
-echo $ECHO_N "checking for GeoIP_new in -lGeoIP... $ECHO_C" >&6
-if test "${ac_cv_lib_GeoIP_GeoIP_new+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGeoIP  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char GeoIP_new ();
-int
-main ()
-{
-GeoIP_new ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_GeoIP_GeoIP_new=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_GeoIP_GeoIP_new=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_GeoIP_GeoIP_new" >&5
-echo "${ECHO_T}$ac_cv_lib_GeoIP_GeoIP_new" >&6
-if test $ac_cv_lib_GeoIP_GeoIP_new = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGEOIP 1
-_ACEOF
-
-  LIBS="-lGeoIP $LIBS"
-
-fi
-
-
-  # geoip header check
-  if test "$ac_cv_lib_GeoIP_GeoIP_new" = "yes" ; then
-    for i in $with_geoip /usr /usr/local
-    do
-      if test -f "$i/include/GeoIP.h"; then
-        inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
-        if test -z "$inschk"; then
-          CPPFLAGS="-I$i/include $CPPFLAGS"
-        fi
-        geo_header="GeoIP.h"
-        break
-      elif test -f "$i/include/GeoIP/GeoIP.h"; then
-        inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/GeoIP "`
-        if test -z "$inschk"; then
-          CPPFLAGS="-I$i/include/GeoIP $CPPFLAGS"
-        fi
-        geo_header="GeoIP.h"
-        break
-      fi
-    done
-  fi
 fi
 
 # Checks for header files.

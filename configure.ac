@@ -1,4 +1,4 @@
-# $Id: configure.ac,v 1.8 2004-08-10 09:38:06 oops Exp $
+# $Id: configure.ac,v 1.9 2004-08-10 11:17:10 oops Exp $
 AC_PREREQ(2.57)
 
 AC_INIT(kwhois, 3.4, http://devel.oops.org)
@@ -11,9 +11,6 @@ AC_ARG_WITH(rrd,
 
 AC_ARG_WITH(olibc,
 [  --with-olibc=PATH       path of olibc library. [[default]]])
-
-AC_ARG_WITH(geoip,
-[  --with-geoip=PATH       path of geoip package.])
 
 # Checks for programs.
 AC_PROG_CC
@@ -99,56 +96,6 @@ if test "$ac_cv_lib_ogc_convert_punycode" = "yes" ; then
       break
     fi
   done
-fi
-
-# geoip library check
-if test "x$with_geoip" != "x"; then
-  if test -f "$with_geoip" ; then
-    chk_ext=`echo $with_geoip | ${SED} 's!.*\.\([^.]\+\)$!\1!g'`
-    if test "$chk_ext" = "so" -a "$chk_ext" = "a"; then
-      with_geoip=`echo $with_geoip | ${SED} 's!/[^/]*$!!g'`
-      geoiplib="-L$with_geoip"
-      dnl CHECK_RPATH(geoiplib, $with_geoip)
-
-      geoipchk=`echo $with_geoip | ${GERP} '/lib$'`
-      if test -n "geoipdchk"; then
-        with_geoip=`echo $with_geoip | ${SED} 's!/lib$!!g'`
-      fi
-    fi
-  elif test -d "$with_geoip" ; then
-    if test -f $with_geoip/lib/libGeoIP.a -o -f $with_geoip/lib/libGeoIP.so; then
-      geoiplib="-L$with_geoip/lib"
-      dnl CHECK_RPATH(geoiplib, $with_geoip/lib)
-    fi
-  else
-    geoiplib=
-  fi
-
-  LDFLAGS="$geoiplib $LDFLAGS"
-
-  AC_CHECK_LIB(GeoIP, GeoIP_new)
-
-  # geoip header check
-  if test "$ac_cv_lib_GeoIP_GeoIP_new" = "yes" ; then
-    for i in $with_geoip /usr /usr/local
-    do
-      if test -f "$i/include/GeoIP.h"; then
-        inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
-        if test -z "$inschk"; then
-          CPPFLAGS="-I$i/include $CPPFLAGS"
-        fi
-        geo_header="GeoIP.h"
-        break
-      elif test -f "$i/include/GeoIP/GeoIP.h"; then
-        inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/GeoIP "`
-        if test -z "$inschk"; then
-          CPPFLAGS="-I$i/include/GeoIP $CPPFLAGS"
-        fi
-        geo_header="GeoIP.h"
-        break
-      fi
-    done
-  fi
 fi
 
 # Checks for header files.

@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.15 2004-08-09 17:52:51 oops Exp $"
+#ident "$Id: whois.c,v 1.16 2004-08-10 11:17:10 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,12 +80,6 @@
 #  endif
 #endif
 
-#ifdef HAVE_GEOIP_H
-#  ifdef HAVE_LIBGEOIP
-#    include <GeoIP.h>
-#  endif
-#endif
-
 #include "tld_server.h"
 
 #ifndef DEFAULT_PORT
@@ -96,7 +90,9 @@ int check_code ( char *tail );
 int crsCheck ( char *wserv );
 int is_ipaddr (char *query);
 char * get_tail (char *query);
-char * parseQuery ( char *qry, char *wserv );
+char * parseQuery ( char *qry, char *wserv);
+
+char *extension = NULL;
 
 void
 alarm_handler(int signum)
@@ -205,13 +201,12 @@ process_query(const char *server, const char *port, const char *query,
 
 	if (verbose) {
 		fprintf (stderr, _("===> Connect to %s success\n"), server);
-		fprintf (stderr, _("===> Query %s to server\n\n"), query);
+		fprintf (stderr, _("===> Query %s to server\n\n"), parseQuery ((char *) query, (char *) server));
 	}
 
 	printf("[%s]\n", server);
 
 	snprintf (buf, sizeof (buf), "%s", parseQuery ((char *) query, (char *) server));
-
 	send(sd, buf, strlen(buf), 0);
 
 	fflush(stdout);
@@ -281,7 +276,6 @@ int main(int argc, char **argv) {
 	char name[256];
 	int i, recurse = -1, help = 0, parse = 1;
 	int verbose = 0, timeout = -1;
-	char *tail = NULL;
 
 	memset (name, '\0', sizeof(name));
 
@@ -385,10 +379,13 @@ int main(int argc, char **argv) {
 			server++;
 
 			/* get contry code */
-			tail = strdup (get_tail (query));
+			extension = strdup (get_tail (query));
 		} else {
 			/* get contry code */
-			tail = strdup (get_tail (query));
+			extension = strdup (get_tail (query));
+
+			if ( ! strcmp (extension, "IP ADDRESS") )
+				server = LO_SERVER;
 
 			/* Nothing there either.  Use the NICNAMESERVER,
 			 * WHOISSERVER, or DEFAULT_SERVER, in that order. */
@@ -397,21 +394,23 @@ int main(int argc, char **argv) {
 			} else {
 				if((server == NULL) && getenv("WHOISSERVER")) {
 					server = getenv("WHOISSERVER");
-				} else if (!tail) {
+				} else if ( !extension ) {
 					server = DEFAULT_SERVER;
 				} else {
-					if ( strlen(tail) == 2 ) {
+					if ( strlen(extension) == 2 ) {
 						char tmphost[50];
-						sprintf(tmphost, "%c%c.%s", tail[0], tail[1], LO_SERVER);
+						sprintf(tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
 						server = strdup(tmphost);
-					} else if (!strcasecmp(tail, "biz")) {
+					} else if (!strcasecmp(extension, "biz")) {
 						server = BIZ_SERVER;
-					} else if (!strcasecmp(tail, "info")) {
+					} else if (!strcasecmp(extension, "info")) {
 						server = INFO_SERVER;
-					} else if (!strcasecmp(tail, "name")) {
+					} else if (!strcasecmp(extension, "name")) {
 						server = NAME_SERVER;
-					} else if (!strcasecmp(tail, "org")) {
+					} else if (!strcasecmp(extension, "org")) {
 						server = ORG_SERVER;
+					} else if ( ! strcmp (extension, "IP ADDRESS") ) {
+						server = LO_SERVER;
 					} else {
 						server = DEFAULT_SERVER;
 					}
@@ -420,7 +419,7 @@ int main(int argc, char **argv) {
 		}
 	} else {
 		/* get contry code */
-		tail = strdup (get_tail (query));
+		extension = strdup (get_tail (query));
 	}
 
 	/* If the server name includes a colon, snip the name there and
@@ -444,7 +443,7 @@ int main(int argc, char **argv) {
 #ifdef HAVE_LIBOGC
 	/* use racecode ??? */
 	/*
-	if ( ! check_code (tail) ) {
+	if ( ! check_code (extension) ) {
 		strcpy (name, (char *) convert_punycode (query, 0, verbose));
 	} else {
 		strcpy (name, (char *) convert_racecode (query, 0, verbose));
@@ -456,19 +455,18 @@ int main(int argc, char **argv) {
 		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
 		fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, query);
 		fprintf (stderr, _("[1;%dmCONV HOST     :[7;0m %s\n"), COLOR, name);
-		fprintf (stderr, _("[1;%dmTAIL          :[7;0m %s\n"), COLOR, tail);
+		fprintf (stderr, _("[1;%dmTAIL          :[7;0m %s\n"), COLOR, extension);
 		fprintf (stderr, _("[1;%dmSERVER        :[7;0m %s\n"), COLOR, server);
 		fprintf (stderr, _("[1;%dmPORT          :[7;0m %s\n"), COLOR, port);
 		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
 	}
-
-	free (tail);
 
 	/* Hand it off to the query function. */
 	process_query(server, port, name, timeout, recurse, verbose);
 #else
 	process_query(server, port, query, timeout, recurse, verbose);
 #endif
+	free (extension);
 
 	return 0;
 }
@@ -499,7 +497,11 @@ char * parseQuery ( char *qry, char *wserv ) {
 	memset (tmp, 0, 1024);
 
 	strncpy (tmp, qry, ( strlen (qry) > 1023 ) ? 1023 : strlen (qry));
-	sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
+
+	if ( ! strcmp ("jp", extension) ) {
+		sprintf ( query, "%s/e\r\n", tmp);
+	} else
+		sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
 
 	return query;
 }
@@ -519,23 +521,9 @@ int is_ipaddr (char *query) {
 
 char * get_tail (char *query) {
 	char	* gettail = NULL;
-#ifdef HAVE_LIBGEOIP
-	GeoIP	* gi;
-#endif
 
 	if ( is_ipaddr (query) ) {
-#ifdef HAVE_LIBGEOIP
-		gi = GeoIP_new (GEOIP_STANDARD);
-		gettail = GeoIP_country_code_by_addr (gi, query);
-		GeoIP_delete (gi);
-
-		if ( gettail == NULL )
-			return "";
-
-		return gettail;
-#else
-		return "kr";
-#endif
+		return "IP ADDRESS";
 	} else {
 		gettail = rindex(query, '.');
 		if ( gettail == NULL )

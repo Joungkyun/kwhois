@@ -1,7 +1,7 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 /*
  * CVS ID Tag
- * $Id: config.h.in,v 1.9 2004-08-10 09:38:06 oops Exp $
+ * $Id: config.h.in,v 1.10 2004-08-10 11:17:10 oops Exp $
  */
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -40,9 +40,6 @@
 
 /* Define to 1 if you have the <langinfo.h> header file. */
 #undef HAVE_LANGINFO_H
-
-/* Define to 1 if you have the `GeoIP' library (-lGeoIP). */
-#undef HAVE_LIBGEOIP
 
 /* Define to 1 if you have the <libidn.h> header file. */
 #undef HAVE_LIBIDN_H
