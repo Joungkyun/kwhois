@@ -1,12 +1,12 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 3.1
-Release: 1
+Version: 3.2
+Release: 1,1
 Copyright: GPL
 Group: Applications/Internet
 Url: http://www.oops.org/
-Source0: ftp://mirror.oops.org/pub/Linux/OOPS/Sources/kwhois/kwhois-%{version}.tar.bz2
+Source0: ftp://mirror.oops.org/pub/Linux/OOPS/Source/kwhois/kwhois-%{version}.tar.bz2
 Buildroot: /var/tmp/kwhois-root
 Conflicts: fwhois, whois
 
@@ -15,11 +15,11 @@ Vendor: OOPS Development ORG
 
 %description
 A whois client that accepts both traditional and finger-style queries.
-And support to search multibyte domains.
+This support to search multibyte domain based on punycode
 
 %description -l ko
-핑커 스타일과 전통적인 방식을 지원하는 후이즈 클라이언트 프로그램으로
-다국어 도메인 검색을 지원한다.
+핑커 스타일과 전통적인 방식을 지원하는 후이즈 클라이언트 프로그램
+kwhois 는 punycode 를 이용한 다국어 도메인을 지원한다.
 
 %prep
 %setup -q
@@ -31,7 +31,7 @@ make
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -fr $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/{man1,ko/man1}}
-%{makeinstall}
+make DESTDIR=$RPM_BUILD_ROOT install
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -40,17 +40,29 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_bindir}/whois
 %{_bindir}/kwhois
+%{_bindir}/punyconv
+%{_bindir}/raceconv
 %{_mandir}/man1/whois.1*
 %{_mandir}/man1/kwhois.1*
-%{_mandir}/ko/man1/whois.1.kr*
-%{_mandir}/ko/man1/kwhois.1.kr*
+%{_mandir}/ko/man1/whois.1*
+%{_mandir}/ko/man1/kwhois.1*
+%{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
-* Wed Feb  4 2004 JoungKyun Kim <http://www.oops.org> 3.1-1
+* Thu Feb 11 2004 JoungKyun Kim <http://www.oops.org> 3.2-1
+- update 3.2
+- fixed org domain to pir.org
+- enabled no case sensitive domain
+
+* Thu Feb  5 2004 JoungKyun Kim <http://www.oops.org> 3.1-1
 - update 3.1
+- changed to use punycode on multibyte com/net domain
+- bug fixed raceconv
 
 * Fri Aug 22 2003 JoungKyun Kim <http://www.oops.org> 3.0-1
-- update 3.0
+- support multibyte domain
+- added punycode converter with punyconv
+- added racecode converter with raceconv
 
 * Wed Mar 23 2003 JoungKyun Kim <http://www.oops.org> 2.3-1
 - fixed segmantfault in case of no tail

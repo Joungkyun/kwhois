@@ -1,5 +1,5 @@
-# $Id: configure.ac,v 1.1 2004-02-04 14:12:23 oops Exp $
-AC_INIT(kwhois, 3.1, http://www.oops.org)
+# $Id: configure.ac,v 1.2 2004-02-11 13:07:36 oops Exp $
+AC_INIT(kwhois, 3.2, http://www.oops.org)
 AC_CONFIG_SRCDIR([i18n.h])
 AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT([/usr/local])

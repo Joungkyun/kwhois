@@ -1,5 +1,10 @@
 Changes by JoungKyun Kim <http://www.oops.org>
-$Id: Changes,v 1.2 2004-02-04 14:12:23 oops Exp $
+$Id: Changes,v 1.3 2004-02-11 13:07:36 oops Exp $
+
+* Wed Feb 11 2003
+- update 3.2
+- changed whois org server to pir.org
+- enabled support non case sensitive domain
 
 * Wed Feb  4 2003
 - update 3.1

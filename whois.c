@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.6 2004-02-04 14:12:23 oops Exp $"
+#ident "$Id: whois.c,v 1.7 2004-02-11 13:07:36 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,6 +89,7 @@
 
 #define LO_SERVER "whois-servers.net"
 #define NSI_SERVER "whois.networksolutions.com"
+#define ORG_SERVER "whois.pir.org"
 
 int check_code ( char *tail );
 
@@ -398,12 +399,12 @@ int main(int argc, char **argv) {
 						char tmphost[50];
 						sprintf(tmphost, "%c%c.%s", tail[0], tail[1], LO_SERVER);
 						server = strdup(tmphost);
-					} else if (!strcmp(tail, "biz")) {
+					} else if (!strcasecmp(tail, "biz")) {
 						server = NSI_SERVER;
-					} else if (!strcmp(tail, "info")) {
+					} else if (!strcasecmp(tail, "info")) {
 						server = NSI_SERVER;
-					} else if (!strcmp(tail, "org")) {
-						server = NSI_SERVER;
+					} else if (!strcasecmp(tail, "org")) {
+						server = ORG_SERVER;
 					} else {
 						server = DEFAULT_SERVER;
 					}
@@ -427,7 +428,7 @@ int main(int argc, char **argv) {
 	/* If we got neither the -r nor the -n arguments, set the default
 	 * based on which server we're querying. */
 	if(recurse == -1) {
-		if(strcmp(DEFAULT_SERVER, server) == 0) {
+		if(strcasecmp(DEFAULT_SERVER, server) == 0) {
 			recurse = 1;
 		} else {
 			recurse = 0;
