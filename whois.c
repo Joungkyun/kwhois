@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.8 2004-06-03 09:56:30 oops Exp $"
+#ident "$Id: whois.c,v 1.9 2004-06-03 11:53:23 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,18 +80,14 @@
 #  endif
 #endif
 
-#ifndef DEFAULT_SERVER
-#define DEFAULT_SERVER "whois.crsnic.net"
-#endif
+#include "tld_server.h"
+
 #ifndef DEFAULT_PORT
 #define DEFAULT_PORT "whois"
 #endif
 
-#define LO_SERVER "whois-servers.net"
-#define NSI_SERVER "whois.networksolutions.com"
-#define ORG_SERVER "whois.pir.org"
-
 int check_code ( char *tail );
+int crsformat = 0;
 
 void
 alarm_handler(int signum)
@@ -204,7 +200,7 @@ process_query(const char *server, const char *port, const char *query,
 	}
 
 	printf("[%s]\n", server);
-	snprintf(buf, sizeof(buf), "=%s\r\n", query);
+	snprintf(buf, sizeof(buf), "%s%s\r\n", crsformat ? "=" : "",query);
 	send(sd, buf, strlen(buf), 0);
 
 	fflush(stdout);
@@ -400,9 +396,11 @@ int main(int argc, char **argv) {
 						sprintf(tmphost, "%c%c.%s", tail[0], tail[1], LO_SERVER);
 						server = strdup(tmphost);
 					} else if (!strcasecmp(tail, "biz")) {
-						server = NSI_SERVER;
+						server = BIZ_SERVER;
 					} else if (!strcasecmp(tail, "info")) {
-						server = NSI_SERVER;
+						server = INFO_SERVER;
+					} else if (!strcasecmp(tail, "name")) {
+						server = NAME_SERVER;
 					} else if (!strcasecmp(tail, "org")) {
 						server = ORG_SERVER;
 					} else {
@@ -434,6 +432,9 @@ int main(int argc, char **argv) {
 			recurse = 0;
 		}
 	}
+
+	if ( ! strcmp (server, DEFAULT_SERVER) )
+		crsformat = 1;
 
 #ifdef HAVE_LIBOLIBC
 	/* use racecode ??? */
