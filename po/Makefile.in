@@ -1,6 +1,7 @@
-# $Id: Makefile.in,v 1.1 2004-02-04 14:12:23 oops Exp $
+# $Id: Makefile.in,v 1.2 2004-02-05 03:31:07 oops Exp $
 DESTDIR =
 
+PROG	= @PACKAGE_NAME@
 prefix  = @prefix@
 langdir = @datadir@/locale
 
