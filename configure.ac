@@ -1,4 +1,6 @@
-# $Id: configure.ac,v 1.5 2004-06-08 08:32:07 oops Exp $
+# $Id: configure.ac,v 1.6 2004-08-09 16:38:55 oops Exp $
+AC_PREREQ(2.57)
+
 AC_INIT(kwhois, 3.4, http://devel.oops.org)
 AC_CONFIG_SRCDIR([i18n.h])
 AC_CONFIG_HEADER([config.h])
@@ -53,15 +55,62 @@ else
   fi
 fi
 
+AC_ARG_WITH(olibc,
+[  --with-olibc=PATH       path of olibc library. [[default]]])
+
 # Checks for libraries.
 AC_CHECK_LIB(resolv,res_mkquery)
-AC_CHECK_LIB(ogc, convert_punycode)
+
+# olibc library check
+if test "x$with_olibc" != "x"; then
+  if test -f "$with_olibc" ; then
+    chk_ext=`echo $with_olibc | ${SED} 's!.*\.\([^.]\+\)$!\1!g'`
+    if test "$chk_ext" = "so" -a "$chk_ext" = "a"; then
+      with_olibc=`echo $with_olibc | ${SED} 's!/[^/]*$!!g'`
+      olibclib="-L$with_olibc"
+      dnl CHECK_RPATH(olibclib, $with_olibc)
+
+      olibcchk=`echo $with_olibc | ${GERP} '/lib$'`
+      if test -n "olibcdchk"; then
+        with_olibc=`echo $with_olibc | ${SED} 's!/lib$!!g'`
+      fi
+    fi
+  elif test -d "$with_olibc" ; then
+    if test -f $with_olibc/lib/libogc.a -o -f $with_olibc/lib/libogc.so; then
+      olibclib="-L$with_olibc/lib"
+      dnl CHECK_RPATH(olibclib, $with_olibc/lib)
+    fi
+  else
+    olibclib=
+  fi
+
+  LDFLAGS="$olibclib $LDFLAGS"
+fi
+AC_CHECK_LIB(ogc, convert_punycode,, [AC_MSG_ERROR(Need over Oops C Library 0.1.0)])
+
+# olibc header check
+for i in $with_olibc /usr /usr/local
+do
+  if test -f "$i/include/ligidn.h"; then
+    inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
+    if test -z "$inschk"; then
+      CPPFLAGS="-I$i/include $CPPFLAGS"
+    fi
+    break
+  elif test -f "$i/include/olibc/libidn.h"; then
+    inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/olibc "`
+    if test -z "$inschk"; then
+      CPPFLAGS="-I$i/include/olibc $CPPFLAGS"
+    fi
+    break
+  fi
+done
 
 # Checks for header files.
 AC_CHECK_HEADERS(stdio.h string.h ctype.h limits.h sys/types.h sys/socket.h \
 		 stdlib.h unistd.h netinet/in.h arpa/nameser.h netdb.h errno.h \
 		 sys/signal.h getopt.h libintl.h locale.h dlfcn.h error.h inttypes.h \
-		 memory.h stdint.h sys/stat.h iconv.h langinfo.h olibc/libstring.h)
+		 memory.h stdint.h sys/stat.h iconv.h langinfo.h libidn.h)
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

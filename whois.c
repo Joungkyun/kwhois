@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.13 2004-06-08 08:29:45 oops Exp $"
+#ident "$Id: whois.c,v 1.14 2004-08-09 16:38:55 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,9 +74,9 @@
 #include <ctype.h>
 #endif
 
-#ifdef HAVE_OLIBC_LIBSTRING_H
+#ifdef HAVE_LIBIDN_H
 #  ifdef HAVE_LIBOGC
-#    include <olibc/libstring.h>
+#    include <libidn.h>
 #  endif
 #endif
 

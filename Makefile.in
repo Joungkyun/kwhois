@@ -1,6 +1,7 @@
-# $Id: Makefile.in,v 1.6 2004-06-03 12:14:33 oops Exp $
+# $Id: Makefile.in,v 1.7 2004-08-09 16:38:55 oops Exp $
 CC		= @CC@
 CFLAGS		= -Wall @CFLAGS@ @DEFS@
+CPPFLAGS	= @CPPFLAGS@
 LDFLAGS		= @LDFLAGS@ @LIBS@
 DESTDIR		=
 prefix		= @prefix@
@@ -33,11 +34,11 @@ raceconv:
 	make -C libracode CFLAGS="$(CFLAGS)" LANGDIR=$(LANGDIR)
 
 whois.o: whois.c i18n.h config.h
-	$(CC)  -Wall $(CFLAGS) $(DEFS) \
+	$(CC)  -Wall $(CFLAGS) $(DEFS) $(CPPFLAGS) \
 		-DNAME=\"$(NAME)\" -DPVERSION=\"$(VERSION)\" -c whois.c
 
 i18n.o: i18n.c i18n.h config.h
-	$(CC) $(CFLAGS) $(DEFS) -c i18n.c
+	$(CC) $(CFLAGS) $(DEFS) $(CPPFLAGS) -c i18n.c
 
 po-install:
 	make -C po DESTDIR=$(DESTDIR) langdir=$(LANGDIR) install

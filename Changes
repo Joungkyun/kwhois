@@ -1,8 +1,9 @@
 Changes by JoungKyun Kim <http://www.oops.org>
-$Id: Changes,v 1.7 2004-08-09 16:36:01 oops Exp $
+$Id: Changes,v 1.8 2004-08-09 16:38:55 oops Exp $
 
 * Tue Aug 10 2004
   by JoungKyun Kim <http://www.oos.org>
+  - added olibc option on configure
 
 * Tue Jun  8 2004
   by JoungKyun Kim <http://www.oos.org>
