@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.12 2004-06-03 12:51:44 oops Exp $"
+#ident "$Id: whois.c,v 1.13 2004-06-08 08:29:45 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,8 +87,8 @@
 #endif
 
 int check_code ( char *tail );
-int crsformat = 0;
-int crschk    = 0;
+int crsCheck ( char *wserv );
+char * parseQuery ( char *qry, char *wserv );
 
 void
 alarm_handler(int signum)
@@ -202,12 +202,7 @@ process_query(const char *server, const char *port, const char *query,
 
 	printf("[%s]\n", server);
 
-	if (crschk)
-	  snprintf(buf, sizeof(buf), "%s\r\n", query);
-	else {
-	  snprintf(buf, sizeof(buf), "%s%s\r\n", crsformat ? "=" : "",query);
-	  if ( crsformat ) crschk++;
-	}
+	snprintf (buf, sizeof (buf), "%s", parseQuery ((char *) query, (char *) server));
 
 	send(sd, buf, strlen(buf), 0);
 
@@ -441,9 +436,6 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	if ( ! strcmp (server, DEFAULT_SERVER) )
-		crsformat = 1;
-
 #ifdef HAVE_LIBOGC
 	/* use racecode ??? */
 	/*
@@ -485,6 +477,26 @@ int check_code ( char *tail ) {
 	}
 
 	return 0;
+}
+
+int crsCheck ( char *wserv ) {
+	if ( ! strcmp ( wserv, DEFAULT_SERVER ) )
+		return 1;
+
+	return 0;
+}
+
+char * parseQuery ( char *qry, char *wserv ) {
+	static char query[1024];
+	char tmp[1024];
+
+	memset (query, 0, 1024);
+	memset (tmp, 0, 1024);
+
+	strncpy (tmp, qry, ( strlen (qry) > 1023 ) ? 1023 : strlen (qry));
+	sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
+
+	return query;
 }
 
 /*
