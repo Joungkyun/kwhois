@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.1 2004-02-04 06:29:31 oops Exp $"
+#ident "$Id: whois.c,v 1.2 2004-02-04 07:52:07 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,13 +75,7 @@
 #define DEFAULT_PORT "whois"
 #endif
 
-#define KR_SERVER "whois.krnic.net"
-#define JP_SERVER "whois.nic.ad.jp"
-#define TO_SERVER "whois.tonic.to"
-#define CC_SERVER "whois.nic.cc"
-#define TV_SERVER "whois.tv"
-
-#define DEFAULTS_SERVER "whois.crsnic.net whois.krnic.net whois.nic.ad.jp whois.tonic.to whois.nic.cc whois.tv"
+#define LO_SERVER "whois-servers.net"
 
 int get_lang();
 int langs;
@@ -383,13 +377,13 @@ main(int argc, char **argv)
 			       "       -h server  whois 서버 이름\n"
 			       "       -p port    서버 포트\n"
 			       "       -t timeout 질의 시간 제한\n"
-			       "       -r         force recursion\n"
-			       "       -n         disable recursion\n"
-			       "       -v         verbose mode\n"
-			       "       --         treat remaining arguments as part of "
-			       "the query\n", strchr(argv[0], '/') ?
+			       "       -r         반복을 강행\n"
+			       "       -n         반복을 하지 않음\n"
+			       "       -v         상세모드\n"
+			       "       --         질의의 부분으로 남아있는 인자로 취급\n",
+			       strchr(argv[0], '/') ?
 			       strrchr(argv[0], '/') + 1 : argv[0]);
-			printf("기본 서버 : %s\n", DEFAULTS_SERVER);
+			printf("기본 서버 : %s\n", DEFAULT_SERVER);
 		} else {
 			printf("Usage: %s [OPTION...] query[@server[:port]]\n"
 			       "valid options:\n"
@@ -402,7 +396,7 @@ main(int argc, char **argv)
 			       "       --         treat remaining arguments as part of "
 			       "the query\n", strchr(argv[0], '/') ?
 			       strrchr(argv[0], '/') + 1 : argv[0]);
-			printf("default server is %s\n", DEFAULTS_SERVER);
+			printf("default server is %s\n", DEFAULT_SERVER);
 		}
 		exit(0);
 	}
@@ -417,6 +411,8 @@ main(int argc, char **argv)
 			server++;
 		} else {
 			char *tail;
+
+			/* get contry code */
 			tail = strdup(rindex(query, '.'));
 
 			/* Nothing there either.  Use the NICNAMESERVER,
@@ -429,16 +425,10 @@ main(int argc, char **argv)
 				} else if (!tail) {
 					server = DEFAULT_SERVER;
 				} else {
-					if (!strcmp(tail, ".kr")) {
-						server = KR_SERVER;
-					} else if (!strcmp(tail, ".to")) {
-						server = TO_SERVER;
-					} else if (!strcmp(tail, ".cc")) {
-						server = CC_SERVER;
-					} else if (!strcmp(tail, ".jp")) {
-						server = JP_SERVER;
-					} else if (!strcmp(tail, ".tv")) {
-						server = TV_SERVER;
+					if ( strlen(tail) == 3 ) {
+						char tmphost[50];
+						sprintf(tmphost, "%c%c.%s", tail[1], tail[2], LO_SERVER);
+						server = strdup(tmphost);
 					} else if (!strcmp(tail, ".biz")) {
 						server = "whois.networksolutions.com";
 					} else if (!strcmp(tail, ".info")) {
