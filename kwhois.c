@@ -1,52 +1,55 @@
 /* kwhois.c by JoungKyun Kim & ByungKi Lee in BbuWoo Packagement.
- * Networking code taken and modified from net.c in the finger source code
- */
+* Networking code taken and modified from net.c in the finger source code
+*/
 
 /*
- * Copyright (c) 1989 The Regents of the University of California.
- * All rights reserved.
- *
- * This code is derived from software contributed to Berkeley by
- * Tony Nardo of the Johns Hopkins University/Applied Physics Labi
- * and Redistributioned by JoungKyun Kim & ByungKi Lee in BbuWoo Packagement..
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *      This product includes software developed by the University of
- *      California, Berkeley and its contributors.
- * 4. Neither the name of the University nor the names of its contributors
- *    may be used to endorse or promote products derived from this software
- *    without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * $Id: kwhois.c,v 1.1.1.1 2004-02-04 06:05:14 oops Exp $
- */
- 
+* Copyright (c) 1989 The Regents of the University of California.
+* All rights reserved.
+*
+* This code is derived from software contributed to Berkeley by
+* Tony Nardo of the Johns Hopkins University/Applied Physics Labi
+* and Redistributioned by JoungKyun Kim & ByungKi Lee in BbuWoo Packagement..
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions
+* are met:
+* 1. Redistributions of source code must retain the above copyright
+*    notice, this list of conditions and the following disclaimer.
+* 2. Redistributions in binary form must reproduce the above copyright
+*    notice, this list of conditions and the following disclaimer in the
+*    documentation and/or other materials provided with the distribution.
+* 3. All advertising materials mentioning features or use of this software
+*    must display the following acknowledgement:
+*      This product includes software developed by the University of
+*      California, Berkeley and its contributors.
+* 4. Neither the name of the University nor the names of its contributors
+*    may be used to endorse or promote products derived from this software
+*    without specific prior written permission.
+*
+*
+* THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+* ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+* OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+* LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+* OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+* SUCH DAMAGE.
+* $Id: kwhois.c,v 1.2 2004-02-04 06:12:07 oops Exp $
+*/
+
 #ifndef lint
-char copyright[] =
-"Redistributions JoungKyun Kim & ByungKi Lee in BbuWoo Packagement from fwhois.\n";
+char copy_en[] =
+"Redistributions JoungKyun Kim & ByungKi Lee in B.P from fwhois.\n";
+char copy_ko[] =
+"Redistributions 김정균 & 이병기 in B.P from fwhois.\n";
 #endif /* not lint */
 
 #ifndef lint
-static char sccsid[] = "@(#)kwhois.c   1.0 (DQ) 7/26/93";
+static char sccsid[] = "@(#)kwhois.c   1.00 (DQ) 7/26/93";
 #endif /* not lint */
 
 #include <sys/param.h>
@@ -69,25 +72,33 @@ int argc;
    
    if (argc == 2) {
       eleet = argv[1];
-      tail = strdup(rindex(argv[1], '.'));
-      /* If no host specified, use whois.internic.net */
-      if(!index(argv[1],'@')) {
-         if(!strcmp(tail, ".kr")) {
-            stuff = strcat(eleet,"@whois.nic.or.kr");
-         }
-         else if(!strcmp(tail, ".to")) {
-            stuff = strcat(eleet,"@whois.tonic.to");
-         }
-         else if(!strcmp(tail, ".cc")) {
-            stuff = strcat(eleet,"@whois.nic.cc");
-         }
-         else if(!strcmp(tail, ".jp")) {
-            stuff = strcat(eleet,"@whois.nic.ad.jp");
-         }
-         else {
-            stuff = strcat(eleet,"@whois.internic.net");
-         }
-         eleet = stuff;
+      if (strstr(argv[1], ".")) {
+        tail = strdup(rindex(argv[1], '.'));
+
+        /* If no host specified, use whois.internic.net */
+        if(!index(argv[1],'@')) {
+           if (tail) {
+              if(!strcmp(tail, ".kr")) {
+                 stuff = strcat(eleet,"@whois.nic.or.kr");
+              }
+              else if(!strcmp(tail, ".to")) {
+                 stuff = strcat(eleet,"@whois.tonic.to");
+              }
+              else if(!strcmp(tail, ".cc")) {
+                 stuff = strcat(eleet,"@whois.nic.cc");
+              }
+              else if(!strcmp(tail, ".jp")) {
+                 stuff = strcat(eleet,"@whois.nic.ad.jp");
+              }
+              else {
+                 stuff = strcat(eleet,"@whois.internic.net");
+              }
+           }
+           eleet = stuff;
+        }
+      }	
+      else {
+	stuff = strcat(eleet,"@whois.internic.net");
       }
    }
    /* If the user entered an invalid argument, here they go */
@@ -100,17 +111,17 @@ int argc;
          printf("검색을 하셔야 합니다.\n");
          printf("Supported Default whois Server :\n");
          printf("Krnic InterNic Tonic eNIC JpNIC\n\n");
-         printf("사용법 : kwhois [domain name]@[whois server]\n\n");
-	 printf("%s\n", copyright);
+         printf("사용법 : kwhois [domain name]@[whois server]\n");
+	 printf("%s\n", copy_ko);
          exit(1);
       }
       else {
          printf("USAGE : kwhois [domainanme]\n\n");
          printf("If you wanna search some Whois Directory Server\n");
          printf("except Krnic, Internic, eNIC and ToNIC, JPnic\n");
-         printf("U must use follow usage.\n");
-         printf("Expected USAGE : kwhois [domainname]@[whois server]\n\n");
-	 printf("%s\n", copyright);
+         printf("U must use follow usage.\n\n");
+         printf("Expected USAGE : kwhois [domainname]@[whois server]\n");
+	 printf("%s\n", copy_en);
          exit(1);
       }
    }

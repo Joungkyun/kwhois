@@ -1,9 +1,9 @@
-.\" RCSID: @(#)$Id: whois.1,v 1.1.1.1 2004-02-04 06:05:14 oops Exp $
-.TH whois 1 "Oct 1999"
+.\" RCSID: @(#)$Id: whois.1,v 1.2 2004-02-04 06:11:45 oops Exp $
+.TH whois 1 "Nov 1999"
 .SH Name
 whois \- Korea finger\-style whois for korean
 .SH Intruduction
-This package(fwhois) is modified to korean environment from origanl 
+This package(kwhois) is modified to korean environment from origanl 
 fwhois that was made by Chris Cappuccio <ccappuc@santafe.edu>.
 
 .SH Syntax
@@ -45,6 +45,17 @@ And other domain that was registered other NIC except Internic,
 Krnic, Tonic, eNic and JPnic use 'whois user@whois.server'.
 .SH Restrictions
 Not very useful if the server was compiled without SETPROCTITLE.
+
+.SH Attention
+If searched
+.B Handle ID
+, default whois server is supported only
+.B Internic
+and searched other whois server's 
+.BHandle ID
+, use
+.B kwhois [HandleID]@[whois server]
+
 .SH FILES
 .B /usr/bin/kwhois
 .br

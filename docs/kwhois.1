@@ -1,5 +1,5 @@
-.\" RCSID: @(#)$Id: kwhois.1,v 1.1.1.1 2004-02-04 06:05:14 oops Exp $
-.TH kwhois 1 "Oct 1999"
+.\" RCSID: @(#)$Id: kwhois.1,v 1.2 2004-02-04 06:11:45 oops Exp $
+.TH kwhois 1 "Nov 1999"
 .SH Name
 kwhois \- Korea finger\-style whois
 .SH Intruduction
@@ -29,7 +29,7 @@ different servers are queued, e.g. an organization with multiple
 whois servers running for different purposes. This type of 
 command can also be useful when a user or group of users 
 makes frequent use of many different whois servers. If a user 
-simply types 'fwhois user' without a hostname, fwhois will 
+simply types 'kwhois user' without a hostname, kwhois will 
 automatically use host 
 .B whois.internic.net
 ,
@@ -44,6 +44,17 @@ And other domain that was registered other NIC except Internic,
 Krnic, Tonic, eNIC and JPnic  use 'kwhois user@whois.server'.
 .SH Restrictions
 Not very useful if the server was compiled without SETPROCTITLE.
+
+.SH Attention
+If searched
+.B Handle ID
+, default whois server is supported only
+.B Internic
+and searched other whois server's 
+.BHandle ID
+, use
+.B kwhois [HandleID]@[whois server]
+
 .SH FILES
 .B /usr/bin/kwhois
 .br

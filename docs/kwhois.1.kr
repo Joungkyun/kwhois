@@ -1,7 +1,7 @@
-.\" RCSID: @(#)$Id: kwhois.1.kr,v 1.1.1.1 2004-02-04 06:05:14 oops Exp $
-.TH fwhois 1 "Oct 1999"
+.\" RCSID: @(#)$Id: kwhois.1.kr,v 1.2 2004-02-04 06:11:45 oops Exp $
+.TH kwhois 1 "Nov 1999"
 .SH Name
-fwhois \- 대한민국 환경으로 수정된 finger style의 whois
+kwhois \- 대한민국 환경으로 수정된 finger style의 whois
 .SH Intruduction
 이 package는 Chris Cappuccio <ccappuc@santafe.edu>에 의해 만들어진
 fwhois package를 우리나라 실정에 맞게끔 한글 patch하고 Krnic whois
@@ -30,8 +30,17 @@ Internic만 지정이 되어 있는 것을 우리실정에 맞게끔 Krnic도 포함을
 Krnic, Tonic, eNIC 그리고 JPnic 이다.
 .SH Restrictions
 만약 SETPROCTITLE이 없이 compile을 한다면 별로 유용하지 못할것이다.
+
+.SH Attention
+.B Handle ID
+를 검색할때는 default server는 internic밖에 안된다. internic 이외의
+.B Handle ID
+를 검색하기 위해서는
+.B kwhois [HandleID]@[whois server]
+를 이용해야 한다.
+
 .SH FILES
-.B /usr/bin/fwhois
+.B /usr/bin/kwhois
 .br
 .B /usr/bin/whois
 .SH BUG REPORT

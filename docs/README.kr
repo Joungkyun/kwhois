@@ -1,4 +1,4 @@
-$Id: README.kr,v 1.1.1.1 2004-02-04 06:05:14 oops Exp $
+$Id: README.kr,v 1.2 2004-02-04 06:11:45 oops Exp $
 kwhois (korean finger style whois) by JoungKyun Kim <admin@oops.kr.net>
                                       ByungKi Lee <pino5@hitel.net>
                                       in BbuWoo Packagement
@@ -47,20 +47,35 @@ server는 internic, krnic, tonic, eNIC (cc domain), JPnic(jp) 이렇게
 whois server를 추가하기를 요망한다면 admin@oops.kr.net 으로 mail을 
 보내주면 계속 첨가해 나가도록 하겠다.
 
+단 handle id를 검색할 시에는 default로는 internic 밖에 지원이 안된다.
+
 사용법
 ------
 
 Internic, Krnic, Tonic, eNIC, JPnic 의 domain을 검색할시:
 
-kwhois [domain name] 또는
-whois [domain name]
+  kwhois [domain name] 또는
+  whois [domain name]
+
+Internic, Krnic, Tonic, eNIC, JPnic 의 Hnadle ID를 검색할시:
+
+  kwhois [HandleID]@[whois server] 또는
+  whois [HandleID]@[whois server]
+
+단 internic의 handle id를 search할때는 whois server를 붙일 필요가 없다.
 
 Internic, Krnic, Tonic, eNIC, JPnic 외의 domain을 검색할시:
 
-kwhois [domain name]@[whois server] 또는
-whois [domain name]@[whois server]
+  kwhois [domain name]@[whois server] 또는
+  whois [domain name]@[whois server]
 
-예: whois digitalmax.co.kr@whois.krnic.net
+  예: whois digitalmax.co.kr@whois.krnic.net
+
+Internic 외의 Hnadle ID를 검색할시:
+
+  kwhois [HandleID]@[whois server] 또는
+  whois [HandleID]@[whois server]
+
 
 Bug Report
 ----------
@@ -75,6 +90,6 @@ mailto : 김정균 <admin@oops.kr.net>
 kwhois는 Tony Nardo가 만든 fwhois의 재배포판 이다.
 
 
-                                 LAST Modified 1999.10.29
+                                 LAST Modified 1999.11.08
                                  김정균 <admin@oops.kr.net>
                                  In BbuWoo Packagement <http://oops.kr.net>
