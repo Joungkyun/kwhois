@@ -1,0 +1,80 @@
+$Id: README.kr,v 1.1.1.1 2004-02-04 06:05:14 oops Exp $
+kwhois (korean finger style whois) by JoungKyun Kim <admin@oops.kr.net>
+                                      ByungKi Lee <pino5@hitel.net>
+                                      in BbuWoo Packagement
+
+이 program은 대한민국 local domain의 검색을 편리하게 하기 위한
+목적으로 만들어 졌으며, kr local domain 외에도 InterNic(com,net.org),
+eNic(cc), ToNic(to), JpNic(Japan local domain) 검색이 기본으로 지원이
+된다.
+
+주의
+----
+
+이 버젼은 Redhat Linux 5.2와 6.0에서만 test되어 졌다. BSD 계열에서는
+무난하게 사용이 되어지리라 생각이 되지만 Redhat 계열 외에는 test되어
+지지 않았다.
+
+kwhois란 무엇인가?
+-----------------
+
+kwhois는 finger의 방식으로 NIC에서 제공하는 whois directory 
+service server를 직접 접근을 하여 원하는 domain에 대한 정보를 
+출력을 해주는 방식이다. 즉 domain 검색을 하는 application
+이라고 생각을 하면 되겠다. 기존의 whois 사용법과 비교를 해 보면
+whois -h whois.server user는 kwhois user@whois.server와 같다.
+
+fwhois와 다른점은?
+-----------------
+
+기존의 fwhois는 default whois server가 Internic으로 되어 있었기 
+때문에 krnic의 domain을 검색하기 위해서는 
+
+whois domain.co.kr@whois.krnic.net 또는
+whois domain.co.kr@whois.nic.or.kr
+
+의 형태로 검색을 해야만 했었다. 
+이에 대한 불편함을 해소하기 위하여 krnic의 Domain이라고 해도 역시 
+Internic에 검색하는 것과 같이 whois domain.co.kr 로 바로 검색이 
+가능하게 해 놓았다.
+
+현재 지원되는 Default whois server?
+--------------------------------
+
+현재 whois server를 지정하지 않고 바로 검색을 할수 있는 whois 
+server는 internic, krnic, tonic, eNIC (cc domain), JPnic(jp) 이렇게
+5개이다. 이 외의 whois server address를 알고 있거나 필요한 국가의
+whois server를 추가하기를 요망한다면 admin@oops.kr.net 으로 mail을 
+보내주면 계속 첨가해 나가도록 하겠다.
+
+사용법
+------
+
+Internic, Krnic, Tonic, eNIC, JPnic 의 domain을 검색할시:
+
+kwhois [domain name] 또는
+whois [domain name]
+
+Internic, Krnic, Tonic, eNIC, JPnic 외의 domain을 검색할시:
+
+kwhois [domain name]@[whois server] 또는
+whois [domain name]@[whois server]
+
+예: whois digitalmax.co.kr@whois.krnic.net
+
+Bug Report
+----------
+
+mailto : 이병기 <pino5@hitel.net>
+mailto : 김정균 <admin@oops.kr.net>
+
+
+라이센스
+--------
+
+kwhois는 Tony Nardo가 만든 fwhois의 재배포판 이다.
+
+
+                                 LAST Modified 1999.10.29
+                                 김정균 <admin@oops.kr.net>
+                                 In BbuWoo Packagement <http://oops.kr.net>
