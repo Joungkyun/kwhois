@@ -51,9 +51,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Thu Jun  3 2004 JoungKyun Kim <http://www.oops.org> 2:3.3-1
+- update 3.3
 - changed query format for miss search domain
 - fixed some compile warning message
-- update 3.3
+- fixed library miss link
+- added default server per extensions
 
 * Thu Feb 11 2004 JoungKyun Kim <http://www.oops.org> 3.2-1
 - update 3.2

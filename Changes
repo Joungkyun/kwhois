@@ -1,11 +1,12 @@
 Changes by JoungKyun Kim <http://www.oops.org>
-$Id: Changes,v 1.4 2004-06-03 12:10:46 oops Exp $
+$Id: Changes,v 1.5 2004-06-03 12:17:35 oops Exp $
 
 * Thu Jun  3 2004
 - update 3.3
 - changed query format for miss search domain
 - fixed some compile warning message
 - added default server per extensions
+- fixed library miss link
 
 * Wed Feb 11 2004
 - update 3.2
