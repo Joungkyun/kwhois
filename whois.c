@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.14 2004-08-09 16:38:55 oops Exp $"
+#ident "$Id: whois.c,v 1.15 2004-08-09 17:52:51 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,6 +80,12 @@
 #  endif
 #endif
 
+#ifdef HAVE_GEOIP_H
+#  ifdef HAVE_LIBGEOIP
+#    include <GeoIP.h>
+#  endif
+#endif
+
 #include "tld_server.h"
 
 #ifndef DEFAULT_PORT
@@ -88,6 +94,8 @@
 
 int check_code ( char *tail );
 int crsCheck ( char *wserv );
+int is_ipaddr (char *query);
+char * get_tail (char *query);
 char * parseQuery ( char *qry, char *wserv );
 
 void
@@ -273,7 +281,7 @@ int main(int argc, char **argv) {
 	char name[256];
 	int i, recurse = -1, help = 0, parse = 1;
 	int verbose = 0, timeout = -1;
-	char *tail = NULL, *gettail = NULL;
+	char *tail = NULL;
 
 	memset (name, '\0', sizeof(name));
 
@@ -377,12 +385,10 @@ int main(int argc, char **argv) {
 			server++;
 
 			/* get contry code */
-			gettail = rindex(query, '.');
-			tail = ( gettail != NULL ) ? strdup (gettail + 1) : strdup ("");
+			tail = strdup (get_tail (query));
 		} else {
 			/* get contry code */
-			gettail = rindex(query, '.');
-			tail = ( gettail != NULL ) ? strdup (gettail + 1) : strdup ("");
+			tail = strdup (get_tail (query));
 
 			/* Nothing there either.  Use the NICNAMESERVER,
 			 * WHOISSERVER, or DEFAULT_SERVER, in that order. */
@@ -414,8 +420,7 @@ int main(int argc, char **argv) {
 		}
 	} else {
 		/* get contry code */
-		gettail = rindex(query, '.');
-		tail = ( gettail != NULL ) ? strdup (gettail + 1) : strdup ("");
+		tail = strdup (get_tail (query));
 	}
 
 	/* If the server name includes a colon, snip the name there and
@@ -497,6 +502,47 @@ char * parseQuery ( char *qry, char *wserv ) {
 	sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
 
 	return query;
+}
+
+int is_ipaddr (char *query) {
+	int pos;
+	char point;
+
+	pos = strlen (query) - 1;
+	point = query[pos];
+
+	if ( point > 47 && point < 58 )
+		return 1;
+
+	return 0;
+}
+
+char * get_tail (char *query) {
+	char	* gettail = NULL;
+#ifdef HAVE_LIBGEOIP
+	GeoIP	* gi;
+#endif
+
+	if ( is_ipaddr (query) ) {
+#ifdef HAVE_LIBGEOIP
+		gi = GeoIP_new (GEOIP_STANDARD);
+		gettail = GeoIP_country_code_by_addr (gi, query);
+		GeoIP_delete (gi);
+
+		if ( gettail == NULL )
+			return "";
+
+		return gettail;
+#else
+		return "kr";
+#endif
+	} else {
+		gettail = rindex(query, '.');
+		if ( gettail == NULL )
+			return "";
+
+		return gettail + 1;
+	}
 }
 
 /*

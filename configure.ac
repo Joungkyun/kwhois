@@ -1,10 +1,19 @@
-# $Id: configure.ac,v 1.6 2004-08-09 16:38:55 oops Exp $
+# $Id: configure.ac,v 1.7 2004-08-09 17:52:51 oops Exp $
 AC_PREREQ(2.57)
 
 AC_INIT(kwhois, 3.4, http://devel.oops.org)
 AC_CONFIG_SRCDIR([i18n.h])
 AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT([/usr/local])
+
+AC_ARG_WITH(rrd,
+[  --with-msgfmt=PATH      path of msgfmt binary [[default]]])
+
+AC_ARG_WITH(olibc,
+[  --with-olibc=PATH       path of olibc library. [[default]]])
+
+AC_ARG_WITH(geoip,
+[  --with-geoip=PATH       path of geoip package.])
 
 # Checks for programs.
 AC_PROG_CC
@@ -36,27 +45,11 @@ if test ! -f "$ac_cv_path_MKDIR"; then
   AC_MSG_ERROR(Can't not found mkdir)
 fi
 
-AC_PATH_PROG(MSGFMT, msgfmt)
-AC_ARG_WITH(msgfmt,
-[  --with-msgfmt=PATH      path of msgfmt program])
-if test "x$with_msgfmt" != "x"; then
-  if test -f $with_msgfmt; then
-    ac_cv_path_MSGFMT=$with_msgfmt
-  fi
-else
-  if test "x$ac_cv_path_MSGFMT" != "x"; then
-    if test -f $ac_cv_path_MSGFMT ; then
-      ac_cv_path_MSGFMT=$with_msgfmt
-    else
-      AC_MSG_ERROR(Can't not found msgfmt)
-    fi
-  else
-    AC_MSG_ERROR(Can't not found msgfmt)
-  fi
+AC_PATH_PROG(MSGFMT, msgfmt,, $PATH:$with_msgfmt:$with_msgfmt/bin)
+if test "x$ac_cv_path_MSGFMT" = "x"; then
+  AC_MSG_ERROR(Can't not found msgfmt)
 fi
 
-AC_ARG_WITH(olibc,
-[  --with-olibc=PATH       path of olibc library. [[default]]])
 
 # Checks for libraries.
 AC_CHECK_LIB(resolv,res_mkquery)
@@ -89,28 +82,79 @@ fi
 AC_CHECK_LIB(ogc, convert_punycode,, [AC_MSG_ERROR(Need over Oops C Library 0.1.0)])
 
 # olibc header check
-for i in $with_olibc /usr /usr/local
-do
-  if test -f "$i/include/ligidn.h"; then
-    inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
-    if test -z "$inschk"; then
-      CPPFLAGS="-I$i/include $CPPFLAGS"
+if test "$ac_cv_lib_ogc_convert_punycode" = "yes" ; then
+  for i in $with_olibc /usr /usr/local
+  do
+    if test -f "$i/include/libidn.h"; then
+      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
+      if test -z "$inschk"; then
+        CPPFLAGS="-I$i/include $CPPFLAGS"
+      fi
+      break
+    elif test -f "$i/include/olibc/libidn.h"; then
+      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/olibc "`
+      if test -z "$inschk"; then
+        CPPFLAGS="-I$i/include/olibc $CPPFLAGS"
+      fi
+      break
     fi
-    break
-  elif test -f "$i/include/olibc/libidn.h"; then
-    inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/olibc "`
-    if test -z "$inschk"; then
-      CPPFLAGS="-I$i/include/olibc $CPPFLAGS"
+  done
+fi
+
+# geoip library check
+if test "x$with_geoip" != "x"; then
+  if test -f "$with_geoip" ; then
+    chk_ext=`echo $with_geoip | ${SED} 's!.*\.\([^.]\+\)$!\1!g'`
+    if test "$chk_ext" = "so" -a "$chk_ext" = "a"; then
+      with_geoip=`echo $with_geoip | ${SED} 's!/[^/]*$!!g'`
+      geoiplib="-L$with_geoip"
+      dnl CHECK_RPATH(geoiplib, $with_geoip)
+
+      geoipchk=`echo $with_geoip | ${GERP} '/lib$'`
+      if test -n "geoipdchk"; then
+        with_geoip=`echo $with_geoip | ${SED} 's!/lib$!!g'`
+      fi
     fi
-    break
+  elif test -d "$with_geoip" ; then
+    if test -f $with_geoip/lib/libGeoIP.a -o -f $with_geoip/lib/libGeoIP.so; then
+      geoiplib="-L$with_geoip/lib"
+      dnl CHECK_RPATH(geoiplib, $with_geoip/lib)
+    fi
+  else
+    geoiplib=
   fi
-done
+
+  LDFLAGS="$geoiplib $LDFLAGS"
+fi
+AC_CHECK_LIB(GeoIP, GeoIP_new)
+
+# geoip header check
+if test "$ac_cv_lib_GeoIP_GeoIP_new" = "yes" ; then
+  for i in $with_geoip /usr /usr/local
+  do
+    if test -f "$i/include/GeoIP.h"; then
+      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
+      if test -z "$inschk"; then
+        CPPFLAGS="-I$i/include $CPPFLAGS"
+      fi
+      geo_header="GeoIP.h"
+      break
+    elif test -f "$i/include/GeoIP/GeoIP.h"; then
+      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/GeoIP "`
+      if test -z "$inschk"; then
+        CPPFLAGS="-I$i/include/GeoIP $CPPFLAGS"
+      fi
+      geo_header="GeoIP.h"
+      break
+    fi
+  done
+fi
 
 # Checks for header files.
 AC_CHECK_HEADERS(stdio.h string.h ctype.h limits.h sys/types.h sys/socket.h \
 		 stdlib.h unistd.h netinet/in.h arpa/nameser.h netdb.h errno.h \
 		 sys/signal.h getopt.h libintl.h locale.h dlfcn.h error.h inttypes.h \
-		 memory.h stdint.h sys/stat.h iconv.h langinfo.h libidn.h)
+		 memory.h stdint.h sys/stat.h iconv.h langinfo.h libidn.h $geo_header)
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

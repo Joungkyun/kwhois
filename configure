@@ -844,8 +844,9 @@ if test -n "$ac_init_help"; then
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-msgfmt=PATH      path of msgfmt program
+  --with-msgfmt=PATH      path of msgfmt binary [default]
   --with-olibc=PATH       path of olibc library. [default]
+  --with-geoip=PATH       path of geoip package.
 
 Some influential environment variables:
   CC          C compiler command
@@ -1277,6 +1278,27 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
           ac_config_headers="$ac_config_headers config.h"
 
 
+
+
+# Check whether --with-rrd or --without-rrd was given.
+if test "${with_rrd+set}" = set; then
+  withval="$with_rrd"
+
+fi;
+
+
+# Check whether --with-olibc or --without-olibc was given.
+if test "${with_olibc+set}" = set; then
+  withval="$with_olibc"
+
+fi;
+
+
+# Check whether --with-geoip or --without-geoip was given.
+if test "${with_geoip+set}" = set; then
+  withval="$with_geoip"
+
+fi;
 
 # Checks for programs.
 ac_ext=c
@@ -2538,7 +2560,8 @@ else
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
+as_dummy="$PATH:$with_msgfmt:$with_msgfmt/bin"
+for as_dir in $as_dummy
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
@@ -2564,38 +2587,12 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-
-# Check whether --with-msgfmt or --without-msgfmt was given.
-if test "${with_msgfmt+set}" = set; then
-  withval="$with_msgfmt"
-
-fi;
-if test "x$with_msgfmt" != "x"; then
-  if test -f $with_msgfmt; then
-    ac_cv_path_MSGFMT=$with_msgfmt
-  fi
-else
-  if test "x$ac_cv_path_MSGFMT" != "x"; then
-    if test -f $ac_cv_path_MSGFMT ; then
-      ac_cv_path_MSGFMT=$with_msgfmt
-    else
-      { { echo "$as_me:$LINENO: error: Can't not found msgfmt" >&5
+if test "x$ac_cv_path_MSGFMT" = "x"; then
+  { { echo "$as_me:$LINENO: error: Can't not found msgfmt" >&5
 echo "$as_me: error: Can't not found msgfmt" >&2;}
    { (exit 1); exit 1; }; }
-    fi
-  else
-    { { echo "$as_me:$LINENO: error: Can't not found msgfmt" >&5
-echo "$as_me: error: Can't not found msgfmt" >&2;}
-   { (exit 1); exit 1; }; }
-  fi
 fi
 
-
-# Check whether --with-olibc or --without-olibc was given.
-if test "${with_olibc+set}" = set; then
-  withval="$with_olibc"
-
-fi;
 
 # Checks for libraries.
 
@@ -2757,22 +2754,134 @@ fi
 
 
 # olibc header check
-for i in $with_olibc /usr /usr/local
-do
-  if test -f "$i/include/ligidn.h"; then
-    inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
-    if test -z "$inschk"; then
-      CPPFLAGS="-I$i/include $CPPFLAGS"
+if test "$ac_cv_lib_ogc_convert_punycode" = "yes" ; then
+  for i in $with_olibc /usr /usr/local
+  do
+    if test -f "$i/include/libidn.h"; then
+      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
+      if test -z "$inschk"; then
+        CPPFLAGS="-I$i/include $CPPFLAGS"
+      fi
+      break
+    elif test -f "$i/include/olibc/libidn.h"; then
+      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/olibc "`
+      if test -z "$inschk"; then
+        CPPFLAGS="-I$i/include/olibc $CPPFLAGS"
+      fi
+      break
     fi
-    break
-  elif test -f "$i/include/olibc/libidn.h"; then
-    inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/olibc "`
-    if test -z "$inschk"; then
-      CPPFLAGS="-I$i/include/olibc $CPPFLAGS"
+  done
+fi
+
+# geoip library check
+if test "x$with_geoip" != "x"; then
+  if test -f "$with_geoip" ; then
+    chk_ext=`echo $with_geoip | ${SED} 's!.*\.\(^.\+\)$!\1!g'`
+    if test "$chk_ext" = "so" -a "$chk_ext" = "a"; then
+      with_geoip=`echo $with_geoip | ${SED} 's!/^/*$!!g'`
+      geoiplib="-L$with_geoip"
+
+      geoipchk=`echo $with_geoip | ${GERP} '/lib$'`
+      if test -n "geoipdchk"; then
+        with_geoip=`echo $with_geoip | ${SED} 's!/lib$!!g'`
+      fi
     fi
-    break
+  elif test -d "$with_geoip" ; then
+    if test -f $with_geoip/lib/libGeoIP.a -o -f $with_geoip/lib/libGeoIP.so; then
+      geoiplib="-L$with_geoip/lib"
+          fi
+  else
+    geoiplib=
   fi
-done
+
+  LDFLAGS="$geoiplib $LDFLAGS"
+fi
+
+echo "$as_me:$LINENO: checking for GeoIP_new in -lGeoIP" >&5
+echo $ECHO_N "checking for GeoIP_new in -lGeoIP... $ECHO_C" >&6
+if test "${ac_cv_lib_GeoIP_GeoIP_new+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGeoIP  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char GeoIP_new ();
+int
+main ()
+{
+GeoIP_new ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_GeoIP_GeoIP_new=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_GeoIP_GeoIP_new=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_GeoIP_GeoIP_new" >&5
+echo "${ECHO_T}$ac_cv_lib_GeoIP_GeoIP_new" >&6
+if test $ac_cv_lib_GeoIP_GeoIP_new = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBGEOIP 1
+_ACEOF
+
+  LIBS="-lGeoIP $LIBS"
+
+fi
+
+
+# geoip header check
+if test "$ac_cv_lib_GeoIP_GeoIP_new" = "yes" ; then
+  for i in $with_geoip /usr /usr/local
+  do
+    if test -f "$i/include/GeoIP.h"; then
+      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
+      if test -z "$inschk"; then
+        CPPFLAGS="-I$i/include $CPPFLAGS"
+      fi
+      geo_header="GeoIP.h"
+      break
+    elif test -f "$i/include/GeoIP/GeoIP.h"; then
+      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/GeoIP "`
+      if test -z "$inschk"; then
+        CPPFLAGS="-I$i/include/GeoIP $CPPFLAGS"
+      fi
+      geo_header="GeoIP.h"
+      break
+    fi
+  done
+fi
 
 # Checks for header files.
 ac_ext=c
@@ -3273,10 +3382,11 @@ done
 
 
 
+
 for ac_header in stdio.h string.h ctype.h limits.h sys/types.h sys/socket.h \
 		 stdlib.h unistd.h netinet/in.h arpa/nameser.h netdb.h errno.h \
 		 sys/signal.h getopt.h libintl.h locale.h dlfcn.h error.h inttypes.h \
-		 memory.h stdint.h sys/stat.h iconv.h langinfo.h libidn.h
+		 memory.h stdint.h sys/stat.h iconv.h langinfo.h libidn.h $geo_header
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
 if eval "test \"\${$as_ac_Header+set}\" = set"; then
