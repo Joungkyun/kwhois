@@ -1,4 +1,4 @@
-.\" RCSID: @(#)$Id: kwhois.1.kr,v 1.2 2004-02-04 06:11:45 oops Exp $
+.\" RCSID: @(#)$Id: kwhois.1.kr,v 1.3 2004-02-04 06:19:37 oops Exp $
 .TH kwhois 1 "Nov 1999"
 .SH Name
 kwhois \- ¥Î«—πŒ±π »Ø∞Ê¿∏∑Œ ºˆ¡§µ» finger style¿« whois
@@ -48,4 +48,4 @@ Bug report to :
 .br
 .B ¿Ã∫¥±‚ <pino5@hitel.net>
 .br
-.B ±Ë¡§±’ <admin@oops.kr.net>
+.B ±Ë¡§±’ <admin@oops.org>

@@ -1,7 +1,7 @@
-$Id: README.kr,v 1.2 2004-02-04 06:11:45 oops Exp $
-kwhois (korean finger style whois) by JoungKyun Kim <admin@oops.kr.net>
+$Id: README.kr,v 1.3 2004-02-04 06:19:37 oops Exp $
+kwhois (korean finger style whois) by JoungKyun Kim <admin@oops.org>
                                       ByungKi Lee <pino5@hitel.net>
-                                      in BbuWoo Packagement
+                                      in OOPS development organization
 
 이 program은 대한민국 local domain의 검색을 편리하게 하기 위한
 목적으로 만들어 졌으며, kr local domain 외에도 InterNic(com,net.org),
@@ -44,7 +44,7 @@ Internic에 검색하는 것과 같이 whois domain.co.kr 로 바로 검색이
 현재 whois server를 지정하지 않고 바로 검색을 할수 있는 whois 
 server는 internic, krnic, tonic, eNIC (cc domain), JPnic(jp) 이렇게
 5개이다. 이 외의 whois server address를 알고 있거나 필요한 국가의
-whois server를 추가하기를 요망한다면 admin@oops.kr.net 으로 mail을 
+whois server를 추가하기를 요망한다면 admin@oops.org 으로 mail을 
 보내주면 계속 첨가해 나가도록 하겠다.
 
 단 handle id를 검색할 시에는 default로는 internic 밖에 지원이 안된다.
@@ -81,7 +81,7 @@ Bug Report
 ----------
 
 mailto : 이병기 <pino5@hitel.net>
-mailto : 김정균 <admin@oops.kr.net>
+mailto : 김정균 <admin@oops.org>
 
 
 라이센스
@@ -91,5 +91,6 @@ kwhois는 Tony Nardo가 만든 fwhois의 재배포판 이다.
 
 
                                  LAST Modified 1999.11.08
-                                 김정균 <admin@oops.kr.net>
-                                 In BbuWoo Packagement <http://oops.kr.net>
+                                 김정균 <admin@oops.org>
+                                 In OOPS development organization 
+                                                <http://oops.org>

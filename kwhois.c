@@ -1,4 +1,4 @@
-/* kwhois.c by JoungKyun Kim & ByungKi Lee in BbuWoo Packagement.
+/* kwhois.c by JoungKyun Kim & ByungKi Lee in OOPS development organization.
 * Networking code taken and modified from net.c in the finger source code
 */
 
@@ -38,14 +38,14 @@
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 * SUCH DAMAGE.
-* $Id: kwhois.c,v 1.2 2004-02-04 06:12:07 oops Exp $
+* $Id: kwhois.c,v 1.3 2004-02-04 06:19:37 oops Exp $
 */
 
 #ifndef lint
 char copy_en[] =
-"Redistributions JoungKyun Kim & ByungKi Lee in B.P from fwhois.\n";
+"Redistributions JoungKyun Kim & ByungKi Lee in OOPS D.O from fwhois.\n";
 char copy_ko[] =
-"Redistributions ±Ë¡§±’ & ¿Ã∫¥±‚ in B.P from fwhois.\n";
+"Redistributions ±Ë¡§±’ & ¿Ã∫¥±‚ in OOPS D.O from fwhois.\n";
 #endif /* not lint */
 
 #ifndef lint
@@ -75,7 +75,7 @@ int argc;
       if (strstr(argv[1], ".")) {
         tail = strdup(rindex(argv[1], '.'));
 
-        /* If no host specified, use whois.internic.net */
+        /* If no host specified, use whois.networksolutions.com */
         if(!index(argv[1],'@')) {
            if (tail) {
               if(!strcmp(tail, ".kr")) {
@@ -91,14 +91,14 @@ int argc;
                  stuff = strcat(eleet,"@whois.nic.ad.jp");
               }
               else {
-                 stuff = strcat(eleet,"@whois.internic.net");
+                 stuff = strcat(eleet,"@whois.networksolutions.com");
               }
            }
            eleet = stuff;
         }
       }	
       else {
-	stuff = strcat(eleet,"@whois.internic.net");
+	stuff = strcat(eleet,"@whois.networksolutions.com");
       }
    }
    /* If the user entered an invalid argument, here they go */

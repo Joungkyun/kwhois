@@ -1,7 +1,7 @@
-$Id: INSTALL,v 1.2 2004-02-04 06:11:45 oops Exp $
-kwhois (korean finger style whois) by JoungKyun Kim <admin@oops.kr.net>
+$Id: INSTALL,v 1.3 2004-02-04 06:19:37 oops Exp $
+kwhois (korean finger style whois) by JoungKyun Kim <admin@oops.org>
                                       ByungKi Lee <pino5@hitel.net>
-                                      in BbuWoo Packagement
+                                      in OOPS development organization
 
 Installation
 
@@ -12,5 +12,6 @@ Installation
 
 
                                  LAST Modified 1999.10.29
-                                 JoungKyun Kim <admin@oops.kr.net>
-                                 In BbuWoo Packagement <http://oops.kr.net>
+                                 JoungKyun Kim <admin@oops.org>
+                                 In OOPS development organization
+                                            <http://www.oops.org>
