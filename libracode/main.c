@@ -1,4 +1,4 @@
-/* $Id: main.c,v 1.3 2004-06-03 09:57:17 oops Exp $ */
+/* $Id: main.c,v 1.4 2004-06-03 12:23:03 oops Exp $ */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#ifdef HAVE_LIBOLIBC
+#ifdef HAVE_LIBOGC
 
 #include <olibc/libstring.h>
 
