@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.3 2004-02-04 07:55:52 oops Exp $"
+#ident "$Id: whois.c,v 1.4 2004-02-04 07:59:44 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,6 +286,7 @@ process_query(const char *server, const char *port, const char *query,
 		process_query(next_server, port, query,
 			      timeout, recurse - 1, verbose);
 	}
+	free (next_server);
 }
 
 int
@@ -411,10 +412,11 @@ main(int argc, char **argv)
 			server[0] = '\0';
 			server++;
 		} else {
-			char *tail;
+			char *tail, *gettail;
 
 			/* get contry code */
-			tail = strdup(rindex(query, '.'));
+			gettail = rindex(query, '.');
+			tail = ( gettail != NULL ) ? strdup (gettail) : strdup ("");
 
 			/* Nothing there either.  Use the NICNAMESERVER,
 			 * WHOISSERVER, or DEFAULT_SERVER, in that order. */
@@ -441,6 +443,7 @@ main(int argc, char **argv)
 					}
 				}
 			}
+			free (tail);
 		}
 	}
 
