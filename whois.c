@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.2 2004-02-04 07:52:07 oops Exp $"
+#ident "$Id: whois.c,v 1.3 2004-02-04 07:55:52 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,6 +76,7 @@
 #endif
 
 #define LO_SERVER "whois-servers.net"
+#define NSI_SERVER "whois.networksolutions.com"
 
 int get_lang();
 int langs;
@@ -430,9 +431,11 @@ main(int argc, char **argv)
 						sprintf(tmphost, "%c%c.%s", tail[1], tail[2], LO_SERVER);
 						server = strdup(tmphost);
 					} else if (!strcmp(tail, ".biz")) {
-						server = "whois.networksolutions.com";
+						server = NSI_SERVER;
 					} else if (!strcmp(tail, ".info")) {
-						server = "whois.networksolutions.com";
+						server = NSI_SERVER;
+					} else if (!strcmp(tail, ".org")) {
+						server = NSI_SERVER;
 					} else {
 						server = DEFAULT_SERVER;
 					}

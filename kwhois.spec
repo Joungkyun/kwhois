@@ -1,7 +1,7 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 2.0
+Version: 2.2
 Release: 1
 Copyright: GPL
 Group: Applications/Internet
@@ -9,9 +9,6 @@ Url: http://www.oops.org/
 Source0: ftp://ftp.oops.kr.net/pub/distrib/kwhois/kwhois-%{version}.tar.gz
 Buildroot: /var/tmp/kwhois-root
 Conflicts: fwhois, whois
-
-Packager: JoungKyun Kim <http://www.oops.org>
-Vendor: OOPS Development ORG
 
 %description
 A whois client that accepts both traditional and finger-style queries.
@@ -41,6 +38,13 @@ mkdir -p $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1}
 %{_mandir}/man1/kwhois.1*
 
 %changelog
+* Fri Feb  7 2003 JoungKyun Kim <http://www.oops.org>
+- changed org registra server to whois.networksolutions.com
+
+* Sun Sep 15 2002 JoungKyun Kim <http://www.oops.org>
+- enable whole local domain in default
+- modified man file
+
 * Thu Sep 12 2002 JoungKyun Kim <admin@oops.org> 2.0-1
 - added traditional query type
 - added tv, biz, info whois server as default server
