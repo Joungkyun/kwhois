@@ -17,7 +17,7 @@
  * along with GNU Libidn; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Id: idn.c,v 1.2 2004-02-04 14:12:23 oops Exp $
+ * $Id: idn.c,v 1.3 2004-06-03 09:57:17 oops Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -64,7 +64,7 @@ int main (int argc, char *argv[]) {
 	if ( argc - optind < 1 )
 		usage();
 
-	printf ("%s\n", convert_punycode ( argv[optind], res, debug )) ;
+	printf ("%s\n", (char *) convert_punycode ( argv[optind], res, debug )) ;
 
 	return 0;
 }
