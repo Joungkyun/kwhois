@@ -17,7 +17,7 @@
  * along with GNU Libidn; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Id: idn.c,v 1.4 2004-06-03 12:23:03 oops Exp $
+ * $Id: idn.c,v 1.5 2004-09-02 19:19:39 oops Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -29,7 +29,7 @@
 #include <stdlib.h>
 
 #ifdef HAVE_LIBOGC
-#include <olibc/libstring.h>
+#include <olibc/libidn.h>
 
 /* support i18n */
 #include "../i18n.h"
