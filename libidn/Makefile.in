@@ -1,0 +1,28 @@
+# $Id: Makefile.in,v 1.1 2004-02-04 14:12:23 oops Exp $
+CC		= @CC@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= @bindir@
+mandir		= @mandir@
+datadir		= @datadir@
+LANGDIR		= @datadir@/locale
+CFLAGS		= -Wall @CFLAGS@
+LDFLAGS		= @LDFLAGS@ @LIBS@
+DEFS		= @DEFS@ -I. -I.. -DLANGDIR=\"$(LANGDIR)\"
+SOURCE		= idn.c
+OBJECT		= i18n.o idn.o
+OBOPT		= -Wall $(DEFS) -DPVERSION=\"@PACKAGE_VERSION@\"
+
+RM		= @RM@ -f
+
+all: $(OBJECT)
+	$(CC) $(CFLAGS) -DLANGDIR=\"$(LANGDIR)\" $(OBJECT) -o punyconv $(LDFLAGS)
+
+i18n.o: ../i18n.c ../config.h
+	$(CC) $(OBOPT) $(CFLAGS) -DLANGDIR=\"$(LANGDIR)\" -c ../i18n.c
+
+idn.o: idn.c
+	$(CC) $(OBOPT) $(CFLAGS) -c idn.c
+
+clean:
+	$(RM) *.o *~ punyconv

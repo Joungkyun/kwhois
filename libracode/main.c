@@ -1,33 +1,31 @@
-/* $Id: main.c,v 1.1 2004-02-04 08:29:21 oops Exp $ */
+/* $Id: main.c,v 1.2 2004-02-04 14:12:23 oops Exp $ */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#define __CINCLUDE__
-#include "race.h"
-#include "misc.h"
+#ifdef HAVE_LIBOLIBC
 
+#include <olibc/libstring.h>
+
+#define __CINCLUDE__
 #include "i18n.h"
 
-char *progs = "raceconv for libracode";
-char *version = "0.0.1";
+char *progs = "raceconv";
 
 void usage (void);
 
 int main (int argc, char *argv[]) {
-	char readbuf[BUFSIZ];
-	int opt, optlength, res = 0, debug = 0;
+	int opt, res = 0, debug = 0;
 
 #ifdef ENABLE_NLS
 	i18n_print();
 #endif
 
-	memset (readbuf, '\0', sizeof(readbuf));
-
 	while ((opt = getopt(argc,argv, "auvh?")) != -1) {
-		if (optarg != NULL)
-			optlength = strlen(optarg);
-
 		switch (opt) {
 			case 'a' :
 				res = 0;
@@ -44,17 +42,13 @@ int main (int argc, char *argv[]) {
 	}
 
 	if (argc - optind < 1 ) usage();
-	strcpy (readbuf, argv[optind]);
-
-	//if ( ! res ) encode_race (readbuf);
-	if ( ! res ) printf ("%s\n", encode_race (readbuf, debug));
-	else printf ("%s\n", decode_race (readbuf, debug));
+	printf ("%s\n", convert_racecode ( argv[optind], res, debug ));
 
 	return 0;
 }
 
 void usage (void) {
-	fprintf (stderr, "%s %s\n", progs, version);
+	fprintf (stderr, "%s %s\n", progs, PVERSION);
 	fprintf (stderr, _("Usage: %s [OPTIONS...] convert_domain\n"), progs);
 	fprintf (stderr, _("valid options:\n"));
 	fprintf (stderr, _("    -h    help message (this message)\n"));
@@ -63,6 +57,14 @@ void usage (void) {
 	fprintf (stderr, _("    -v    verbose mode\n"));
 	exit (1);
 }
+
+#else
+int main (void) {
+	fprintf (stderr, "Can't support olibc library\n");
+
+	return 1;
+}
+#endif
 
 /*
  * Local variables:

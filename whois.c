@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.5 2004-02-04 08:29:21 oops Exp $"
+#ident "$Id: whois.c,v 1.6 2004-02-04 14:12:23 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,10 +27,6 @@
 
 /* support i18n */
 #include "i18n.h"
-#include "libidn/idna.h"
-#include "libidn/stringprep.h"
-#include "libracode/race.h"
-#include "libracode/misc.h"
 
 /* ansi color */
 #define COLOR 34
@@ -78,6 +74,12 @@
 #include <ctype.h>
 #endif
 
+#ifdef HAVE_OLIBC_LIBSTRING_H
+#  ifdef HAVE_LIBOLIBC
+#    include <olibc/libstring.h>
+#  endif
+#endif
+
 #ifndef DEFAULT_SERVER
 #define DEFAULT_SERVER "whois.crsnic.net"
 #endif
@@ -88,10 +90,7 @@
 #define LO_SERVER "whois-servers.net"
 #define NSI_SERVER "whois.networksolutions.com"
 
-char *version = "3.0";
-int multibyte_check (char *src);
-char *punyconv (char *domain, char *tail);
-char *raceconv (char *domain, int debug);
+int check_code ( char *tail );
 
 void
 alarm_handler(int signum)
@@ -267,15 +266,13 @@ process_query(const char *server, const char *port, const char *query,
 	free (next_server);
 }
 
-int
-main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	char *server = NULL;
 	char *port = DEFAULT_PORT;
 	char *query = NULL;
 	char name[256];
 	int i, recurse = -1, help = 0, parse = 1;
-	int verbose = 0, timeout = -1, puny = 0;
+	int verbose = 0, timeout = -1;
 	char *tail = NULL, *gettail = NULL;
 
 	memset (name, '\0', sizeof(name));
@@ -316,10 +313,6 @@ main(int argc, char **argv)
 			case 'n':
 				/* Force chasing off. */
 				recurse = 0;
-				break;
-			case 'P':
-				/* convert punycode. */
-				puny = 1;
 				break;
 			case 't':
 				/* Use a timeout when querying.  The timeout
@@ -367,11 +360,10 @@ main(int argc, char **argv)
 		fprintf (stderr, _("       -t timeout query time limit\n"));
 		fprintf (stderr, _("       -r         force recursion\n"));
 		fprintf (stderr, _("       -n         disable recursion\n"));
-		fprintf (stderr, _("       -P         convert punyconde\n"));
 		fprintf (stderr, _("       -v         verbose mode\n"));
 		fprintf (stderr, _("       --         treat remaining arguments as part of the query\n"));
 		fprintf (stderr, _("default server is %s\n"), DEFAULT_SERVER);
-		fprintf (stderr, "kwhois %s\n", version);
+		fprintf (stderr, "%s %s\n", NAME, PVERSION);
 		exit(1);
 	}
 
@@ -442,21 +434,21 @@ main(int argc, char **argv)
 		}
 	}
 
-	/* check multibyte domain */
-	if ( puny == 1 ) {
-		strcpy (name, (char *) punyconv (query, tail));
+#ifdef HAVE_LIBOLIBC
+	/* use racecode ??? */
+	/*
+	if ( ! check_code (tail) ) {
+		strcpy (name, (char *) convert_punycode (query, 0, verbose));
 	} else {
-		strcpy (name, (char *) raceconv (query, verbose));
+		strcpy (name, (char *) convert_racecode (query, 0, verbose));
 	}
+	*/
+	strcpy (name, (char *) convert_punycode (query, 0, verbose));
 
 	if (verbose) {
 		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
-		if ( puny || ! strncasecmp (name, "bq--", 4) ) {
-			fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, query);
-			fprintf (stderr, _("[1;%dmCONV HOST     :[7;0m %s\n"), COLOR, name);
-		} else {
-			fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, name);
-		}
+		fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, query);
+		fprintf (stderr, _("[1;%dmCONV HOST     :[7;0m %s\n"), COLOR, name);
 		fprintf (stderr, _("[1;%dmTAIL          :[7;0m %s\n"), COLOR, tail);
 		fprintf (stderr, _("[1;%dmSERVER        :[7;0m %s\n"), COLOR, server);
 		fprintf (stderr, _("[1;%dmPORT          :[7;0m %s\n"), COLOR, port);
@@ -467,75 +459,22 @@ main(int argc, char **argv)
 
 	/* Hand it off to the query function. */
 	process_query(server, port, name, timeout, recurse, verbose);
+#else
+	process_query(server, port, query, timeout, recurse, verbose);
+#endif
 
 	return 0;
 }
 
-char *punyconv (char *domain, char *tail) {
-	int chk = 0, rc;
-	char *p, *r;
-	static char res[256];
-	uint32_t *q;
-
-	memset (res, '\0', sizeof(res));
-	chk = multibyte_check(domain);
-
-	if ( tail != NULL ) {
-		if ( strcmp ("kr", tail) ) chk = 0;
-	} else chk = 0;
-
-	if (chk == 1) {
-		p = stringprep_locale_to_utf8 (domain);
-		if (!p) {
-			fprintf (stderr, _("%s: could not convert from %s to UTF-8.\n"),
-					domain, stringprep_locale_charset ());
-			exit (1);
-		}
-
-		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
-		if (!q) {
-			free (p);
-			fprintf (stderr, _("%s: could not convert from UCS-4 to UTF-8.\n"), domain);
-			exit (1);
-		}
-
-		rc = idna_to_ascii_4z (q, &r, 0);
-		free (q);
-		if (rc != IDNA_SUCCESS) {
-			fprintf (stderr, _("%s: idna_to_ascii_from_locale() failed with error %d.\n"), domain, rc);
-			exit (1);
-		}
-
-		strcpy (res, r);
-		free (r);
-	} else {
-		return domain;
+int check_code ( char *tail ) {
+	if ( ! strcasecmp ( tail, "com" ) || ! strcasecmp ( tail, "net" ) ) {
+		return 1;
+	} else if ( ! strcasecmp ( tail, "org" ) || ! strcasecmp ( tail, "info" ) ||
+			    ! strcasecmp ( tail, "biz" ) || ! strcasecmp ( tail, "name" ) ) {
+		return 2;
 	}
 
-	return res;
-}
-
-char * raceconv (char *domain, int debug) {
-	static char race[1024];
-
-	memset (race, '\0', sizeof (race));
-	strcpy (race, encode_race (domain, debug));
-
-	return race;
-}
-
-int multibyte_check (char *src) {
-	int mchk = 0;
-	int i = 0;
-
-	for (i=0; i<strlen(src); i++) {
-		if (src[i] & 0x80) {
-			mchk = 1;
-			break;
-		}
-	}
-
-	return mchk;
+	return 0;
 }
 
 /*

@@ -1,5 +1,12 @@
 Changes by JoungKyun Kim <http://www.oops.org>
-$Id: Changes,v 1.1 2004-02-04 08:29:21 oops Exp $
+$Id: Changes,v 1.2 2004-02-04 14:12:23 oops Exp $
+
+* Wed Feb  4 2003
+- update 3.1
+- removed idn library and linked olibc
+- changed convert method from race to puny on dot com multibyte domain
+- rewrite configure.ac
+- rewrite Makefile
 
 * Fri Aug 22 2003
 - update 3.0

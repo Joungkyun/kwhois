@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.3 2004-02-04 08:29:21 oops Exp $
+# $Id: Makefile.in,v 1.4 2004-02-04 14:12:23 oops Exp $
 CC		= @CC@
 CFLAGS		= -Wall @CFLAGS@ @DEFS@
 LDFLAGS		= @LDFLAGS@ @LIBS@
@@ -10,20 +10,21 @@ mandir		= @mandir@
 INSTALL		= @INSTALL@
 LANGDIR		= @datadir@/locale
 DEFS		= -I. -I./libidn -DLANGDIR=\"$(LANGDIR)\"
-VERSION		= $(shell grep ^Version: kwhois.spec | cut -f2 -d' ')
-RELEASE		= $(shell grep ^Release: kwhois.spec | cut -f2 -d' ')
-CVSTAG		= $(shell echo kwhois-$(VERSION)-$(RELEASE) | sed 's^\.^-^g')
 OBJ		= whois.o i18n.o
-SUBOBJ          = libidn/idna.o libidn/nfkc.o libidn/profiles.o libidn/punycode.o \
-		  libidn/stringprep.o libidn/stringprep_generic.o libidn/toutf8.o \
-		  libracode/misc.o libracode/race.o
+
+VERSION		= @PACKAGE_VERSION@
+NAME		= @PACKAGE_NAME@
+
+RM		= @RM@ -f
+MKDIR		= @MKDIR@ -p
+LN		= @LN_S@ -f
 
 all: punyconv raceconv whois
 	make -C po
 	-strip whois libidn/punyconv libracode/raceconv
 
 whois: $(OBJ)
-	$(CC) -Wall $(CFLAGS) $(LDFLAGS) $(DEFS) $(OBJ) $(SUBOBJ) -o whois
+	$(CC) -Wall $(CFLAGS) $(LDFLAGS) $(DEFS) $(OBJ) -o whois
 
 punyconv:
 	make -C libidn CFLAGS="$(CFLAGS)" LANGDIR=$(LANGDIR)
@@ -32,7 +33,8 @@ raceconv:
 	make -C libracode CFLAGS="$(CFLAGS)" LANGDIR=$(LANGDIR)
 
 whois.o: whois.c i18n.h config.h
-	$(CC)  -Wall $(CFLAGS) $(LDFLAGS) $(DEFS) -c whois.c
+	$(CC)  -Wall $(CFLAGS) $(LDFLAGS) $(DEFS) \
+		-DNAME=\"$(NAME)\" -DPVERSION=\"$(VERSION)\" -c whois.c
 
 i18n.o: i18n.c i18n.h config.h
 	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -c i18n.c
@@ -47,14 +49,17 @@ clean:
 	make -C libracode clean
 
 distclean: clean
-	-$(RM) Makefile config.h config.cache config.log config.status
+	-$(RM) Makefile libidn/Makefile libracode/Makefile config.h \
+		config.cache config.log config.status
 
 install: po-install
-	mkdir -p $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/{man1,ko/man1}
+	$(MKDIR) -p $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/{man1,ko/man1}
 
 	$(INSTALL) -m 755 whois $(DESTDIR)$(bindir)
-	$(INSTALL) -m 644 kwhois.1 whois.1 $(DESTDIR)$(mandir)/man1
-	$(INSTALL) -m 644 kwhois.1.kr whois.1.kr $(DESTDIR)$(mandir)/ko/man1
-	ln -sf whois $(DESTDIR)$(bindir)/kwhois
+	$(INSTALL) -m 644 docs/kwhois.1 $(DESTDIR)$(mandir)/man1/kwhois.1
+	$(INSTALL) -m 644 docs/whois.1 $(DESTDIR)$(mandir)/man1/whois.1
+	$(INSTALL) -m 644 docs/kwhois.1.kr $(DESTDIR)$(mandir)/ko/man1/kwhois.1
+	$(INSTALL) -m 644 docs/whois.1.kr $(DESTDIR)$(mandir)/ko/man1/whois.1
+	$(LN) whois $(DESTDIR)$(bindir)/kwhois
 	$(INSTALL) -m 755 libidn/punyconv $(DESTDIR)$(bindir)
 	$(INSTALL) -m 755 libracode/raceconv $(DESTDIR)$(bindir)

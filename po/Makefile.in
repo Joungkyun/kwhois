@@ -1,0 +1,26 @@
+# $Id: Makefile.in,v 1.1 2004-02-04 14:12:23 oops Exp $
+DESTDIR =
+
+prefix  = @prefix@
+langdir = @datadir@/locale
+
+INSTALL = @INSTALL@
+LS      = @LS@
+RM      = @RM@ -f
+SED     = @SED@
+MKDIR   = @MKDIR@ -p
+MSGFMT  = @MSGFMT@
+
+all:
+	for i in `$(LS) *.po | $(SED) 's/\.po//'` ; do \
+		$(MSGFMT) $$i.po -o $$i.mo ; \
+	done
+
+install:
+	for i in `$(LS) *.po | $(SED) 's/\.po//'` ; do \
+		$(MKDIR) $(DESTDIR)$(langdir)/$$i/LC_MESSAGES/ ; \
+		$(INSTALL) -m644 $$i.mo $(DESTDIR)$(langdir)/$$i/LC_MESSAGES/$(PROG).mo ; \
+	done
+
+clean:
+	-$(RM) *.mo
