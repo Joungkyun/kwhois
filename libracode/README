@@ -1,0 +1,9 @@
+LibRacode
+
+Written by JoungKyun Kim <http://www.oops.org> 2003.8.22
+$Id: README,v 1.1 2004-02-04 08:29:21 oops Exp $
+
+Libracode supported to convert multibyte domain to race code
+
+libracode 는 다국어 도메인 (com/net/org) 를 race code 로 변환/역변환
+해 주는 라이브러리 이다.

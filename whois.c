@@ -19,11 +19,21 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.4 2004-02-04 07:59:44 oops Exp $"
+#ident "$Id: whois.c,v 1.5 2004-02-04 08:29:21 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+/* support i18n */
+#include "i18n.h"
+#include "libidn/idna.h"
+#include "libidn/stringprep.h"
+#include "libracode/race.h"
+#include "libracode/misc.h"
+
+/* ansi color */
+#define COLOR 34
 
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
@@ -78,16 +88,17 @@
 #define LO_SERVER "whois-servers.net"
 #define NSI_SERVER "whois.networksolutions.com"
 
-int get_lang();
-int langs;
+char *version = "3.0";
+int multibyte_check (char *src);
+char *punyconv (char *domain, char *tail);
+char *raceconv (char *domain, int debug);
 
 void
 alarm_handler(int signum)
 {
 	char *message;
 
-	if ( langs == 1 ) { message = "¿äÃ» ½Ã°£ ÃÊ°ú.\n"; }
-	else { message = "Timeout exceeded.\n"; }
+	message = _("Timeout exceeded.\n");
 	write(STDERR_FILENO, message, strlen(message));
 	exit(0);
 }
@@ -114,24 +125,13 @@ process_query(const char *server, const char *port, const char *query,
 	}
 
 	if(getaddrinfo(server, port, &hints, &res) != 0) {
-		if ( langs == 1 ) {
-			fprintf(stderr, "%s:%s ¿¡ Á¢¼ÓÇÏ´Â µ¿¾È ¹ß»ýÇÑ ¿¡·¯ : %s\n",
-				server, port, gai_strerror(errno));
-		} else {
-			fprintf(stderr, "%s while getting connection info for %s:%s\n",
-				gai_strerror(errno), server, port);
-		}
+		fprintf(stderr, _("%s while getting connection info for %s:%s\n"),
+			gai_strerror(errno), server, port);
 		exit(1);
 	}
 
 	if(res == NULL) {
-		if ( langs == 1 ) {
-			fprintf(stderr, "%s:%s ¿¡ Á¢¼ÓÀ» ÇÏ´Â µ¿¾È ¾Æ¹«·± °á°ú¸¦ ¾òÁö ¸øÇÔ\n",
-				server, port);
-		} else {
-			fprintf(stderr, "no results while getting connection info for "
-				"%s:%s\n", server, port);
-		}
+		fprintf(stderr, _("no results while getting connection info for %s:%s\n"), server, port);
 		exit(1);
 	}
 
@@ -164,37 +164,22 @@ process_query(const char *server, const char *port, const char *query,
 		serv = getservbyname("whois", "tcp");
 	}
 	if(serv == NULL) {
-		if ( langs == 1 ) {
-			fprintf(stderr, "%s ¼­ºñ½º¿¡ ¹ß»ýÇÑ ¿¡·¯ : %s\n",
-				port, strerror(errno));
-		} else {
-			fprintf(stderr, "%s while getting service info for %s\n",
-				strerror(errno), port);
-		}
+		fprintf(stderr, _("%s while getting service info for %s\n"),
+			strerror(errno), port);
 		exit(1);
 	}
 
 	host = gethostbyname(server);
 	if(host == NULL) {
-		if ( langs == 1 ) {
-			printf("\"%s\" ¿¡ Á¢¼ÓÇÏ´Â µ¿¾È ¹ß»ýÇÑ ¿¡·¯ : %s\n",
-				server, strerror(h_errno));
-		} else {
-			printf("%s while getting address for \"%s\"\n",
-				strerror(h_errno), server);
-		}
+		printf(_("%s while getting address for \"%s\"\n"),
+			strerror(h_errno), server);
 		exit(1);
 	}
 
 	sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if(sd == -1) {
-		if ( langs == 1 ) {
-			printf("%s initializing protocol stacks?!?\n",
-				strerror(errno));
-		} else {
-			printf("%s initializing protocol stacks?!?\n",
-				strerror(errno));
-		}
+		printf(_("%s initializing protocol stacks?!?\n"),
+			strerror(errno));
 		exit(1);
 	}
 
@@ -209,31 +194,24 @@ process_query(const char *server, const char *port, const char *query,
 #endif
 
 	if(ret == -1) {
-		if ( langs == 1 ) {
-			printf("%s ÀÇ Á¢¼Ó ¿¡·¯ : %s\n", server, strerror(errno));
-		} else {
-			printf("%s connecting to %s\n", strerror(errno), server);
-		}
+		printf(_("%s connecting to %s\n"), strerror(errno), server);
 		exit(1);
+	}
+
+	if (verbose) {
+		fprintf (stderr, _("===> Connect to %s success\n"), server);
+		fprintf (stderr, _("===> Query %s to server\n\n"), query);
 	}
 
 	printf("[%s]\n", server);
 	snprintf(buf, sizeof(buf), "%s\r\n", query);
-	if(verbose) {
-		printf("=>'%s'\n", query);
-	}
 	send(sd, buf, strlen(buf), 0);
 
 	fflush(stdout);
 
 	reader = fdopen(sd, "r");
 	if(reader == NULL) {
-		if ( langs == 1 ) {
-			printf("¼ÒÄÏÀü¼Û ¿¡·¯ : %s\n", strerror(errno));
-		} else {
-			printf("%s while reading from socket\n",
-				strerror(errno));
-		}
+		printf(_("%s while reading from socket\n"), strerror(errno));
 		exit(1);
 	}
 
@@ -295,13 +273,17 @@ main(int argc, char **argv)
 	char *server = NULL;
 	char *port = DEFAULT_PORT;
 	char *query = NULL;
-	int i, recurse = -1, help = 0, parse = 1, verbose = 0, timeout = -1;
+	char name[256];
+	int i, recurse = -1, help = 0, parse = 1;
+	int verbose = 0, timeout = -1, puny = 0;
+	char *tail = NULL, *gettail = NULL;
 
-	/* get language type
-	 * return 1 : korean
-	 * return 0 : english
-	 */
-	langs = get_lang();
+	memset (name, '\0', sizeof(name));
+
+	/* support i18n */
+#ifdef ENABLE_NLS
+	i18n_print();
+#endif
 
 	/* If we got no arguments, we're just going to print out a short
 	 * usage message and quit. */
@@ -309,7 +291,7 @@ main(int argc, char **argv)
 		help = 1;
 	}
 
-	while(parse && ((i = getopt(argc, argv, "h:vrnp:t:-")) != -1)) {
+	while(parse && ((i = getopt(argc, argv, "h:vrnp:Pt:-")) != -1)) {
 		switch(i) {
 			case 'h':
 				/* The -h option for traditional whois specifies
@@ -334,6 +316,10 @@ main(int argc, char **argv)
 			case 'n':
 				/* Force chasing off. */
 				recurse = 0;
+				break;
+			case 'P':
+				/* convert punycode. */
+				puny = 1;
 				break;
 			case 't':
 				/* Use a timeout when querying.  The timeout
@@ -373,34 +359,20 @@ main(int argc, char **argv)
 	/* If the help flag was given, or we didn't get anything that looked
 	 * like a query string, print a short help message and quit. */
 	if(help || (query == NULL) || (strlen(query) == 0)) {
-		if ( langs == 1 ) {
-			printf("»ç¿ë¹ý: %s [¿É¼Ç...] ÁúÀÇ[@¼­¹ö[:Æ÷Æ®]]\n"
-			       "À¯È¿ÇÑ ¿É¼Çµé:\n"
-			       "       -h server  whois ¼­¹ö ÀÌ¸§\n"
-			       "       -p port    ¼­¹ö Æ÷Æ®\n"
-			       "       -t timeout ÁúÀÇ ½Ã°£ Á¦ÇÑ\n"
-			       "       -r         ¹Ýº¹À» °­Çà\n"
-			       "       -n         ¹Ýº¹À» ÇÏÁö ¾ÊÀ½\n"
-			       "       -v         »ó¼¼¸ðµå\n"
-			       "       --         ÁúÀÇÀÇ ºÎºÐÀ¸·Î ³²¾ÆÀÖ´Â ÀÎÀÚ·Î Ãë±Þ\n",
-			       strchr(argv[0], '/') ?
-			       strrchr(argv[0], '/') + 1 : argv[0]);
-			printf("±âº» ¼­¹ö : %s\n", DEFAULT_SERVER);
-		} else {
-			printf("Usage: %s [OPTION...] query[@server[:port]]\n"
-			       "valid options:\n"
-			       "       -h server  server name\n"
-			       "       -p port    server port\n"
-			       "       -t timeout query time limit\n"
-			       "       -r         force recursion\n"
-			       "       -n         disable recursion\n"
-			       "       -v         verbose mode\n"
-			       "       --         treat remaining arguments as part of "
-			       "the query\n", strchr(argv[0], '/') ?
-			       strrchr(argv[0], '/') + 1 : argv[0]);
-			printf("default server is %s\n", DEFAULT_SERVER);
-		}
-		exit(0);
+		fprintf (stderr, _("Usage: %s [OPTION...] query[@server[:port]]\n"),
+				strchr(argv[0], '/') ? strrchr(argv[0], '/') + 1 : argv[0]);
+		fprintf (stderr, _("valid options:\n"));
+		fprintf (stderr, _("       -h server  server name\n"));
+		fprintf (stderr, _("       -p port    server port\n"));
+		fprintf (stderr, _("       -t timeout query time limit\n"));
+		fprintf (stderr, _("       -r         force recursion\n"));
+		fprintf (stderr, _("       -n         disable recursion\n"));
+		fprintf (stderr, _("       -P         convert punyconde\n"));
+		fprintf (stderr, _("       -v         verbose mode\n"));
+		fprintf (stderr, _("       --         treat remaining arguments as part of the query\n"));
+		fprintf (stderr, _("default server is %s\n"), DEFAULT_SERVER);
+		fprintf (stderr, "kwhois %s\n", version);
+		exit(1);
 	}
 
 	/* If we didn't get an explicit server name, check if the query string
@@ -411,12 +383,14 @@ main(int argc, char **argv)
 			server = strrchr(query, '@');
 			server[0] = '\0';
 			server++;
-		} else {
-			char *tail, *gettail;
 
 			/* get contry code */
 			gettail = rindex(query, '.');
-			tail = ( gettail != NULL ) ? strdup (gettail) : strdup ("");
+			tail = ( gettail != NULL ) ? strdup (gettail + 1) : strdup ("");
+		} else {
+			/* get contry code */
+			gettail = rindex(query, '.');
+			tail = ( gettail != NULL ) ? strdup (gettail + 1) : strdup ("");
 
 			/* Nothing there either.  Use the NICNAMESERVER,
 			 * WHOISSERVER, or DEFAULT_SERVER, in that order. */
@@ -428,23 +402,26 @@ main(int argc, char **argv)
 				} else if (!tail) {
 					server = DEFAULT_SERVER;
 				} else {
-					if ( strlen(tail) == 3 ) {
+					if ( strlen(tail) == 2 ) {
 						char tmphost[50];
-						sprintf(tmphost, "%c%c.%s", tail[1], tail[2], LO_SERVER);
+						sprintf(tmphost, "%c%c.%s", tail[0], tail[1], LO_SERVER);
 						server = strdup(tmphost);
-					} else if (!strcmp(tail, ".biz")) {
+					} else if (!strcmp(tail, "biz")) {
 						server = NSI_SERVER;
-					} else if (!strcmp(tail, ".info")) {
+					} else if (!strcmp(tail, "info")) {
 						server = NSI_SERVER;
-					} else if (!strcmp(tail, ".org")) {
+					} else if (!strcmp(tail, "org")) {
 						server = NSI_SERVER;
 					} else {
 						server = DEFAULT_SERVER;
 					}
 				}
 			}
-			free (tail);
 		}
+	} else {
+		/* get contry code */
+		gettail = rindex(query, '.');
+		tail = ( gettail != NULL ) ? strdup (gettail + 1) : strdup ("");
 	}
 
 	/* If the server name includes a colon, snip the name there and
@@ -465,17 +442,107 @@ main(int argc, char **argv)
 		}
 	}
 
+	/* check multibyte domain */
+	if ( puny == 1 ) {
+		strcpy (name, (char *) punyconv (query, tail));
+	} else {
+		strcpy (name, (char *) raceconv (query, verbose));
+	}
+
+	if (verbose) {
+		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
+		if ( puny || ! strncasecmp (name, "bq--", 4) ) {
+			fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, query);
+			fprintf (stderr, _("[1;%dmCONV HOST     :[7;0m %s\n"), COLOR, name);
+		} else {
+			fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, name);
+		}
+		fprintf (stderr, _("[1;%dmTAIL          :[7;0m %s\n"), COLOR, tail);
+		fprintf (stderr, _("[1;%dmSERVER        :[7;0m %s\n"), COLOR, server);
+		fprintf (stderr, _("[1;%dmPORT          :[7;0m %s\n"), COLOR, port);
+		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
+	}
+
+	free (tail);
+
 	/* Hand it off to the query function. */
-	process_query(server, port, query, timeout, recurse, verbose);
+	process_query(server, port, name, timeout, recurse, verbose);
 
 	return 0;
 }
 
-int get_lang()
-{
-       if ( !strncmp( (char *) getenv("LANG"), "ko", 2) ) {
-               return 1;
-       } else {
-               return 0;
-       }
+char *punyconv (char *domain, char *tail) {
+	int chk = 0, rc;
+	char *p, *r;
+	static char res[256];
+	uint32_t *q;
+
+	memset (res, '\0', sizeof(res));
+	chk = multibyte_check(domain);
+
+	if ( tail != NULL ) {
+		if ( strcmp ("kr", tail) ) chk = 0;
+	} else chk = 0;
+
+	if (chk == 1) {
+		p = stringprep_locale_to_utf8 (domain);
+		if (!p) {
+			fprintf (stderr, _("%s: could not convert from %s to UTF-8.\n"),
+					domain, stringprep_locale_charset ());
+			exit (1);
+		}
+
+		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
+		if (!q) {
+			free (p);
+			fprintf (stderr, _("%s: could not convert from UCS-4 to UTF-8.\n"), domain);
+			exit (1);
+		}
+
+		rc = idna_to_ascii_4z (q, &r, 0);
+		free (q);
+		if (rc != IDNA_SUCCESS) {
+			fprintf (stderr, _("%s: idna_to_ascii_from_locale() failed with error %d.\n"), domain, rc);
+			exit (1);
+		}
+
+		strcpy (res, r);
+		free (r);
+	} else {
+		return domain;
+	}
+
+	return res;
 }
+
+char * raceconv (char *domain, int debug) {
+	static char race[1024];
+
+	memset (race, '\0', sizeof (race));
+	strcpy (race, encode_race (domain, debug));
+
+	return race;
+}
+
+int multibyte_check (char *src) {
+	int mchk = 0;
+	int i = 0;
+
+	for (i=0; i<strlen(src); i++) {
+		if (src[i] & 0x80) {
+			mchk = 1;
+			break;
+		}
+	}
+
+	return mchk;
+}
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw=4 ts=4 fdm=marker
+ * vim<600: noet sw=4 ts=4
+ */

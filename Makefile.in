@@ -1,27 +1,60 @@
-# $Id: Makefile.in,v 1.2 2004-02-04 07:55:51 oops Exp $
-CC=@CC@
-CFLAGS=-Wall @CFLAGS@ @DEFS@
-LDFLAGS=@LDFLAGS@ @LIBS@
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-bindir=@bindir@
-mandir=@mandir@
-INSTALL=@INSTALL@
-VERSION=$(shell grep ^Version: kwhois.spec | cut -f2 -d' ')
-RELEASE=$(shell grep ^Release: kwhois.spec | cut -f2 -d' ')
-CVSTAG=$(shell echo kwhois-$(VERSION)-$(RELEASE) | sed 's^\.^-^g')
+# $Id: Makefile.in,v 1.3 2004-02-04 08:29:21 oops Exp $
+CC		= @CC@
+CFLAGS		= -Wall @CFLAGS@ @DEFS@
+LDFLAGS		= @LDFLAGS@ @LIBS@
+DESTDIR		=
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= @bindir@
+mandir		= @mandir@
+INSTALL		= @INSTALL@
+LANGDIR		= @datadir@/locale
+DEFS		= -I. -I./libidn -DLANGDIR=\"$(LANGDIR)\"
+VERSION		= $(shell grep ^Version: kwhois.spec | cut -f2 -d' ')
+RELEASE		= $(shell grep ^Release: kwhois.spec | cut -f2 -d' ')
+CVSTAG		= $(shell echo kwhois-$(VERSION)-$(RELEASE) | sed 's^\.^-^g')
+OBJ		= whois.o i18n.o
+SUBOBJ          = libidn/idna.o libidn/nfkc.o libidn/profiles.o libidn/punycode.o \
+		  libidn/stringprep.o libidn/stringprep_generic.o libidn/toutf8.o \
+		  libracode/misc.o libracode/race.o
 
-whois: whois.c
-	$(CC) -o $@ $(CFLAGS) $< $(LDFLAGS)
+all: punyconv raceconv whois
+	make -C po
+	-strip whois libidn/punyconv libracode/raceconv
+
+whois: $(OBJ)
+	$(CC) -Wall $(CFLAGS) $(LDFLAGS) $(DEFS) $(OBJ) $(SUBOBJ) -o whois
+
+punyconv:
+	make -C libidn CFLAGS="$(CFLAGS)" LANGDIR=$(LANGDIR)
+
+raceconv:
+	make -C libracode CFLAGS="$(CFLAGS)" LANGDIR=$(LANGDIR)
+
+whois.o: whois.c i18n.h config.h
+	$(CC)  -Wall $(CFLAGS) $(LDFLAGS) $(DEFS) -c whois.c
+
+i18n.o: i18n.c i18n.h config.h
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -c i18n.c
+
+po-install:
+	make -C po DESTDIR=$(DESTDIR) langdir=$(LANGDIR) install
 
 clean:
-	$(RM) whois
+	-$(RM) whois *.o *~
+	make -C po clean
+	make -C libidn clean
+	make -C libracode clean
 
 distclean: clean
-	$(RM) Makefile config.cache config.log config.status
+	-$(RM) Makefile config.h config.cache config.log config.status
 
-install:
+install: po-install
+	mkdir -p $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/{man1,ko/man1}
+
 	$(INSTALL) -m 755 whois $(DESTDIR)$(bindir)
 	$(INSTALL) -m 644 kwhois.1 whois.1 $(DESTDIR)$(mandir)/man1
 	$(INSTALL) -m 644 kwhois.1.kr whois.1.kr $(DESTDIR)$(mandir)/ko/man1
 	ln -sf whois $(DESTDIR)$(bindir)/kwhois
+	$(INSTALL) -m 755 libidn/punyconv $(DESTDIR)$(bindir)
+	$(INSTALL) -m 755 libracode/raceconv $(DESTDIR)$(bindir)
