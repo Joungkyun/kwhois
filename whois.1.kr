@@ -1,0 +1,49 @@
+.\" RCSID: @(#)$Id: whois.1.kr,v 1.1 2004-02-04 06:29:01 oops Exp $
+.TH KWHOIS 1 "kwhois" "OOPS Develoopment ORG" \" -*- nroff -*-
+.SH 이름
+whois, kwhois \- 여러 도메인에 대한 whois, nicname 디비를 검색
+.SH 사용법
+.B whois
+[\-v] [\-r|\-n] [\-h 서버] [\-p 포트] [-t 시간제한] [\-\-] 질의[@서버[:포트]]
+.SH 설명
+.B whois
+어떠한 RFC954 wohis 서버에 형식과 질의를 보내고, 표준 출력으로 그 결과를 출력한다.
+.SH 옵션
+.TP
+\fI\-h server\fP
+질의를 할 whois 서버 이름을 지정한다. 지정하지 않는다면 \fBNICNAMESERVER\fP 와
+\fBWHOISSERVER\fP 환경 변수를 체크하게 되며, 환경 변수 역시 지정되어 있지 않을
+경우에는 default server - Internic, Krnic, Tonic, eNIC, JPnic, TVnic - 에 질의를
+하게 된다.
+.TP
+\fI\-p port\fP
+기본값은 \fBwhois\fP 이며, 클라이언트에서 접속할 포트번호를 변경할 수 있다.
+.TP
+\fI\-t\fP
+질의를 하였을 경우 시갖제한을 할 수 있다. 초로 지정을 한다.
+.TP
+\fI\-r\fP
+Force recursion.  If the first server response contains a line similar to
+
+Whois Server: \fIhostname\fP
+
+\fBwhois\fP will retry the same query with \fIhostname\fP as the server.  This
+is the default when the default server is being queried.
+.TP
+\fI\-n\fP
+Disable recursion, even if the default server is being queried.
+.TP
+\fI-v\fP
+Be verbose in the query.  This causes the client to print the query string
+it will send to the server before sending it.
+.TP
+\fI--\fP
+Don't interpret subsequent \fI-p\fP, \fI-h\fP, \fI-r\fP, or \fI-v\fP flags
+given as arguments.
+.SH 버그
+알려진 버그는 없다. 단, 간단한 프로토콜이기 때문에 어떠한 문제가 발생할 염려는
+없다고 생각이 된다.
+.SH 작성
+Nalin Dahyabhai <nalin@redhat.com>
+.br
+JoungKyun Kim <http://www.oops.org>

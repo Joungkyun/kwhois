@@ -1,0 +1,27 @@
+# $Id: Makefile.in,v 1.1 2004-02-04 06:29:01 oops Exp $
+CC=@CC@
+CFLAGS=-Wall @CFLAGS@ @DEFS@
+LDFLAGS=@LDFLAGS@ @LIBS@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+mandir=@mandir@
+INSTALL=@INSTALL@
+VERSION=$(shell grep ^Version: kwhois.spec | cut -f2 -d' ')
+RELEASE=$(shell grep ^Release: kwhois.spec | cut -f2 -d' ')
+CVSTAG=$(shell echo kwhois-$(VERSION)-$(RELEASE) | sed 's^\.^-^g')
+
+whois: whois.c
+	$(CC) -o $@ $(CFLAGS) $< $(LDFLAGS)
+
+clean:
+	$(RM) whois
+
+distclean: clean
+	$(RM) Makefile config.cache config.log config.status
+
+install:
+	$(INSTALL) -m 755 whois $(DESTDIR)$(bindir)
+	$(INSTALL) -m 644 kwhois.1 whois.1 $(DESTDIR)$(mandir)/man1
+	$(INSTALL) -m 644 kwhois.1.kr whois.1.kr $(DESTDIR)$(mandir)/ko/man1
+	ln -sf whois $(DESTDIR)$(bindir)/kwhois
