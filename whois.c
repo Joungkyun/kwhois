@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.11 2004-06-03 12:42:10 oops Exp $"
+#ident "$Id: whois.c,v 1.12 2004-06-03 12:51:44 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,12 +201,13 @@ process_query(const char *server, const char *port, const char *query,
 	}
 
 	printf("[%s]\n", server);
-	crschk++;
 
 	if (crschk)
 	  snprintf(buf, sizeof(buf), "%s\r\n", query);
-	else
+	else {
 	  snprintf(buf, sizeof(buf), "%s%s\r\n", crsformat ? "=" : "",query);
+	  if ( crsformat ) crschk++;
+	}
 
 	send(sd, buf, strlen(buf), 0);
 
