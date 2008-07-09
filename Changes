@@ -1,9 +1,10 @@
 Changes by JoungKyun Kim <http://www.oops.org>
-$Id: Changes,v 1.13 2008-07-09 13:40:43 oops Exp $
+$Id: Changes,v 1.14 2008-07-09 14:30:14 oops Exp $
 
 * Wed Jul  9 2008
   by JoungKyun Kim <http://www.oos.org>
   - support long ip format
+  - fixed memory corruption
 
 * Fri Sep  3 2004
   by JoungKyun Kim <http://www.oos.org>
