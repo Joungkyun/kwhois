@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.16 2004-08-10 11:17:10 oops Exp $"
+#ident "$Id: whois.c,v 1.17 2008-07-09 13:40:43 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,6 +64,9 @@
 #ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
 #endif
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
+#endif
 #ifdef HAVE_ARPA_NAMESER_H
 #include <arpa/nameser.h>
 #endif
@@ -91,6 +94,8 @@ int crsCheck ( char *wserv );
 int is_ipaddr (char *query);
 char * get_tail (char *query);
 char * parseQuery ( char *qry, char *wserv);
+int is_longip (char *query);
+char * long2ip (char ** ip);
 
 char *extension = NULL;
 
@@ -384,8 +389,12 @@ int main(int argc, char **argv) {
 			/* get contry code */
 			extension = strdup (get_tail (query));
 
-			if ( ! strcmp (extension, "IP ADDRESS") )
+			if ( ! strcmp (extension, "IP ADDRESS") ) {
+				if ( is_longip (query) )
+					long2ip (&query);
+
 				server = LO_SERVER;
+			}
 
 			/* Nothing there either.  Use the NICNAMESERVER,
 			 * WHOISSERVER, or DEFAULT_SERVER, in that order. */
@@ -420,6 +429,10 @@ int main(int argc, char **argv) {
 	} else {
 		/* get contry code */
 		extension = strdup (get_tail (query));
+
+		if ( ! strcmp (extension, "IP ADDRESS") )
+			if ( is_longip (query) )
+				long2ip (&query);
 	}
 
 	/* If the server name includes a colon, snip the name there and
@@ -466,6 +479,7 @@ int main(int argc, char **argv) {
 #else
 	process_query(server, port, query, timeout, recurse, verbose);
 #endif
+	free (query);
 	free (extension);
 
 	return 0;
@@ -531,6 +545,39 @@ char * get_tail (char *query) {
 
 		return gettail + 1;
 	}
+}
+
+int is_longip (char *query) {
+	while ( *query != 0 ) {
+		if ( *query < 48 || *query > 57 )
+			return 0;
+		*query++;
+	}
+
+	return 1;
+}
+
+char * _long2ip (char *ip) {
+	struct in_addr addr;
+	unsigned long longip;
+
+	longip = strtoul (ip, NULL, 10);
+
+	addr.s_addr = htonl (longip);
+	return inet_ntoa (addr);
+}
+
+char * long2ip (char **q) {
+	char *p;
+
+	if ( ! q )
+		return NULL;
+
+	p = strdup (*q);
+	free (*q);
+
+	*q = strdup (_long2ip (p));
+	free (p);
 }
 
 /*

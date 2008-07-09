@@ -3265,8 +3265,9 @@ done
 
 
 
+
 for ac_header in stdio.h string.h ctype.h limits.h sys/types.h sys/socket.h \
-		 stdlib.h unistd.h netinet/in.h arpa/nameser.h netdb.h errno.h \
+		 stdlib.h unistd.h netinet/in.h arpa/inet.h arpa/nameser.h netdb.h errno.h \
 		 sys/signal.h getopt.h libintl.h locale.h dlfcn.h error.h inttypes.h \
 		 memory.h stdint.h sys/stat.h iconv.h langinfo.h libidn.h $geo_header
 do

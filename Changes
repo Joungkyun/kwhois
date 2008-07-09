@@ -1,17 +1,13 @@
 Changes by JoungKyun Kim <http://www.oops.org>
-$Id: Changes,v 1.12 2004-09-02 19:21:20 oops Exp $
+$Id: Changes,v 1.13 2008-07-09 13:40:43 oops Exp $
+
+* Wed Jul  9 2008
+  by JoungKyun Kim <http://www.oos.org>
+  - support long ip format
 
 * Fri Sep  3 2004
   by JoungKyun Kim <http://www.oos.org>
   - fixed typo libidn.h
-
-* Tue Jun  8 2004
-  by JoungKyun Kim <http://www.oos.org>
-  - start 3.4
-  - added crsnic check function
-  - changed query parsing
-
-* Thu Jun  3 2004
 
 * Tue Aug 10 2004
   by JoungKyun Kim <http://www.oos.org>

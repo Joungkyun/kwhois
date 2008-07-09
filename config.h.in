@@ -1,12 +1,15 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 /*
  * CVS ID Tag
- * $Id: config.h.in,v 1.10 2004-08-10 11:17:10 oops Exp $
+ * $Id: config.h.in,v 1.11 2008-07-09 13:40:43 oops Exp $
  */
 #ifndef CONFIG_H
 #define CONFIG_H
 
 
+
+/* Define to 1 if you have the <arpa/inet.h> header file. */
+#undef HAVE_ARPA_INET_H
 
 /* Define to 1 if you have the <arpa/nameser.h> header file. */
 #undef HAVE_ARPA_NAMESER_H
