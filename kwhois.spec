@@ -1,17 +1,17 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 3.4
+Version: 3.5
 Release: 1
-Epoch: 5
-Copyright: GPL
+Epoch: 6
+License: GPL
 Group: Applications/Internet
-Url: http://www.oops.org/
+Url: http://oops.org/
 Source0: ftp://mirror.oops.org/pub/Linux/OOPS/Source/kwhois/kwhois-%{version}.tar.bz2
 Buildroot: /var/tmp/kwhois-root
 Conflicts: fwhois, whois
 
-Packager: JoungKyun Kim <http://www.oops.org>
+Packager: JoungKyun.Kim <http://oops.org>
 Vendor: OOPS Development ORG
 
 %description
@@ -50,63 +50,66 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
-* Tue Aug 10 2004 JoungKyun Kim <http://www.oops.org> 5:3.4-1
+* Wed Jul  9 2008 JoungKyun.Kim <http://oops.org> 6:3.5-1
+- update 3.5
+
+* Tue Aug 10 2004 JoungKyun.Kim <http://oops.org> 5:3.4-1
 - update 3.4
 
-* Thu Jun  3 2004 JoungKyun Kim <http://www.oops.org> 4:3.3-3
+* Thu Jun  3 2004 JoungKyun.Kim <http://oops.org> 4:3.3-3
 - rebuilt
 
-* Thu Jun  3 2004 JoungKyun Kim <http://www.oops.org> 3:3.3-2
+* Thu Jun  3 2004 JoungKyun.Kim <http://oops.org> 3:3.3-2
 - fixed extension query format for crsnic
 
-* Thu Jun  3 2004 JoungKyun Kim <http://www.oops.org> 2:3.3-1
+* Thu Jun  3 2004 JoungKyun.Kim <http://oops.org> 2:3.3-1
 - update 3.3
 - changed query format for miss search domain
 - fixed some compile warning message
 - fixed library miss link
 - added default server per extensions
 
-* Thu Feb 11 2004 JoungKyun Kim <http://www.oops.org> 3.2-1
+* Thu Feb 11 2004 JoungKyun.Kim <http://oops.org> 3.2-1
 - update 3.2
 - fixed org domain to pir.org
 - enabled no case sensitive domain
 
-* Thu Feb  5 2004 JoungKyun Kim <http://www.oops.org> 3.1-1
+* Thu Feb  5 2004 JoungKyun.Kim <http://oops.org> 3.1-1
 - update 3.1
 - changed to use punycode on multibyte com/net domain
 - bug fixed raceconv
 
-* Fri Aug 22 2003 JoungKyun Kim <http://www.oops.org> 3.0-1
+* Fri Aug 22 2003 JoungKyun.Kim <http://oops.org> 3.0-1
 - support multibyte domain
 - added punycode converter with punyconv
 - added racecode converter with raceconv
 
-* Wed Mar 23 2003 JoungKyun Kim <http://www.oops.org> 2.3-1
+* Wed Mar 23 2003 JoungKyun.Kim <http://oops.org> 2.3-1
 - fixed segmantfault in case of no tail
 
-* Fri Feb  7 2003 JoungKyun Kim <http://www.oops.org> 2.2-1
+* Fri Feb  7 2003 JoungKyun.Kim <http://oops.org> 2.2-1
 - changed org registra server to whois.networksolutions.com
 
-* Sun Sep 15 2002 JoungKyun Kim <http://www.oops.org> 2.1-1
+* Sun Sep 15 2002 JoungKyun.Kim <http://oops.org> 2.1-1
 - enable whole local domain in default
 - modified man file
 
-* Thu Sep 13 2002 JoungKyun Kim <http://www.oops.org> 2.0-1
+* Thu Sep 13 2002 JoungKyun.Kim <http://oops.org> 2.0-1
 - added traditional query type
 - added tv, biz, info whois server as default server
 
-* Thu Dec 02 1999 JoungKyun, Kim <http://www.oops.org>
+* Thu Dec 02 1999 JoungKyun.Kim <http://oops.org>
 - updated version 1.2
 - fixed Internic whois server to whois.networksolutions.com from rs.internic.net
 
-* Fri Nov 08 1999 JoungKyun, Kim <http://www.oops.org>
+* Fri Nov 08 1999 JoungKyun.Kim <http://oops.org>
 - updated version 1.1
 - fixed search Handle ID
 
-* Fri Nov 05 1999 JoungKyun, Kim <http://www.oops.org>
+* Fri Nov 05 1999 JoungKyun.Kim <http://oops.org>
 - rpm version updated 1.0-2
 - added ko locale
 
-* Fri Oct 29 1999 JoungKyun, Kim <http://www.oops.org>
+* Fri Oct 29 1999 JoungKyun.Kim <http://oops.org>
 - packaging kwhois-1.0-1
 

@@ -1,7 +1,7 @@
-# $Id: configure.ac,v 1.9 2004-08-10 11:17:10 oops Exp $
+# $Id: configure.ac,v 1.10 2008-07-09 13:38:46 oops Exp $
 AC_PREREQ(2.57)
 
-AC_INIT(kwhois, 3.4, http://devel.oops.org)
+AC_INIT(kwhois, 3.5, http://devel.oops.org)
 AC_CONFIG_SRCDIR([i18n.h])
 AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT([/usr/local])
