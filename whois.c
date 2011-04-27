@@ -19,17 +19,11 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.18 2008-07-09 14:26:39 oops Exp $"
+#ident "$Id: whois.c,v 1.2 2004-02-04 07:52:07 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-/* support i18n */
-#include "i18n.h"
-
-/* ansi color */
-#define COLOR 34
 
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
@@ -64,9 +58,6 @@
 #ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
 #endif
-#ifdef HAVE_ARPA_INET_H
-#include <arpa/inet.h>
-#endif
 #ifdef HAVE_ARPA_NAMESER_H
 #include <arpa/nameser.h>
 #endif
@@ -77,34 +68,25 @@
 #include <ctype.h>
 #endif
 
-#ifdef HAVE_LIBIDN_H
-#  ifdef HAVE_LIBOGC
-#    include <libidn.h>
-#  endif
+#ifndef DEFAULT_SERVER
+#define DEFAULT_SERVER "whois.crsnic.net"
 #endif
-
-#include "tld_server.h"
-
 #ifndef DEFAULT_PORT
 #define DEFAULT_PORT "whois"
 #endif
 
-int check_code ( char *tail );
-int crsCheck ( char *wserv );
-int is_ipaddr (char *query);
-char * get_tail (char *query);
-char * parseQuery ( char *qry, char *wserv);
-int is_longip (char *query);
-void long2ip (char ** ip);
+#define LO_SERVER "whois-servers.net"
 
-char *extension = NULL;
+int get_lang();
+int langs;
 
 void
 alarm_handler(int signum)
 {
 	char *message;
 
-	message = _("Timeout exceeded.\n");
+	if ( langs == 1 ) { message = "¿äÃ» ½Ã°£ ÃÊ°ú.\n"; }
+	else { message = "Timeout exceeded.\n"; }
 	write(STDERR_FILENO, message, strlen(message));
 	exit(0);
 }
@@ -131,13 +113,24 @@ process_query(const char *server, const char *port, const char *query,
 	}
 
 	if(getaddrinfo(server, port, &hints, &res) != 0) {
-		fprintf(stderr, _("%s while getting connection info for %s:%s\n"),
-			gai_strerror(errno), server, port);
+		if ( langs == 1 ) {
+			fprintf(stderr, "%s:%s ¿¡ Á¢¼ÓÇÏ´Â µ¿¾È ¹ß»ýÇÑ ¿¡·¯ : %s\n",
+				server, port, gai_strerror(errno));
+		} else {
+			fprintf(stderr, "%s while getting connection info for %s:%s\n",
+				gai_strerror(errno), server, port);
+		}
 		exit(1);
 	}
 
 	if(res == NULL) {
-		fprintf(stderr, _("no results while getting connection info for %s:%s\n"), server, port);
+		if ( langs == 1 ) {
+			fprintf(stderr, "%s:%s ¿¡ Á¢¼ÓÀ» ÇÏ´Â µ¿¾È ¾Æ¹«·± °á°ú¸¦ ¾òÁö ¸øÇÔ\n",
+				server, port);
+		} else {
+			fprintf(stderr, "no results while getting connection info for "
+				"%s:%s\n", server, port);
+		}
 		exit(1);
 	}
 
@@ -170,22 +163,37 @@ process_query(const char *server, const char *port, const char *query,
 		serv = getservbyname("whois", "tcp");
 	}
 	if(serv == NULL) {
-		fprintf(stderr, _("%s while getting service info for %s\n"),
-			strerror(errno), port);
+		if ( langs == 1 ) {
+			fprintf(stderr, "%s ¼­ºñ½º¿¡ ¹ß»ýÇÑ ¿¡·¯ : %s\n",
+				port, strerror(errno));
+		} else {
+			fprintf(stderr, "%s while getting service info for %s\n",
+				strerror(errno), port);
+		}
 		exit(1);
 	}
 
 	host = gethostbyname(server);
 	if(host == NULL) {
-		printf(_("%s while getting address for \"%s\"\n"),
-			strerror(h_errno), server);
+		if ( langs == 1 ) {
+			printf("\"%s\" ¿¡ Á¢¼ÓÇÏ´Â µ¿¾È ¹ß»ýÇÑ ¿¡·¯ : %s\n",
+				server, strerror(h_errno));
+		} else {
+			printf("%s while getting address for \"%s\"\n",
+				strerror(h_errno), server);
+		}
 		exit(1);
 	}
 
 	sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if(sd == -1) {
-		printf(_("%s initializing protocol stacks?!?\n"),
-			strerror(errno));
+		if ( langs == 1 ) {
+			printf("%s initializing protocol stacks?!?\n",
+				strerror(errno));
+		} else {
+			printf("%s initializing protocol stacks?!?\n",
+				strerror(errno));
+		}
 		exit(1);
 	}
 
@@ -200,25 +208,31 @@ process_query(const char *server, const char *port, const char *query,
 #endif
 
 	if(ret == -1) {
-		printf(_("%s connecting to %s\n"), strerror(errno), server);
+		if ( langs == 1 ) {
+			printf("%s ÀÇ Á¢¼Ó ¿¡·¯ : %s\n", server, strerror(errno));
+		} else {
+			printf("%s connecting to %s\n", strerror(errno), server);
+		}
 		exit(1);
 	}
 
-	if (verbose) {
-		fprintf (stderr, _("===> Connect to %s success\n"), server);
-		fprintf (stderr, _("===> Query %s to server\n\n"), parseQuery ((char *) query, (char *) server));
-	}
-
 	printf("[%s]\n", server);
-
-	snprintf (buf, sizeof (buf), "%s", parseQuery ((char *) query, (char *) server));
+	snprintf(buf, sizeof(buf), "%s\r\n", query);
+	if(verbose) {
+		printf("=>'%s'\n", query);
+	}
 	send(sd, buf, strlen(buf), 0);
 
 	fflush(stdout);
 
 	reader = fdopen(sd, "r");
 	if(reader == NULL) {
-		printf(_("%s while reading from socket\n"), strerror(errno));
+		if ( langs == 1 ) {
+			printf("¼ÒÄÏÀü¼Û ¿¡·¯ : %s\n", strerror(errno));
+		} else {
+			printf("%s while reading from socket\n",
+				strerror(errno));
+		}
 		exit(1);
 	}
 
@@ -271,21 +285,21 @@ process_query(const char *server, const char *port, const char *query,
 		process_query(next_server, port, query,
 			      timeout, recurse - 1, verbose);
 	}
-	free (next_server);
 }
 
-int main(int argc, char **argv) {
+int
+main(int argc, char **argv)
+{
 	char *server = NULL;
 	char *port = DEFAULT_PORT;
 	char *query = NULL;
-	char *name = NULL;
-	int i, recurse = -1, help = 0, parse = 1;
-	int verbose = 0, timeout = -1;
+	int i, recurse = -1, help = 0, parse = 1, verbose = 0, timeout = -1;
 
-	/* support i18n */
-#ifdef ENABLE_NLS
-	i18n_print();
-#endif
+	/* get language type
+	 * return 1 : korean
+	 * return 0 : english
+	 */
+	langs = get_lang();
 
 	/* If we got no arguments, we're just going to print out a short
 	 * usage message and quit. */
@@ -293,17 +307,17 @@ int main(int argc, char **argv) {
 		help = 1;
 	}
 
-	while(parse && ((i = getopt(argc, argv, "h:vrnp:Pt:-")) != -1)) {
+	while(parse && ((i = getopt(argc, argv, "h:vrnp:t:-")) != -1)) {
 		switch(i) {
 			case 'h':
 				/* The -h option for traditional whois specifies
 				 * the server to query. */
-				server = optarg;
+				server = strdup(optarg);
 				break;
 			case 'p':
 				/* Use an alternate port.  This can be a name
 				 * or a number. */
-				port = optarg;
+				port = strdup(optarg);
 				break;
 			case 'v':
 				/* Be verbose.  Currently this means that we
@@ -357,19 +371,34 @@ int main(int argc, char **argv) {
 	/* If the help flag was given, or we didn't get anything that looked
 	 * like a query string, print a short help message and quit. */
 	if(help || (query == NULL) || (strlen(query) == 0)) {
-		fprintf (stderr, _("Usage: %s [OPTION...] query[@server[:port]]\n"),
-				strchr(argv[0], '/') ? strrchr(argv[0], '/') + 1 : argv[0]);
-		fprintf (stderr, _("valid options:\n"));
-		fprintf (stderr, _("       -h server  server name\n"));
-		fprintf (stderr, _("       -p port    server port\n"));
-		fprintf (stderr, _("       -t timeout query time limit\n"));
-		fprintf (stderr, _("       -r         force recursion\n"));
-		fprintf (stderr, _("       -n         disable recursion\n"));
-		fprintf (stderr, _("       -v         verbose mode\n"));
-		fprintf (stderr, _("       --         treat remaining arguments as part of the query\n"));
-		fprintf (stderr, _("default server is %s\n"), DEFAULT_SERVER);
-		fprintf (stderr, "%s %s\n", NAME, PVERSION);
-		exit(1);
+		if ( langs == 1 ) {
+			printf("»ç¿ë¹ý: %s [¿É¼Ç...] ÁúÀÇ[@¼­¹ö[:Æ÷Æ®]]\n"
+			       "À¯È¿ÇÑ ¿É¼Çµé:\n"
+			       "       -h server  whois ¼­¹ö ÀÌ¸§\n"
+			       "       -p port    ¼­¹ö Æ÷Æ®\n"
+			       "       -t timeout ÁúÀÇ ½Ã°£ Á¦ÇÑ\n"
+			       "       -r         ¹Ýº¹À» °­Çà\n"
+			       "       -n         ¹Ýº¹À» ÇÏÁö ¾ÊÀ½\n"
+			       "       -v         »ó¼¼¸ðµå\n"
+			       "       --         ÁúÀÇÀÇ ºÎºÐÀ¸·Î ³²¾ÆÀÖ´Â ÀÎÀÚ·Î Ãë±Þ\n",
+			       strchr(argv[0], '/') ?
+			       strrchr(argv[0], '/') + 1 : argv[0]);
+			printf("±âº» ¼­¹ö : %s\n", DEFAULT_SERVER);
+		} else {
+			printf("Usage: %s [OPTION...] query[@server[:port]]\n"
+			       "valid options:\n"
+			       "       -h server  server name\n"
+			       "       -p port    server port\n"
+			       "       -t timeout query time limit\n"
+			       "       -r         force recursion\n"
+			       "       -n         disable recursion\n"
+			       "       -v         verbose mode\n"
+			       "       --         treat remaining arguments as part of "
+			       "the query\n", strchr(argv[0], '/') ?
+			       strrchr(argv[0], '/') + 1 : argv[0]);
+			printf("default server is %s\n", DEFAULT_SERVER);
+		}
+		exit(0);
 	}
 
 	/* If we didn't get an explicit server name, check if the query string
@@ -380,15 +409,11 @@ int main(int argc, char **argv) {
 			server = strrchr(query, '@');
 			server[0] = '\0';
 			server++;
-
-			/* get contry code */
-			extension = strdup (get_tail (query));
 		} else {
-			/* get contry code */
-			extension = strdup (get_tail (query));
+			char *tail;
 
-			if ( ! strcmp (extension, "IP ADDRESS") )
-				server = LO_SERVER;
+			/* get contry code */
+			tail = strdup(rindex(query, '.'));
 
 			/* Nothing there either.  Use the NICNAMESERVER,
 			 * WHOISSERVER, or DEFAULT_SERVER, in that order. */
@@ -397,32 +422,23 @@ int main(int argc, char **argv) {
 			} else {
 				if((server == NULL) && getenv("WHOISSERVER")) {
 					server = getenv("WHOISSERVER");
-				} else if ( !extension ) {
+				} else if (!tail) {
 					server = DEFAULT_SERVER;
 				} else {
-					if ( strlen(extension) == 2 ) {
+					if ( strlen(tail) == 3 ) {
 						char tmphost[50];
-						sprintf(tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
-						server = tmphost;
-					} else if (!strcasecmp(extension, "biz")) {
-						server = BIZ_SERVER;
-					} else if (!strcasecmp(extension, "info")) {
-						server = INFO_SERVER;
-					} else if (!strcasecmp(extension, "name")) {
-						server = NAME_SERVER;
-					} else if (!strcasecmp(extension, "org")) {
-						server = ORG_SERVER;
-					} else if ( ! strcmp (extension, "IP ADDRESS") ) {
-						server = LO_SERVER;
+						sprintf(tmphost, "%c%c.%s", tail[1], tail[2], LO_SERVER);
+						server = strdup(tmphost);
+					} else if (!strcmp(tail, ".biz")) {
+						server = "whois.networksolutions.com";
+					} else if (!strcmp(tail, ".info")) {
+						server = "whois.networksolutions.com";
 					} else {
 						server = DEFAULT_SERVER;
 					}
 				}
 			}
 		}
-	} else {
-		/* get contry code */
-		extension = strdup (get_tail (query));
 	}
 
 	/* If the server name includes a colon, snip the name there and
@@ -436,152 +452,24 @@ int main(int argc, char **argv) {
 	/* If we got neither the -r nor the -n arguments, set the default
 	 * based on which server we're querying. */
 	if(recurse == -1) {
-		if(strcasecmp(DEFAULT_SERVER, server) == 0) {
+		if(strcmp(DEFAULT_SERVER, server) == 0) {
 			recurse = 1;
 		} else {
 			recurse = 0;
 		}
 	}
 
-#ifdef HAVE_LIBOGC
-	/* use racecode ??? */
-	/*
-	if ( ! check_code (extension) ) {
-		strcpy (name, (char *) convert_punycode (query, 0, verbose));
-	} else {
-		strcpy (name, (char *) convert_racecode (query, 0, verbose));
-	}
-	*/
-	name = strdup (convert_punycode (query, 0, verbose));
-
-	if ( is_longip (name) )
-		long2ip (&name);
-
-	if (verbose) {
-		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
-		fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, query);
-		fprintf (stderr, _("[1;%dmCONV HOST     :[7;0m %s\n"), COLOR, name);
-		fprintf (stderr, _("[1;%dmTAIL          :[7;0m %s\n"), COLOR, extension);
-		fprintf (stderr, _("[1;%dmSERVER        :[7;0m %s\n"), COLOR, server);
-		fprintf (stderr, _("[1;%dmPORT          :[7;0m %s\n"), COLOR, port);
-		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
-	}
-
 	/* Hand it off to the query function. */
-	process_query(server, port, name, timeout, recurse, verbose);
-	free (name);
-#else
-	if ( is_longip (query) )
-		long2ip (&query);
-
 	process_query(server, port, query, timeout, recurse, verbose);
-#endif
-	free (query);
-	free (extension);
 
 	return 0;
 }
 
-int check_code ( char *tail ) {
-	if ( ! strcasecmp ( tail, "com" ) || ! strcasecmp ( tail, "net" ) ) {
-		return 1;
-	} else if ( ! strcasecmp ( tail, "org" ) || ! strcasecmp ( tail, "info" ) ||
-			    ! strcasecmp ( tail, "biz" ) || ! strcasecmp ( tail, "name" ) ) {
-		return 2;
-	}
-
-	return 0;
+int get_lang()
+{
+       if ( !strncmp( (char *) getenv("LANG"), "ko", 2) ) {
+               return 1;
+       } else {
+               return 0;
+       }
 }
-
-int crsCheck ( char *wserv ) {
-	if ( ! strcmp ( wserv, DEFAULT_SERVER ) )
-		return 1;
-
-	return 0;
-}
-
-char * parseQuery ( char *qry, char *wserv ) {
-	static char query[1024];
-	char tmp[1024];
-
-	memset (query, 0, 1024);
-	memset (tmp, 0, 1024);
-
-	strncpy (tmp, qry, ( strlen (qry) > 1023 ) ? 1023 : strlen (qry));
-
-	if ( ! strcmp ("jp", extension) ) {
-		sprintf ( query, "%s/e\r\n", tmp);
-	} else
-		sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
-
-	return query;
-}
-
-int is_ipaddr (char *query) {
-	int pos;
-	char point;
-
-	pos = strlen (query) - 1;
-	point = query[pos];
-
-	if ( point > 47 && point < 58 )
-		return 1;
-
-	return 0;
-}
-
-char * get_tail (char *query) {
-	char	* gettail = NULL;
-
-	if ( is_ipaddr (query) ) {
-		return "IP ADDRESS";
-	} else {
-		gettail = rindex(query, '.');
-		if ( gettail == NULL )
-			return "";
-
-		return gettail + 1;
-	}
-}
-
-int is_longip (char *query) {
-	while ( *query != 0 ) {
-		if ( *query < 48 || *query > 57 )
-			return 0;
-		query++;
-	}
-
-	return 1;
-}
-
-char * _long2ip (char *ip) {
-	struct in_addr addr;
-	unsigned long longip;
-
-	longip = strtoul (ip, NULL, 10);
-
-	addr.s_addr = htonl (longip);
-	return inet_ntoa (addr);
-}
-
-void long2ip (char **q) {
-	char *p;
-
-	if ( ! *q )
-		return;
-
-	p = strdup (*q);
-	free (*q);
-
-	*q = strdup (_long2ip (p));
-	free (p);
-}
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */

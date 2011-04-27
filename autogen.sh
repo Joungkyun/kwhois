@@ -1,3 +1,2 @@
-# $Id: autogen.sh,v 1.5 2004-08-10 09:38:06 oops Exp $
-autoheader --force && autoconf --force
-rm -rf autom4te* *~
+# $Id: autogen.sh,v 1.1 2004-02-04 06:29:01 oops Exp $
+autoheader && autoconf && ./configure --prefix=/usr
