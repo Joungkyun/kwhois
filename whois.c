@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.18 2008-07-09 14:26:39 oops Exp $"
+#ident "$Id: whois.c,v 1.16 2004-08-10 11:17:10 oops Exp $"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,9 +64,6 @@
 #ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
 #endif
-#ifdef HAVE_ARPA_INET_H
-#include <arpa/inet.h>
-#endif
 #ifdef HAVE_ARPA_NAMESER_H
 #include <arpa/nameser.h>
 #endif
@@ -94,8 +91,6 @@ int crsCheck ( char *wserv );
 int is_ipaddr (char *query);
 char * get_tail (char *query);
 char * parseQuery ( char *qry, char *wserv);
-int is_longip (char *query);
-void long2ip (char ** ip);
 
 char *extension = NULL;
 
@@ -278,9 +273,11 @@ int main(int argc, char **argv) {
 	char *server = NULL;
 	char *port = DEFAULT_PORT;
 	char *query = NULL;
-	char *name = NULL;
+	char name[256];
 	int i, recurse = -1, help = 0, parse = 1;
 	int verbose = 0, timeout = -1;
+
+	memset (name, '\0', sizeof(name));
 
 	/* support i18n */
 #ifdef ENABLE_NLS
@@ -298,12 +295,12 @@ int main(int argc, char **argv) {
 			case 'h':
 				/* The -h option for traditional whois specifies
 				 * the server to query. */
-				server = optarg;
+				server = strdup(optarg);
 				break;
 			case 'p':
 				/* Use an alternate port.  This can be a name
 				 * or a number. */
-				port = optarg;
+				port = strdup(optarg);
 				break;
 			case 'v':
 				/* Be verbose.  Currently this means that we
@@ -403,7 +400,7 @@ int main(int argc, char **argv) {
 					if ( strlen(extension) == 2 ) {
 						char tmphost[50];
 						sprintf(tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
-						server = tmphost;
+						server = strdup(tmphost);
 					} else if (!strcasecmp(extension, "biz")) {
 						server = BIZ_SERVER;
 					} else if (!strcasecmp(extension, "info")) {
@@ -452,10 +449,7 @@ int main(int argc, char **argv) {
 		strcpy (name, (char *) convert_racecode (query, 0, verbose));
 	}
 	*/
-	name = strdup (convert_punycode (query, 0, verbose));
-
-	if ( is_longip (name) )
-		long2ip (&name);
+	strcpy (name, (char *) convert_punycode (query, 0, verbose));
 
 	if (verbose) {
 		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
@@ -469,14 +463,9 @@ int main(int argc, char **argv) {
 
 	/* Hand it off to the query function. */
 	process_query(server, port, name, timeout, recurse, verbose);
-	free (name);
 #else
-	if ( is_longip (query) )
-		long2ip (&query);
-
 	process_query(server, port, query, timeout, recurse, verbose);
 #endif
-	free (query);
 	free (extension);
 
 	return 0;
@@ -542,39 +531,6 @@ char * get_tail (char *query) {
 
 		return gettail + 1;
 	}
-}
-
-int is_longip (char *query) {
-	while ( *query != 0 ) {
-		if ( *query < 48 || *query > 57 )
-			return 0;
-		query++;
-	}
-
-	return 1;
-}
-
-char * _long2ip (char *ip) {
-	struct in_addr addr;
-	unsigned long longip;
-
-	longip = strtoul (ip, NULL, 10);
-
-	addr.s_addr = htonl (longip);
-	return inet_ntoa (addr);
-}
-
-void long2ip (char **q) {
-	char *p;
-
-	if ( ! *q )
-		return;
-
-	p = strdup (*q);
-	free (*q);
-
-	*q = strdup (_long2ip (p));
-	free (p);
 }
 
 /*

@@ -1,7 +1,7 @@
-# $Id: configure.ac,v 1.11 2008-07-09 13:40:43 oops Exp $
+# $Id: configure.ac,v 1.9 2004-08-10 11:17:10 oops Exp $
 AC_PREREQ(2.57)
 
-AC_INIT(kwhois, 3.5, http://devel.oops.org)
+AC_INIT(kwhois, 3.4, http://devel.oops.org)
 AC_CONFIG_SRCDIR([i18n.h])
 AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT([/usr/local])
@@ -100,7 +100,7 @@ fi
 
 # Checks for header files.
 AC_CHECK_HEADERS(stdio.h string.h ctype.h limits.h sys/types.h sys/socket.h \
-		 stdlib.h unistd.h netinet/in.h arpa/inet.h arpa/nameser.h netdb.h errno.h \
+		 stdlib.h unistd.h netinet/in.h arpa/nameser.h netdb.h errno.h \
 		 sys/signal.h getopt.h libintl.h locale.h dlfcn.h error.h inttypes.h \
 		 memory.h stdint.h sys/stat.h iconv.h langinfo.h libidn.h $geo_header)
 
