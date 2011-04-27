@@ -1,4 +1,4 @@
-/* $Id: main.c,v 1.5 2004-09-02 19:20:12 oops Exp $ */
+/* $Id: main.c,v 1.2 2004-02-04 14:12:23 oops Exp $ */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -7,9 +7,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#ifdef HAVE_LIBOGC
+#ifdef HAVE_LIBOLIBC
 
-#include <olibc/libidn.h>
+#include <olibc/libstring.h>
 
 #define __CINCLUDE__
 #include "i18n.h"
@@ -42,7 +42,7 @@ int main (int argc, char *argv[]) {
 	}
 
 	if (argc - optind < 1 ) usage();
-	printf ("%s\n", (char *) convert_racecode ( argv[optind], res, debug ));
+	printf ("%s\n", convert_racecode ( argv[optind], res, debug ));
 
 	return 0;
 }

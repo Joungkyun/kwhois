@@ -17,7 +17,7 @@
  * along with GNU Libidn; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Id: idn.c,v 1.5 2004-09-02 19:19:39 oops Exp $
+ * $Id: idn.c,v 1.2 2004-02-04 14:12:23 oops Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -28,8 +28,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#ifdef HAVE_LIBOGC
-#include <olibc/libidn.h>
+#ifdef HAVE_LIBOLIBC
+#include <olibc/libstring.h>
 
 /* support i18n */
 #include "../i18n.h"
@@ -64,7 +64,7 @@ int main (int argc, char *argv[]) {
 	if ( argc - optind < 1 )
 		usage();
 
-	printf ("%s\n", (char *) convert_punycode ( argv[optind], res, debug )) ;
+	printf ("%s\n", convert_punycode ( argv[optind], res, debug )) ;
 
 	return 0;
 }
