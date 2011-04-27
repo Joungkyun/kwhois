@@ -1,50 +1,42 @@
-.\" RCSID: @(#)$Id: whois.1.kr,v 1.5 2004-02-04 14:12:23 oops Exp $
-.TH KWHOIS 1 "kwhois" "OOPS Develoopment ORG" \" -*- nroff -*-
-.SH 이름
-whois, kwhois \- 여러 도메인에 대한 whois, nicname 디비를 검색
-.SH 사용법
-.B whois
-[\-v] [\-r|\-n] [\-h 서버] [\-p 포트] [-t 시간제한] [\-\-] 질의[@서버[:포트]]
-.SH 설명
-.B whois
-어떠한 RFC954 wohis 서버에 형식과 질의를 보내고, 표준 출력으로 그 결과를 출력한다.
-.SH 옵션
-.TP
-\fI\-h server\fP
-질의를 할 whois 서버 이름을 지정한다. 지정하지 않는다면 \fBNICNAMESERVER\fP 와
-\fBWHOISSERVER\fP 환경 변수를 체크하게 되며, 환경 변수 역시 지정되어 있지 않을
-경우에는 default server - Internic, Krnic, Tonic, eNIC, JPnic, TVnic - 에 질의를
-하게 된다.
-.TP
-\fI\-p port\fP
-기본값은 \fBwhois\fP 이며, 클라이언트에서 접속할 포트번호를 변경할 수 있다.
-.TP
-\fI\-t\fP
-질의를 하였을 경우 시갖제한을 할 수 있다. 초로 지정을 한다.
-.TP
-\fI\-r\fP
-반복을 강행한다. 첫 서버가 응답을 한다면,
+.\" RCSID: @(#)$Id: whois.1.kr,v 1.1.1.1 2004-02-04 06:05:14 oops Exp $
+.TH whois 1 "Oct 1999"
+.SH Name
+whois \- 대한민국 환경으로 수정된 finger style의 whois
+.SH Intruduction
+이 package는 Chris Cappuccio <ccappuc@santafe.edu>에 의해 만들어진
+fwhois package를 우리나라 실정에 맞게끔 한글 patch하고 Krnic whois
+server가 기본으로 설정된 것이다.
+.SH Syntax
 
-Whois Server: \fIhostname\fP
-
-와 유사한 라인을 포함한다.
-\fBwhois\fP 는 서버로 부터 hostname 을 동반한 같은 질의를 재시도 한다. 기본 서버로
-질의 되었을 때는, 기본값이다.
-.TP
-\fI\-n\fP
-기본 서버로 질의되었을지라도 반복을 강행하지 않는다.
-.TP
-\fI-v\fP
-질의에 상세한 출력을 한다. 이 것은 클라이언트의 질의가 서버에 전달되기 전에
-표준 출력으로 먼저 출력을 하게 한다.
-.TP
-\fI--\fP
-\fI-p\fP, \fI-h\fP, \fI-r\fP, or \fI-v\fP 옵션 뒤에 주어진 인자들에 대해서는
-해석을 하지 않는다.
-.SH 버그
-알려진 버그는 없다. 단, 간단한 프로토콜이기 때문에 어떠한 문제가 발생할 염려는
-없다고 생각이 된다.
-.SH 작성
-Nalin Dahyabhai <nalin@redhat.com>
+Internic, Krnic, Tonic, eNIC, JPnic 의 whois server 검색 :
 .br
-JoungKyun Kim <http://www.oops.org>
+.B whois [domain name]
+
+Internic, Krnic, Tonic, eNIC, JPnic 외의 whois server 검색 :
+.br
+.B whois [domain name]@[whois server]
+
+.SH Description
+.B fwhois 
+는 BSD system을 위한 finger style의 whois 이다.
+이것은 표준 InterNIC whois.c 보다 더 작으며, 더욱 정교하며,
+또한 다른 방식으로 작동을 한다.
+.B whois user@whois.internic.net 
+는 
+.B 'whois -h whois.internic.net user'. 
+와 같이 작동을 한다. 기존의 whois와 달라진 점은 default server가
+Internic만 지정이 되어 있는 것을 우리실정에 맞게끔 Krnic도 포함을
+했다는 것이다. 현재 default server로 지원이 되는 것은 Internic과 
+Krnic, Tonic, eNIC 그리고 JPnic 이다.
+.SH Restrictions
+만약 SETPROCTITLE이 없이 compile을 한다면 별로 유용하지 못할것이다.
+.SH FILES
+.B /usr/bin/kwhois
+.br
+.B /usr/bin/whois
+.SH BUG REPORT
+Bug report to : 
+.br
+.B 이병기 <pino5@hitel.net>
+.br
+.B 김정균 <admin@oops.kr.net>

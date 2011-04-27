@@ -1,2 +1,42 @@
-.\" RCSID: @(#)$Id: kwhois.1.kr,v 1.5 2004-02-04 14:12:23 oops Exp $
-.so whois.1
+.\" RCSID: @(#)$Id: kwhois.1.kr,v 1.1.1.1 2004-02-04 06:05:14 oops Exp $
+.TH fwhois 1 "Oct 1999"
+.SH Name
+fwhois \- 대한민국 환경으로 수정된 finger style의 whois
+.SH Intruduction
+이 package는 Chris Cappuccio <ccappuc@santafe.edu>에 의해 만들어진
+fwhois package를 우리나라 실정에 맞게끔 한글 patch하고 Krnic whois
+server가 기본으로 설정된 것이다.
+.SH Syntax
+
+Internic, Krnic, Tonic, eNIC, JPnic 의 whois server 검색 :
+.br
+.B whois [domain name]
+
+Internic, Krnic, Tonic, eNIC, JPnic 외의 whois server 검색 :
+.br
+.B whois [domain name]@[whois server]
+
+.SH Description
+.B kwhois 
+는 BSD system을 위한 finger style의 whois 이다.
+이것은 표준 InterNIC whois.c 보다 더 작으며, 더욱 정교하며,
+또한 다른 방식으로 작동을 한다.
+.B kwhois user@whois.internic.net 
+는 
+.B 'whois -h whois.internic.net user'. 
+와 같이 작동을 한다. 기존의 fwhois와 달라진 점은 default server가
+Internic만 지정이 되어 있는 것을 우리실정에 맞게끔 Krnic도 포함을
+했다는 것이다. 현재 default server로 지원이 되는 것은 Internic과 
+Krnic, Tonic, eNIC 그리고 JPnic 이다.
+.SH Restrictions
+만약 SETPROCTITLE이 없이 compile을 한다면 별로 유용하지 못할것이다.
+.SH FILES
+.B /usr/bin/fwhois
+.br
+.B /usr/bin/whois
+.SH BUG REPORT
+Bug report to : 
+.br
+.B 이병기 <pino5@hitel.net>
+.br
+.B 김정균 <admin@oops.kr.net>
