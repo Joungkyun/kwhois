@@ -1,7 +1,6 @@
-# $Id: Makefile.in,v 1.7 2004-08-09 16:38:55 oops Exp $
+# $Id: Makefile.in,v 1.5 2004-02-04 14:13:14 oops Exp $
 CC		= @CC@
 CFLAGS		= -Wall @CFLAGS@ @DEFS@
-CPPFLAGS	= @CPPFLAGS@
 LDFLAGS		= @LDFLAGS@ @LIBS@
 DESTDIR		=
 prefix		= @prefix@
@@ -25,7 +24,7 @@ all: punyconv raceconv whois
 	-strip whois libidn/punyconv libracode/raceconv
 
 whois: $(OBJ)
-	$(CC) -Wall $(CFLAGS) $(DEFS) $(OBJ) -o whois $(LDFLAGS)
+	$(CC) -Wall $(CFLAGS) $(LDFLAGS) $(DEFS) $(OBJ) -o whois
 
 punyconv:
 	make -C libidn CFLAGS="$(CFLAGS)" LANGDIR=$(LANGDIR)
@@ -34,11 +33,11 @@ raceconv:
 	make -C libracode CFLAGS="$(CFLAGS)" LANGDIR=$(LANGDIR)
 
 whois.o: whois.c i18n.h config.h
-	$(CC)  -Wall $(CFLAGS) $(DEFS) $(CPPFLAGS) \
+	$(CC)  -Wall $(CFLAGS) $(LDFLAGS) $(DEFS) \
 		-DNAME=\"$(NAME)\" -DPVERSION=\"$(VERSION)\" -c whois.c
 
 i18n.o: i18n.c i18n.h config.h
-	$(CC) $(CFLAGS) $(DEFS) $(CPPFLAGS) -c i18n.c
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -c i18n.c
 
 po-install:
 	make -C po DESTDIR=$(DESTDIR) langdir=$(LANGDIR) install
