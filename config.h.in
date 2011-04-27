@@ -1,15 +1,5 @@
-/* config.h.in.  Generated from configure.ac by autoheader.  */
-/*
- * CVS ID Tag
- * $Id: config.h.in,v 1.11 2008-07-09 13:40:43 oops Exp $
- */
-#ifndef CONFIG_H
-#define CONFIG_H
-
-
-
-/* Define to 1 if you have the <arpa/inet.h> header file. */
-#undef HAVE_ARPA_INET_H
+/* $Id: config.h.in,v 1.3 2004-02-04 08:29:21 oops Exp $ */
+/* config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Define to 1 if you have the <arpa/nameser.h> header file. */
 #undef HAVE_ARPA_NAMESER_H
@@ -44,27 +34,20 @@
 /* Define to 1 if you have the <langinfo.h> header file. */
 #undef HAVE_LANGINFO_H
 
-/* Define to 1 if you have the <libidn.h> header file. */
-#undef HAVE_LIBIDN_H
-
 /* Define to 1 if you have the <libintl.h> header file. */
 #undef HAVE_LIBINTL_H
 
-/* Define to 1 if you have the `ogc' library (-logc). */
-#undef HAVE_LIBOGC
-
 /* Define to 1 if you have the `resolv' library (-lresolv). */
 #undef HAVE_LIBRESOLV
+
+/* Define to 1 if you have the `socket' library (-lsocket). */
+#undef HAVE_LIBSOCKET
 
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
 /* Define to 1 if you have the <locale.h> header file. */
 #undef HAVE_LOCALE_H
-
-/* Define to 1 if your system has a GNU libc compatible `malloc' function, and
-   to 0 otherwise. */
-#undef HAVE_MALLOC
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -74,10 +57,6 @@
 
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #undef HAVE_NETINET_IN_H
-
-/* Define to 1 if `stat' has the bug that it succeeds when given the
-   zero-length file name argument. */
-#undef HAVE_STAT_EMPTY_STRING_BUG
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -109,10 +88,6 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to 1 if `lstat' dereferences a symlink specified with a trailing
-   slash. */
-#undef LSTAT_FOLLOWS_SLASHED_SYMLINK
-
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
 
@@ -130,23 +105,3 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
-
-/* Define to empty if `const' does not conform to ANSI C. */
-#undef const
-
-/* Define to `int' if <sys/types.h> doesn't define. */
-#undef gid_t
-
-/* Define to rpl_malloc if the replacement function should be used. */
-#undef malloc
-
-/* Define to `unsigned' if <sys/types.h> does not define. */
-#undef size_t
-
-/* Define to `int' if <sys/types.h> doesn't define. */
-#undef uid_t
-
-/* Define to 1 if you have the <GeoIP.h> header file. */
-#undef HAVE_GEOIP_H
-
-#endif /*  CONFIG_H */

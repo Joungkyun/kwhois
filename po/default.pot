@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# $Id: default.pot,v 1.2 2004-02-04 14:12:23 oops Exp $
+# $Id: default.pot,v 1.1 2004-02-04 08:29:21 oops Exp $
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: kwhois 3.1\n"
-"POT-Creation-Date: 2004-02-04 22:58+0900\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2003-08-22 07:29+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,156 +16,269 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: whois.c:449 whois.c:455
+#: whois.c:453 whois.c:463
 msgid ""
 "\n"
 "------------------- Debug Message --------------------\n"
 "\n"
 msgstr ""
 
-#: whois.c:451
+#: whois.c:456
 #, c-format
 msgid "[1;%dmCONV HOST     :[7;0m %s\n"
 msgstr ""
 
-#: whois.c:450
+#: whois.c:455 whois.c:458
 #, c-format
 msgid "[1;%dmHOST          :[7;0m %s\n"
 msgstr ""
 
-#: whois.c:454
+#: whois.c:462
 #, c-format
 msgid "[1;%dmPORT          :[7;0m %s\n"
 msgstr ""
 
-#: whois.c:453
+#: whois.c:461
 #, c-format
 msgid "[1;%dmSERVER        :[7;0m %s\n"
 msgstr ""
 
-#: whois.c:452
+#: whois.c:460
 #, c-format
 msgid "[1;%dmTAIL          :[7;0m %s\n"
 msgstr ""
 
-#: whois.c:364
+#: whois.c:372
 msgid "       --         treat remaining arguments as part of the query\n"
 msgstr ""
 
-#: whois.c:358
+#: whois.c:370
+msgid "       -P         convert punyconde\n"
+msgstr ""
+
+#: whois.c:365
 msgid "       -h server  server name\n"
 msgstr ""
 
-#: whois.c:362
+#: whois.c:369
 msgid "       -n         disable recursion\n"
 msgstr ""
 
-#: whois.c:359
+#: whois.c:366
 msgid "       -p port    server port\n"
 msgstr ""
 
-#: whois.c:361
+#: whois.c:368
 msgid "       -r         force recursion\n"
 msgstr ""
 
-#: whois.c:360
+#: whois.c:367
 msgid "       -t timeout query time limit\n"
 msgstr ""
 
-#: whois.c:363
+#: whois.c:371
 msgid "       -v         verbose mode\n"
 msgstr ""
 
-#: libidn/idn.c:77
+#: libidn/idn.c:185
 msgid "    -a    convert EUC-KR to Punycode\n"
 msgstr ""
 
-#: libracode/main.c:55
+#: libracode/main.c:60
 msgid "    -a    convert EUC-KR to Race code\n"
 msgstr ""
 
-#: libidn/idn.c:76 libracode/main.c:54
+#: libidn/idn.c:184 libracode/main.c:59
 msgid "    -h    help message (this message)\n"
 msgstr ""
 
-#: libracode/main.c:56
+#: libracode/main.c:61
 msgid "    -u    convert Race code to Euc-kr\n"
 msgstr ""
 
-#: libidn/idn.c:78
+#: libidn/idn.c:186
 msgid "    -u    convert punycode to Euc-kr\n"
 msgstr ""
 
-#: libidn/idn.c:79 libracode/main.c:57
+#: libidn/idn.c:187 libracode/main.c:62
 msgid "    -v    verbose mode\n"
 msgstr ""
 
-#: whois.c:196
+#: whois.c:197
 #, c-format
 msgid "%s connecting to %s\n"
 msgstr ""
 
-#: whois.c:180
+#: whois.c:181
 #, c-format
 msgid "%s initializing protocol stacks?!?\n"
 msgstr ""
 
-#: whois.c:173
+#: whois.c:174
 #, c-format
 msgid "%s while getting address for \"%s\"\n"
 msgstr ""
 
-#: whois.c:127
+#: whois.c:128
 #, c-format
 msgid "%s while getting connection info for %s:%s\n"
 msgstr ""
 
-#: whois.c:166
+#: whois.c:167
 #, c-format
 msgid "%s while getting service info for %s\n"
 msgstr ""
 
-#: whois.c:213
+#: whois.c:214
 #, c-format
 msgid "%s while reading from socket\n"
 msgstr ""
 
-#: whois.c:201
+#: whois.c:490 libidn/idn.c:86 libidn/idn.c:124
+#, c-format
+msgid "%s: could not convert from %s to UTF-8.\n"
+msgstr ""
+
+#: whois.c:498 libidn/idn.c:95 libidn/idn.c:133 libidn/idn.c:157
+#, c-format
+msgid "%s: could not convert from UCS-4 to UTF-8.\n"
+msgstr ""
+
+#: libidn/idn.c:166
+#, c-format
+msgid "%s: could not convert from UTF-8 to %s.\n"
+msgstr ""
+
+#: whois.c:505 libidn/idn.c:111
+#, c-format
+msgid "%s: idna_to_ascii_from_locale() failed with error %d.\n"
+msgstr ""
+
+#: libidn/idn.c:142
+#, c-format
+msgid "%s: idna_to_unicode_locale_from_locale() failed with error %d.\n"
+msgstr ""
+
+#: libracode/race.c:230
+#, c-format
+msgid "%sstring_convert() debug%s\n"
+msgstr ""
+
+#: whois.c:202
 #, c-format
 msgid "===> Connect to %s success\n"
 msgstr ""
 
-#: whois.c:202
+#: whois.c:203
 #, c-format
 msgid ""
 "===> Query %s to server\n"
 "\n"
 msgstr ""
 
-#: whois.c:100
+#: libracode/race.c:123
+#, c-format
+msgid "Convert  Target  :     %s \n"
+msgstr ""
+
+#: libracode/race.c:63
+#, c-format
+msgid "Convert  Target :     %s \n"
+msgstr ""
+
+#: libracode/race.c:232
+#, c-format
+msgid "Convert Method   :     %s from %s\n"
+msgstr ""
+
+#: libracode/race.c:233
+#, c-format
+msgid ""
+"Convert String   :     %s\n"
+"Hex Data         :     "
+msgstr ""
+
+#: libracode/race.c:34 libracode/race.c:44
+#, c-format
+msgid "ERROR: %s is not Race Code\n"
+msgstr ""
+
+#: libracode/race.c:201
+msgid "ERROR: Can't not open iconv point\n"
+msgstr ""
+
+#: libracode/race.c:150
+msgid "ERROR: Compress string is bigger than 72 charactors\n"
+msgstr ""
+
+#: libracode/race.c:54 libracode/race.c:114
+msgid "ERROR: Domain don't have extension\n"
+msgstr ""
+
+#: libracode/race.c:147
+msgid "ERROR: Race code compress failed\n"
+msgstr ""
+
+#: libracode/race.c:530 libracode/race.c:535
+msgid "ERROR: compiled without iconv\n"
+msgstr ""
+
+#: libracode/race.c:251
+msgid "ERROR: encoding error with iconv\n"
+msgstr ""
+
+#: libracode/race.c:189
+msgid "ERROR: input data is nothing\n"
+msgstr ""
+
+#: libracode/race.c:194
+msgid "ERROR: original charactor set sames convert charactor set\n"
+msgstr ""
+
+#: libracode/race.c:124
+#, c-format
+msgid "Extension        :     %s \n"
+msgstr ""
+
+#: libracode/race.c:64
+#, c-format
+msgid "Extension       :     %s \n"
+msgstr ""
+
+#: libracode/race.c:122
+#, c-format
+msgid "Original Domain  :     %s \n"
+msgstr ""
+
+#: libracode/race.c:62
+#, c-format
+msgid "Original Domain :     %s \n"
+msgstr ""
+
+#: whois.c:101
 msgid "Timeout exceeded.\n"
 msgstr ""
 
-#: whois.c:355
+#: whois.c:362
 #, c-format
 msgid "Usage: %s [OPTION...] query[@server[:port]]\n"
 msgstr ""
 
-#: libidn/idn.c:74 libracode/main.c:52
+#: libidn/idn.c:182 libracode/main.c:57
 #, c-format
 msgid "Usage: %s [OPTIONS...] convert_domain\n"
 msgstr ""
 
-#: whois.c:365
+#: whois.c:373
 #, c-format
 msgid "default server is %s\n"
 msgstr ""
 
-#: whois.c:133
+#: whois.c:134
 #, c-format
 msgid "no results while getting connection info for %s:%s\n"
 msgstr ""
 
-#: whois.c:357 libidn/idn.c:75 libracode/main.c:53
+#: whois.c:364 libidn/idn.c:183 libracode/main.c:58
 msgid "valid options:\n"
 msgstr ""

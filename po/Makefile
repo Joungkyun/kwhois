@@ -1,16 +1,16 @@
-# $Id: Makefile.in,v 1.2 2004-02-05 03:31:07 oops Exp $
+# $Id: Makefile,v 1.1 2004-02-04 08:29:21 oops Exp $
+CFLAGS  =
 DESTDIR =
 
-PROG	= @PACKAGE_NAME@
-prefix  = @prefix@
-langdir = @datadir@/locale
+PROG    = kwhois
+langdir = /usr/share/locale
 
-INSTALL = @INSTALL@
-LS      = @LS@
-RM      = @RM@ -f
-SED     = @SED@
-MKDIR   = @MKDIR@ -p
-MSGFMT  = @MSGFMT@
+INSTALL = /usr/bin/install
+LS      = /bin/ls
+RM      = /bin/rm -f
+SED     = /bin/sed
+MKDIR   = /bin/mkdir -p
+MSGFMT  = /usr/bin/msgfmt
 
 all:
 	for i in `$(LS) *.po | $(SED) 's/\.po//'` ; do \
