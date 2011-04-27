@@ -1,3 +1,3 @@
-# $Id: autogen.sh,v 1.5 2004-08-10 09:38:06 oops Exp $
-autoheader --force && autoconf --force
+# $Id: autogen.sh,v 1.4 2004-06-03 12:10:46 oops Exp $
+autoheader && autoconf
 rm -rf autom4te* *~

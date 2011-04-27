@@ -1,16 +1,8 @@
-# $Id: configure.ac,v 1.11 2008-07-09 13:40:43 oops Exp $
-AC_PREREQ(2.57)
-
-AC_INIT(kwhois, 3.5, http://devel.oops.org)
+# $Id: configure.ac,v 1.4 2004-06-03 12:17:35 oops Exp $
+AC_INIT(kwhois, 3.3, http://devel.oops.org)
 AC_CONFIG_SRCDIR([i18n.h])
 AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT([/usr/local])
-
-AC_ARG_WITH(rrd,
-[  --with-msgfmt=PATH      path of msgfmt binary [[default]]])
-
-AC_ARG_WITH(olibc,
-[  --with-olibc=PATH       path of olibc library. [[default]]])
 
 # Checks for programs.
 AC_PROG_CC
@@ -42,67 +34,34 @@ if test ! -f "$ac_cv_path_MKDIR"; then
   AC_MSG_ERROR(Can't not found mkdir)
 fi
 
-AC_PATH_PROG(MSGFMT, msgfmt,, $PATH:$with_msgfmt:$with_msgfmt/bin)
-if test "x$ac_cv_path_MSGFMT" = "x"; then
-  AC_MSG_ERROR(Can't not found msgfmt)
+AC_PATH_PROG(MSGFMT, msgfmt)
+AC_ARG_WITH(msgfmt,
+[  --with-msgfmt=PATH      path of msgfmt program])
+if test "x$with_msgfmt" != "x"; then
+  if test -f $with_msgfmt; then
+    ac_cv_path_MSGFMT=$with_msgfmt
+  fi
+else
+  if test "x$ac_cv_path_MSGFMT" != "x"; then
+    if test -f $ac_cv_path_MSGFMT ; then
+      ac_cv_path_MSGFMT=$with_msgfmt
+    else
+      AC_MSG_ERROR(Can't not found msgfmt)
+    fi
+  else
+    AC_MSG_ERROR(Can't not found msgfmt)
+  fi
 fi
-
 
 # Checks for libraries.
 AC_CHECK_LIB(resolv,res_mkquery)
-
-# olibc library check
-if test "x$with_olibc" != "x"; then
-  if test -f "$with_olibc" ; then
-    chk_ext=`echo $with_olibc | ${SED} 's!.*\.\([^.]\+\)$!\1!g'`
-    if test "$chk_ext" = "so" -a "$chk_ext" = "a"; then
-      with_olibc=`echo $with_olibc | ${SED} 's!/[^/]*$!!g'`
-      olibclib="-L$with_olibc"
-      dnl CHECK_RPATH(olibclib, $with_olibc)
-
-      olibcchk=`echo $with_olibc | ${GERP} '/lib$'`
-      if test -n "olibcdchk"; then
-        with_olibc=`echo $with_olibc | ${SED} 's!/lib$!!g'`
-      fi
-    fi
-  elif test -d "$with_olibc" ; then
-    if test -f $with_olibc/lib/libogc.a -o -f $with_olibc/lib/libogc.so; then
-      olibclib="-L$with_olibc/lib"
-      dnl CHECK_RPATH(olibclib, $with_olibc/lib)
-    fi
-  else
-    olibclib=
-  fi
-
-  LDFLAGS="$olibclib $LDFLAGS"
-fi
-AC_CHECK_LIB(ogc, convert_punycode,, [AC_MSG_ERROR(Need over Oops C Library 0.1.0)])
-
-# olibc header check
-if test "$ac_cv_lib_ogc_convert_punycode" = "yes" ; then
-  for i in $with_olibc /usr /usr/local
-  do
-    if test -f "$i/include/libidn.h"; then
-      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
-      if test -z "$inschk"; then
-        CPPFLAGS="-I$i/include $CPPFLAGS"
-      fi
-      break
-    elif test -f "$i/include/olibc/libidn.h"; then
-      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/olibc "`
-      if test -z "$inschk"; then
-        CPPFLAGS="-I$i/include/olibc $CPPFLAGS"
-      fi
-      break
-    fi
-  done
-fi
+AC_CHECK_LIB(ogc, convert_punycode)
 
 # Checks for header files.
 AC_CHECK_HEADERS(stdio.h string.h ctype.h limits.h sys/types.h sys/socket.h \
-		 stdlib.h unistd.h netinet/in.h arpa/inet.h arpa/nameser.h netdb.h errno.h \
+		 stdlib.h unistd.h netinet/in.h arpa/nameser.h netdb.h errno.h \
 		 sys/signal.h getopt.h libintl.h locale.h dlfcn.h error.h inttypes.h \
-		 memory.h stdint.h sys/stat.h iconv.h langinfo.h libidn.h $geo_header)
+		 memory.h stdint.h sys/stat.h iconv.h langinfo.h olibc/libstring.h)
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

@@ -1,15 +1,4 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
-/*
- * CVS ID Tag
- * $Id: config.h.in,v 1.11 2008-07-09 13:40:43 oops Exp $
- */
-#ifndef CONFIG_H
-#define CONFIG_H
-
-
-
-/* Define to 1 if you have the <arpa/inet.h> header file. */
-#undef HAVE_ARPA_INET_H
 
 /* Define to 1 if you have the <arpa/nameser.h> header file. */
 #undef HAVE_ARPA_NAMESER_H
@@ -44,9 +33,6 @@
 /* Define to 1 if you have the <langinfo.h> header file. */
 #undef HAVE_LANGINFO_H
 
-/* Define to 1 if you have the <libidn.h> header file. */
-#undef HAVE_LIBIDN_H
-
 /* Define to 1 if you have the <libintl.h> header file. */
 #undef HAVE_LIBINTL_H
 
@@ -74,6 +60,9 @@
 
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #undef HAVE_NETINET_IN_H
+
+/* Define to 1 if you have the <olibc/libstring.h> header file. */
+#undef HAVE_OLIBC_LIBSTRING_H
 
 /* Define to 1 if `stat' has the bug that it succeeds when given the
    zero-length file name argument. */
@@ -145,8 +134,3 @@
 
 /* Define to `int' if <sys/types.h> doesn't define. */
 #undef uid_t
-
-/* Define to 1 if you have the <GeoIP.h> header file. */
-#undef HAVE_GEOIP_H
-
-#endif /*  CONFIG_H */

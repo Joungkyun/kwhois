@@ -1,8 +1,8 @@
 /*
- * Name server list per domain extensions.
- *
- * $Id: tld_server.h,v 1.2 2004-08-09 14:20:36 oops Exp $
- */
+ *  * Name server list per domain extensions.
+ *   *
+ *    * $Id: tld_server.h,v 1.1 2004-06-03 11:53:32 oops Exp $
+ *     */
 
 #ifndef TLD_SERVER_H
 #define TLD_SERVER_H
