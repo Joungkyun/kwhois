@@ -1,0 +1,17 @@
+$Id: INSTALL,v 1.3 2004-02-04 06:19:37 oops Exp $
+kwhois (korean finger style whois) by JoungKyun Kim <admin@oops.org>
+                                      ByungKi Lee <pino5@hitel.net>
+                                      in OOPS development organization
+
+Installation
+
+1. gzip -d kwhois-%version
+2. cd kwhois-%version
+3. make
+4. make install
+
+
+                                 LAST Modified 1999.10.29
+                                 JoungKyun Kim <admin@oops.org>
+                                 In OOPS development organization
+                                            <http://www.oops.org>

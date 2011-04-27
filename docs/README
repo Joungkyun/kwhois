@@ -1,0 +1,37 @@
+$Id: README,v 1.2 2004-02-04 06:19:37 oops Exp $
+kwhois (korean finger style whois) by JoungKyun Kim <admin@oops.org>
+                                      ByungKi Lee <pino5@hitel.net>
+                                      in OOPS development organization
+
+What is kwhois?
+--------------
+kwhois is maden that easy search Korea local domain with whois command.
+It is supported InterNic(com,net,org), eNic(cc), ToNic(to) and JpNic(jp)
+except KrNic as Default Whois Server.
+
+A point of difference with fwhois?
+---------------------------------
+
+Default Whois server of fwhois is rs.internic.net(INTERNIC- com,net,org).
+And for search korea local domain, used whois as follow;
+
+whois domain.co.kr@whois.krnic.net or
+whois domain.co.kr@whois.nic.or.kr
+
+So, solved this inconvenience, kwhois was designed 
+
+compiling
+-----------
+To recomplie, just type: make and make install
+
+
+Notes on Compiling and Test OS type
+-----------------------------------
+It was tested in RH5.2 and RH6.0
+
+
+License
+-------
+
+kwhois is redistributed fwhois that made by Tony Nardo
+
