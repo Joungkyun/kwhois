@@ -1,4 +1,4 @@
-.\" RCSID: @(#)$Id: whois.1.kr,v 1.5 2004-02-04 14:12:23 oops Exp $
+.\" RCSID: @(#)$Id: whois.1.kr,v 1.1 2004-02-04 06:29:01 oops Exp $
 .TH KWHOIS 1 "kwhois" "OOPS Develoopment ORG" \" -*- nroff -*-
 .SH 이름
 whois, kwhois \- 여러 도메인에 대한 whois, nicname 디비를 검색
@@ -23,24 +23,23 @@ whois, kwhois \- 여러 도메인에 대한 whois, nicname 디비를 검색
 질의를 하였을 경우 시갖제한을 할 수 있다. 초로 지정을 한다.
 .TP
 \fI\-r\fP
-반복을 강행한다. 첫 서버가 응답을 한다면,
+Force recursion.  If the first server response contains a line similar to
 
 Whois Server: \fIhostname\fP
 
-와 유사한 라인을 포함한다.
-\fBwhois\fP 는 서버로 부터 hostname 을 동반한 같은 질의를 재시도 한다. 기본 서버로
-질의 되었을 때는, 기본값이다.
+\fBwhois\fP will retry the same query with \fIhostname\fP as the server.  This
+is the default when the default server is being queried.
 .TP
 \fI\-n\fP
-기본 서버로 질의되었을지라도 반복을 강행하지 않는다.
+Disable recursion, even if the default server is being queried.
 .TP
 \fI-v\fP
-질의에 상세한 출력을 한다. 이 것은 클라이언트의 질의가 서버에 전달되기 전에
-표준 출력으로 먼저 출력을 하게 한다.
+Be verbose in the query.  This causes the client to print the query string
+it will send to the server before sending it.
 .TP
 \fI--\fP
-\fI-p\fP, \fI-h\fP, \fI-r\fP, or \fI-v\fP 옵션 뒤에 주어진 인자들에 대해서는
-해석을 하지 않는다.
+Don't interpret subsequent \fI-p\fP, \fI-h\fP, \fI-r\fP, or \fI-v\fP flags
+given as arguments.
 .SH 버그
 알려진 버그는 없다. 단, 간단한 프로토콜이기 때문에 어떠한 문제가 발생할 염려는
 없다고 생각이 된다.
