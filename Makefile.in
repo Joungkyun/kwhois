@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.7 2004-08-09 16:38:55 oops Exp $
+# $Id$
 CC		= @CC@
 CFLAGS		= -Wall @CFLAGS@ @DEFS@
 CPPFLAGS	= @CPPFLAGS@

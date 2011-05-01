@@ -19,7 +19,7 @@
  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  ******************************************************************************/
-#ident "$Id: whois.c,v 1.18 2008-07-09 14:26:39 oops Exp $"
+#ident "$Id$"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

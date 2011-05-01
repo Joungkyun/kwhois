@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.2 2004-02-05 03:31:07 oops Exp $
+# $Id$
 DESTDIR =
 
 PROG	= @PACKAGE_NAME@

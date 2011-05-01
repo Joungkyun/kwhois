@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.1 2004-02-04 14:12:23 oops Exp $
+# $Id$
 CC		= @CC@
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@

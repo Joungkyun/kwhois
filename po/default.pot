@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# $Id: default.pot,v 1.2 2004-02-04 14:12:23 oops Exp $
+# $Id$
 #
 #, fuzzy
 msgid ""

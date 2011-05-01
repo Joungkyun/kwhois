@@ -1,4 +1,4 @@
-# $Id: configure.ac,v 1.11 2008-07-09 13:40:43 oops Exp $
+# $Id$
 AC_PREREQ(2.57)
 
 AC_INIT(kwhois, 3.5, http://devel.oops.org)

@@ -1,4 +1,4 @@
-/* $Id: main.c,v 1.5 2004-09-02 19:20:12 oops Exp $ */
+/* $Id$ */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
