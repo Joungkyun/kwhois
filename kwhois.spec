@@ -1,9 +1,9 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 3.5
+Version: 3.6
 Release: 1
-Epoch: 6
+Epoch: 7
 License: GPL
 Group: Applications/Internet
 Url: http://oops.org/
@@ -50,6 +50,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
+* Wed Sep  7 2011 JoungKyun.Kim <http://oops.org> 7:3.6-1
+- update 3.6
+
 * Wed Jul  9 2008 JoungKyun.Kim <http://oops.org> 6:3.5-1
 - update 3.5
 

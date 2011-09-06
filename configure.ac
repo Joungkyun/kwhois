@@ -1,12 +1,12 @@
 # $Id$
-AC_PREREQ(2.57)
+AC_PREREQ(2.59)
 
-AC_INIT(kwhois, 3.5, http://devel.oops.org)
+AC_INIT(kwhois, 3.6, http://devel.oops.org)
 AC_CONFIG_SRCDIR([i18n.h])
 AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT([/usr/local])
 
-AC_ARG_WITH(rrd,
+AC_ARG_WITH(msgfmt,
 [  --with-msgfmt=PATH      path of msgfmt binary [[default]]])
 
 AC_ARG_WITH(olibc,
