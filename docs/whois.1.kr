@@ -1,50 +1,50 @@
 .\" RCSID: @(#)$Id$
 .TH KWHOIS 1 "kwhois" "OOPS Develoopment ORG" \" -*- nroff -*-
-.SH ÀÌ¸§
-whois, kwhois \- ¿©·¯ µµ¸ÞÀÎ¿¡ ´ëÇÑ whois, nicname µðºñ¸¦ °Ë»ö
-.SH »ç¿ë¹ý
+.SH ì´ë¦„
+whois, kwhois \- ì—¬ëŸ¬ ë„ë©”ì¸ì— ëŒ€í•œ whois, nicname ë””ë¹„ë¥¼ ê²€ìƒ‰
+.SH ì‚¬ìš©ë²•
 .B whois
-[\-v] [\-r|\-n] [\-h ¼­¹ö] [\-p Æ÷Æ®] [-t ½Ã°£Á¦ÇÑ] [\-\-] ÁúÀÇ[@¼­¹ö[:Æ÷Æ®]]
-.SH ¼³¸í
+[\-v] [\-r|\-n] [\-h ì„œë²„] [\-p í¬íŠ¸] [-t ì‹œê°„ì œí•œ] [\-\-] ì§ˆì˜[@ì„œë²„[:í¬íŠ¸]]
+.SH ì„¤ëª…
 .B whois
-¾î¶°ÇÑ RFC954 wohis ¼­¹ö¿¡ Çü½Ä°ú ÁúÀÇ¸¦ º¸³»°í, Ç¥ÁØ Ãâ·ÂÀ¸·Î ±× °á°ú¸¦ Ãâ·ÂÇÑ´Ù.
-.SH ¿É¼Ç
+ì–´ë– í•œ RFC954 wohis ì„œë²„ì— í˜•ì‹ê³¼ ì§ˆì˜ë¥¼ ë³´ë‚´ê³ , í‘œì¤€ ì¶œë ¥ìœ¼ë¡œ ê·¸ ê²°ê³¼ë¥¼ ì¶œë ¥í•œë‹¤.
+.SH ì˜µì…˜
 .TP
 \fI\-h server\fP
-ÁúÀÇ¸¦ ÇÒ whois ¼­¹ö ÀÌ¸§À» ÁöÁ¤ÇÑ´Ù. ÁöÁ¤ÇÏÁö ¾Ê´Â´Ù¸é \fBNICNAMESERVER\fP ¿Í
-\fBWHOISSERVER\fP È¯°æ º¯¼ö¸¦ Ã¼Å©ÇÏ°Ô µÇ¸ç, È¯°æ º¯¼ö ¿ª½Ã ÁöÁ¤µÇ¾î ÀÖÁö ¾ÊÀ»
-°æ¿ì¿¡´Â default server - Internic, Krnic, Tonic, eNIC, JPnic, TVnic - ¿¡ ÁúÀÇ¸¦
-ÇÏ°Ô µÈ´Ù.
+ì§ˆì˜ë¥¼ í•  whois ì„œë²„ ì´ë¦„ì„ ì§€ì •í•œë‹¤. ì§€ì •í•˜ì§€ ì•ŠëŠ”ë‹¤ë©´ \fBNICNAMESERVER\fP ì™€
+\fBWHOISSERVER\fP í™˜ê²½ ë³€ìˆ˜ë¥¼ ì²´í¬í•˜ê²Œ ë˜ë©°, í™˜ê²½ ë³€ìˆ˜ ì—­ì‹œ ì§€ì •ë˜ì–´ ìžˆì§€ ì•Šì„
+ê²½ìš°ì—ëŠ” default server - Internic, Krnic, Tonic, eNIC, JPnic, TVnic - ì— ì§ˆì˜ë¥¼
+í•˜ê²Œ ëœë‹¤.
 .TP
 \fI\-p port\fP
-±âº»°ªÀº \fBwhois\fP ÀÌ¸ç, Å¬¶óÀÌ¾ðÆ®¿¡¼­ Á¢¼ÓÇÒ Æ÷Æ®¹øÈ£¸¦ º¯°æÇÒ ¼ö ÀÖ´Ù.
+ê¸°ë³¸ê°’ì€ \fBwhois\fP ì´ë©°, í´ë¼ì´ì–¸íŠ¸ì—ì„œ ì ‘ì†í•  í¬íŠ¸ë²ˆí˜¸ë¥¼ ë³€ê²½í•  ìˆ˜ ìžˆë‹¤.
 .TP
 \fI\-t\fP
-ÁúÀÇ¸¦ ÇÏ¿´À» °æ¿ì ½Ã°®Á¦ÇÑÀ» ÇÒ ¼ö ÀÖ´Ù. ÃÊ·Î ÁöÁ¤À» ÇÑ´Ù.
+ì§ˆì˜ë¥¼ í•˜ì˜€ì„ ê²½ìš° ì‹œê°–ì œí•œì„ í•  ìˆ˜ ìžˆë‹¤. ì´ˆë¡œ ì§€ì •ì„ í•œë‹¤.
 .TP
 \fI\-r\fP
-¹Ýº¹À» °­ÇàÇÑ´Ù. Ã¹ ¼­¹ö°¡ ÀÀ´äÀ» ÇÑ´Ù¸é,
+ë°˜ë³µì„ ê°•í–‰í•œë‹¤. ì²« ì„œë²„ê°€ ì‘ë‹µì„ í•œë‹¤ë©´,
 
 Whois Server: \fIhostname\fP
 
-¿Í À¯»çÇÑ ¶óÀÎÀ» Æ÷ÇÔÇÑ´Ù.
-\fBwhois\fP ´Â ¼­¹ö·Î ºÎÅÍ hostname À» µ¿¹ÝÇÑ °°Àº ÁúÀÇ¸¦ Àç½Ãµµ ÇÑ´Ù. ±âº» ¼­¹ö·Î
-ÁúÀÇ µÇ¾úÀ» ¶§´Â, ±âº»°ªÀÌ´Ù.
+ì™€ ìœ ì‚¬í•œ ë¼ì¸ì„ í¬í•¨í•œë‹¤.
+\fBwhois\fP ëŠ” ì„œë²„ë¡œ ë¶€í„° hostname ì„ ë™ë°˜í•œ ê°™ì€ ì§ˆì˜ë¥¼ ìž¬ì‹œë„ í•œë‹¤. ê¸°ë³¸ ì„œë²„ë¡œ
+ì§ˆì˜ ë˜ì—ˆì„ ë•ŒëŠ”, ê¸°ë³¸ê°’ì´ë‹¤.
 .TP
 \fI\-n\fP
-±âº» ¼­¹ö·Î ÁúÀÇµÇ¾úÀ»Áö¶óµµ ¹Ýº¹À» °­ÇàÇÏÁö ¾Ê´Â´Ù.
+ê¸°ë³¸ ì„œë²„ë¡œ ì§ˆì˜ë˜ì—ˆì„ì§€ë¼ë„ ë°˜ë³µì„ ê°•í–‰í•˜ì§€ ì•ŠëŠ”ë‹¤.
 .TP
 \fI-v\fP
-ÁúÀÇ¿¡ »ó¼¼ÇÑ Ãâ·ÂÀ» ÇÑ´Ù. ÀÌ °ÍÀº Å¬¶óÀÌ¾ðÆ®ÀÇ ÁúÀÇ°¡ ¼­¹ö¿¡ Àü´ÞµÇ±â Àü¿¡
-Ç¥ÁØ Ãâ·ÂÀ¸·Î ¸ÕÀú Ãâ·ÂÀ» ÇÏ°Ô ÇÑ´Ù.
+ì§ˆì˜ì— ìƒì„¸í•œ ì¶œë ¥ì„ í•œë‹¤. ì´ ê²ƒì€ í´ë¼ì´ì–¸íŠ¸ì˜ ì§ˆì˜ê°€ ì„œë²„ì— ì „ë‹¬ë˜ê¸° ì „ì—
+í‘œì¤€ ì¶œë ¥ìœ¼ë¡œ ë¨¼ì € ì¶œë ¥ì„ í•˜ê²Œ í•œë‹¤.
 .TP
 \fI--\fP
-\fI-p\fP, \fI-h\fP, \fI-r\fP, or \fI-v\fP ¿É¼Ç µÚ¿¡ ÁÖ¾îÁø ÀÎÀÚµé¿¡ ´ëÇØ¼­´Â
-ÇØ¼®À» ÇÏÁö ¾Ê´Â´Ù.
-.SH ¹ö±×
-¾Ë·ÁÁø ¹ö±×´Â ¾ø´Ù. ´Ü, °£´ÜÇÑ ÇÁ·ÎÅäÄÝÀÌ±â ¶§¹®¿¡ ¾î¶°ÇÑ ¹®Á¦°¡ ¹ß»ýÇÒ ¿°·Á´Â
-¾ø´Ù°í »ý°¢ÀÌ µÈ´Ù.
-.SH ÀÛ¼º
+\fI-p\fP, \fI-h\fP, \fI-r\fP, or \fI-v\fP ì˜µì…˜ ë’¤ì— ì£¼ì–´ì§„ ì¸ìžë“¤ì— ëŒ€í•´ì„œëŠ”
+í•´ì„ì„ í•˜ì§€ ì•ŠëŠ”ë‹¤.
+.SH ë²„ê·¸
+ì•Œë ¤ì§„ ë²„ê·¸ëŠ” ì—†ë‹¤. ë‹¨, ê°„ë‹¨í•œ í”„ë¡œí† ì½œì´ê¸° ë•Œë¬¸ì— ì–´ë– í•œ ë¬¸ì œê°€ ë°œìƒí•  ì—¼ë ¤ëŠ”
+ì—†ë‹¤ê³  ìƒê°ì´ ëœë‹¤.
+.SH ìž‘ì„±
 Nalin Dahyabhai <nalin@redhat.com>
 .br
 JoungKyun Kim <http://www.oops.org>
