@@ -1,122 +1,53 @@
+# Process this file with autoconf to produce a configure script.
+# Configure template for kwhois
+#
 # $Id$
-AC_PREREQ(2.59)
 
-AC_INIT(kwhois, 3.6, http://devel.oops.org)
+AC_PREREQ(2.59)
+AC_INIT([kwhois], [3.6], [http://oops.org])
+
+AC_CONFIG_AUX_DIR([tools])
+AM_INIT_AUTOMAKE([-Wall -Werror -Wno-override foreign no-dependencies])
+AM_MAINTAINER_MODE
+
 AC_CONFIG_SRCDIR([i18n.h])
 AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT([/usr/local])
 
-AC_ARG_WITH(msgfmt,
-[  --with-msgfmt=PATH      path of msgfmt binary [[default]]])
-
-AC_ARG_WITH(olibc,
-[  --with-olibc=PATH       path of olibc library. [[default]]])
+AC_DEFUN([AC_DATAROOTDIR_CHECKED])
 
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_AWK
-AC_PATH_PROG(GREP, grep)
-if test ! -f "$ac_cv_path_GREP"; then
-  AC_MSG_ERROR(Can't not found grep)
-fi
-
-AC_PATH_PROG(SED, sed)
-if test ! -f "$ac_cv_path_SED"; then
-  AC_MSG_ERROR(Can't not found sed)
-fi
-
-AC_PATH_PROG(LS, ls)
-if test ! -f "$ac_cv_path_LS"; then
-  AC_MSG_ERROR(Can't not found ls)
-fi
-
-AC_PATH_PROG(RM, rm)
-if test ! -f "$ac_cv_path_RM"; then
-  AC_MSG_ERROR(Can't not found rm)
-fi
-
-AC_PATH_PROG(MKDIR, mkdir)
-if test ! -f "$ac_cv_path_MKDIR"; then
-  AC_MSG_ERROR(Can't not found mkdir)
-fi
-
-AC_PATH_PROG(MSGFMT, msgfmt,, $PATH:$with_msgfmt:$with_msgfmt/bin)
-if test "x$ac_cv_path_MSGFMT" = "x"; then
-  AC_MSG_ERROR(Can't not found msgfmt)
-fi
-
+AC_PROG_MAKE_SET
+AM_PO_SUBDIRS
 
 # Checks for libraries.
 AC_CHECK_LIB(resolv,res_mkquery)
-
-# olibc library check
-if test "x$with_olibc" != "x"; then
-  if test -f "$with_olibc" ; then
-    chk_ext=`echo $with_olibc | ${SED} 's!.*\.\([^.]\+\)$!\1!g'`
-    if test "$chk_ext" = "so" -a "$chk_ext" = "a"; then
-      with_olibc=`echo $with_olibc | ${SED} 's!/[^/]*$!!g'`
-      olibclib="-L$with_olibc"
-      dnl CHECK_RPATH(olibclib, $with_olibc)
-
-      olibcchk=`echo $with_olibc | ${GERP} '/lib$'`
-      if test -n "olibcdchk"; then
-        with_olibc=`echo $with_olibc | ${SED} 's!/lib$!!g'`
-      fi
-    fi
-  elif test -d "$with_olibc" ; then
-    if test -f $with_olibc/lib/libogc.a -o -f $with_olibc/lib/libogc.so; then
-      olibclib="-L$with_olibc/lib"
-      dnl CHECK_RPATH(olibclib, $with_olibc/lib)
-    fi
-  else
-    olibclib=
-  fi
-
-  LDFLAGS="$olibclib $LDFLAGS"
-fi
-AC_CHECK_LIB(ogc, convert_punycode,, [AC_MSG_ERROR(Need over Oops C Library 0.1.0)])
-
-# olibc header check
-if test "$ac_cv_lib_ogc_convert_punycode" = "yes" ; then
-  for i in $with_olibc /usr /usr/local
-  do
-    if test -f "$i/include/libidn.h"; then
-      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include "`
-      if test -z "$inschk"; then
-        CPPFLAGS="-I$i/include $CPPFLAGS"
-      fi
-      break
-    elif test -f "$i/include/olibc/libidn.h"; then
-      inschk=`echo $CPPFLAGS | ${GREP} "I$i/include/olibc "`
-      if test -z "$inschk"; then
-        CPPFLAGS="-I$i/include/olibc $CPPFLAGS"
-      fi
-      break
-    fi
-  done
-fi
+AX_OLIBC
 
 # Checks for header files.
-AC_CHECK_HEADERS(stdio.h string.h ctype.h limits.h sys/types.h sys/socket.h \
-		 stdlib.h unistd.h netinet/in.h arpa/inet.h arpa/nameser.h netdb.h errno.h \
-		 sys/signal.h getopt.h libintl.h locale.h dlfcn.h error.h inttypes.h \
-		 memory.h stdint.h sys/stat.h iconv.h langinfo.h libidn.h $geo_header)
+AC_HEADER_STDC
+AC_CHECK_HEADERS(
+	sys/signal.h sys/socket.h getopt.h limits.h netinet/in.h \
+	arpa/inet.h arpa/nameser.h netdb.h ctype.h langinfo.h \
+	locale.h libintl.h errno.h error.h
+)
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
-AC_TYPE_UID_T
 AC_TYPE_SIZE_T
 
 # Checks for library functions.
-AC_FUNC_MALLOC
 AC_FUNC_STAT
 AC_CHECK_FUNCS(getaddrinfo)
 AC_CHECK_FUNCS(getopt_long,, [AC_LIBOBJ(getopt) AC_LIBOBJ(getopt1)])
 
 AC_CONFIG_FILES([Makefile
                  po/Makefile
+				 docs/Makefile
                  libidn/Makefile
                  libracode/Makefile])
 

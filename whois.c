@@ -31,56 +31,26 @@
 /* ansi color */
 #define COLOR 34
 
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#ifdef HAVE_SYS_SIGNAL_H
-#include <sys/signal.h>
-#endif
-#ifdef HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
-#endif
-#ifdef HAVE_ERRNO_H
-#include <errno.h>
-#endif
-#ifdef HAVE_GETOPT_H
-#include <getopt.h>
-#endif
-#ifdef HAVE_STDIO_H
 #include <stdio.h>
-#endif
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-#ifdef HAVE_STRING_H
 #include <string.h>
-#endif
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-#ifdef HAVE_NETINET_IN_H
-#include <netinet/in.h>
-#endif
-#ifdef HAVE_ARPA_INET_H
-#include <arpa/inet.h>
-#endif
-#ifdef HAVE_ARPA_NAMESER_H
-#include <arpa/nameser.h>
-#endif
-#ifdef HAVE_NETDB_H
-#include <netdb.h>
-#endif
-#ifdef HAVE_CTYPE_H
-#include <ctype.h>
-#endif
 
-#ifdef HAVE_LIBIDN_H
-#  ifdef HAVE_LIBOGC
-#    include <libidn.h>
-#  endif
+#include <sys/types.h>
+#include <sys/signal.h>
+#include <sys/socket.h>
+
+#include <errno.h>
+
+#include <limits.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <arpa/nameser.h>
+#include <netdb.h>
+#include <ctype.h>
+
+#ifdef HAVE_LIBOGC
+#	include <olibc/libidn.h>
 #endif
 
 #include "tld_server.h"
@@ -368,7 +338,7 @@ int main(int argc, char **argv) {
 		fprintf (stderr, _("       -v         verbose mode\n"));
 		fprintf (stderr, _("       --         treat remaining arguments as part of the query\n"));
 		fprintf (stderr, _("default server is %s\n"), DEFAULT_SERVER);
-		fprintf (stderr, "%s %s\n", NAME, PVERSION);
+		fprintf (stderr, "%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
 		exit(1);
 	}
 

@@ -70,7 +70,7 @@ int main (int argc, char *argv[]) {
 }
 
 void usage (void) {
-	fprintf (stderr, "%s %s\n", progs, PVERSION);
+	fprintf (stderr, "%s %s\n", progs, PACKAGE_VERSION);
 	fprintf (stderr, _("Usage: %s [OPTIONS...] convert_domain\n"), progs);
 	fprintf (stderr, _("valid options:\n"));
 	fprintf (stderr, _("    -h    help message (this message)\n"));
