@@ -4,6 +4,7 @@ $Id$
 * Sun Sep 11 2011
   by JoungKyun Kim <http://oops.org>
   - use automake
+  - fixed intent and uncritical bugs
 
 * Wed Sep  7 2011
   by JoungKyun Kim <http://oops.org>

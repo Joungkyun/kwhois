@@ -59,241 +59,265 @@
 #define DEFAULT_PORT "whois"
 #endif
 
-int check_code ( char *tail );
-int crsCheck ( char *wserv );
-int is_ipaddr (char *query);
-char * get_tail (char *query);
-char * parseQuery ( char *qry, char *wserv);
-int is_longip (char *query);
+#ifndef null
+#	define null NULL
+#endif
+typedef unsigned long ULong;
+
+typedef struct {
+	char	* server;
+	char	* port;
+	char	* query;
+	int		timeout;
+	int		recurse;
+	int		verbose;
+} Pquery;
+
+int  check_code (char * tail);
+int  crsCheck (char * wserv);
+int  is_ipaddr (char * query);
+char * get_tail (char * query);
+char * parseQuery (char * qry, char * wserv);
+int  is_longip (char * query);
 void long2ip (char ** ip);
 
-char *extension = NULL;
+char * extension = null;
 
-void
-alarm_handler(int signum)
-{
-	char *message;
+void alarm_handler (int signum) { // {{{
+	char	* message;
 
 	message = _("Timeout exceeded.\n");
-	write(STDERR_FILENO, message, strlen(message));
-	exit(0);
-}
+	write (STDERR_FILENO, message, strlen (message));
+	exit (0);
+} // }}}
 
 static void
-process_query(const char *server, const char *port, const char *query,
-	      int timeout, int recurse, int verbose)
-{
-	int sd = -1, ret = 0;
-	FILE *reader = NULL;
-	char buf[LINE_MAX], ubuf[LINE_MAX];
-	char *next_server = NULL;
+process_query (Pquery * v) { // {{{
+	int		sd = -1,
+			ret = 0;
+	FILE	* reader = null;
+	char	buf[LINE_MAX],
+			ubuf[LINE_MAX];
+	char	* next_server = null;
 
 #ifdef HAVE_GETADDRINFO
-	struct addrinfo hints, *res = NULL;
+	struct	addrinfo hints,
+			* res = null;
 
-	memset(&hints, 0, sizeof(hints));
+	memset (&hints, 0, sizeof (hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 
-	if(timeout > 0) {
-		signal(SIGALRM, alarm_handler);
-		alarm(timeout);
+	if ( v->timeout > 0 ) {
+		signal (SIGALRM, alarm_handler);
+		alarm (v->timeout);
 	}
 
-	if(getaddrinfo(server, port, &hints, &res) != 0) {
-		fprintf(stderr, _("%s while getting connection info for %s:%s\n"),
-			gai_strerror(errno), server, port);
-		exit(1);
+	if ( getaddrinfo (v->server, v->port, &hints, &res) != 0 ) {
+		fprintf (stderr, _("%s while getting connection info for %s:%s\n"),
+				gai_strerror (errno), v->server, v->port);
+		exit (1);
 	}
 
-	if(res == NULL) {
-		fprintf(stderr, _("no results while getting connection info for %s:%s\n"), server, port);
-		exit(1);
+	if ( res == null ) {
+		fprintf (stderr, _("no results while getting connection info for %s:%s\n"), v->server, v->port);
+		exit (1);
 	}
 
-	while(res != NULL) {
-		sd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+	while ( res != null ) {
+		sd = socket (res->ai_family, res->ai_socktype, res->ai_protocol);
 		ret = -1;
 
-		if(sd == -1) {
+		if ( sd == -1 ) {
 			res = res->ai_next;
 			continue;
 		}
 
-		ret = connect(sd, res->ai_addr, res->ai_addrlen);
-		if(ret != -1) {
+		ret = connect (sd, res->ai_addr, res->ai_addrlen);
+		if ( ret != -1 )
 			break;
-		}
+
 		res = res->ai_next;
-		close(sd);
+		close (sd);
 	}
 #else
-	struct sockaddr_in server_addr;
-	struct hostent *host = NULL;
-	struct servent *serv = NULL;
+	struct	sockaddr_in server_addr;
+	struct	hostent * host = null;
+	struct	servent * serv = null;
 
-	serv = getservbyname(port, "tcp");
-	if(serv == NULL) {
-		serv = getservbyname("nicname", "tcp");
-	}
-	if(serv == NULL) {
-		serv = getservbyname("whois", "tcp");
-	}
-	if(serv == NULL) {
-		fprintf(stderr, _("%s while getting service info for %s\n"),
-			strerror(errno), port);
-		exit(1);
-	}
+	serv = getservbyname (v->port, "tcp");
+	if ( serv == null )
+		serv = getservbyname ("nicname", "tcp");
 
-	host = gethostbyname(server);
-	if(host == NULL) {
-		printf(_("%s while getting address for \"%s\"\n"),
-			strerror(h_errno), server);
-		exit(1);
+	if ( serv == null )
+		serv = getservbyname ("whois", "tcp");
+
+	if ( serv == null ) {
+		fprintf (stderr, _("%s while getting service info for %s\n"),
+				strerror (errno), v->port);
+		exit (1);
 	}
 
-	sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if(sd == -1) {
-		printf(_("%s initializing protocol stacks?!?\n"),
-			strerror(errno));
-		exit(1);
+	host = gethostbyname (v->server);
+	if ( host == null ) {
+		printf (_("%s while getting address for \"%s\"\n"),
+				strerror (h_errno), v->server);
+		exit (1);
 	}
 
-	memset(&server_addr, 0, sizeof(server_addr));
+	sd = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if ( sd == -1 ) {
+		printf (_("%s initializing protocol stacks?!?\n"),
+				strerror (errno));
+		exit (1);
+	}
+
+	memset (&server_addr, 0, sizeof (server_addr));
 	server_addr.sin_family = host->h_addrtype;
 	server_addr.sin_port = serv->s_port;
-	memcpy(&server_addr.sin_addr, host->h_addr_list[0],
-	       host->h_length);
+	memcpy (&server_addr.sin_addr, host->h_addr_list[0], host->h_length);
 
-	ret = connect(sd, (struct sockaddr*) &server_addr,
-		      sizeof(struct sockaddr_in));
+	ret = connect (
+		sd,
+		(struct sockaddr *) &server_addr,
+		sizeof (struct sockaddr_in)
+	);
 #endif
 
-	if(ret == -1) {
-		printf(_("%s connecting to %s\n"), strerror(errno), server);
-		exit(1);
+	if ( ret == -1 ) {
+		printf (_("%s connecting to %s\n"), strerror (errno), v->server);
+		exit (1);
 	}
 
-	if (verbose) {
-		fprintf (stderr, _("===> Connect to %s success\n"), server);
-		fprintf (stderr, _("===> Query %s to server\n\n"), parseQuery ((char *) query, (char *) server));
+	if ( v->verbose ) {
+		char buf[1024] = { 0, };
+
+		strncpy (buf, parseQuery (v->query, v->server), 1024);
+		buf[strlen (buf) - 2] = 0;
+
+		fprintf (stderr, _("===> Connect to %s success\n"), v->server);
+		fprintf (stderr, _("===> Query %s to server\n\n"), buf);
 	}
 
-	printf("[%s]\n", server);
+	printf ("[%s]\n", v->server);
 
-	snprintf (buf, sizeof (buf), "%s", parseQuery ((char *) query, (char *) server));
-	send(sd, buf, strlen(buf), 0);
+	snprintf (buf, sizeof (buf), "%s", parseQuery (v->query, v->server));
+	send (sd, buf, strlen (buf), 0);
 
-	fflush(stdout);
+	fflush (stdout);
 
-	reader = fdopen(sd, "r");
-	if(reader == NULL) {
-		printf(_("%s while reading from socket\n"), strerror(errno));
-		exit(1);
+	reader = fdopen (sd, "r");
+	if ( reader == null ) {
+		printf (_("%s while reading from socket\n"), strerror (errno));
+		exit (1);
 	}
 
-	memset(buf, 0, sizeof(buf));
-	while(fgets(buf, sizeof(buf) - 1, reader) != NULL) {
+	memset (buf, 0, sizeof (buf));
+	while ( fgets (buf, sizeof (buf) - 1, reader) != null ) {
 		int i;
 
 		/* Give the user the literal string, including the newline. */
-		printf("%s", buf);
+		printf ("%s", buf);
 
 		/* Create an upper-cased copy of the response line. */
-		memset(ubuf, '\0', sizeof(ubuf));
-		for(i = 0; i < strlen(buf); i++) {
-			ubuf[i] = toupper(buf[i]);
+		memset (ubuf, '\0', sizeof (ubuf));
+		for ( i=0; i < strlen (buf); i++ ) {
+			ubuf[i] = toupper (buf[i]);
 		}
 
 		/* If the line includes the magic string, pull out the
 		 * name of the server we should talk to next. */
-		if(recurse && (strstr(ubuf, "WHOIS SERVER:") != NULL)) {
-			char *p = NULL;
+		if ( v->recurse && (strstr (ubuf, "WHOIS SERVER:") != null)) {
+			char	* p = null;
 			next_server = buf;
-			while((next_server[0] != '\0') &&
-			      (next_server[0] != ':')) {
+			while ( (next_server[0] != '\0') && (next_server[0] != ':') ) {
 				next_server++;
 			}
-			while((next_server[0] != '\0') &&
+			while ( (next_server[0] != '\0') &&
 			      ((next_server[0] == ':') ||
-			       isspace(next_server[0]))) {
+			       isspace (next_server[0])) ) {
 				next_server++;
 			}
-			p = buf + strlen(buf);
-			while((p > buf) &&
-			      ((isspace(p[-1])) ||
+			p = buf + strlen (buf);
+			while ( (p > buf) &&
+			      ((isspace (p[-1])) ||
 			       (p[-1] == '\r') ||
-			       (p[-1] == '\n'))) {
+			       (p[-1] == '\n')) ) {
 				p[-1] = '\0';
 				p--;
 			}
-			next_server = strdup(next_server);
+			next_server = strdup (next_server);
 		}
 	}
-	fclose(reader);
-	printf("\n");
+	fclose (reader);
+	printf ("\n");
 
-	if(timeout > 0) {
-		alarm(0);
-	}
+	if ( v->timeout > 0 )
+		alarm (0);
 
-	if((recurse > 0) && (next_server != NULL)) {
-		process_query(next_server, port, query,
-			      timeout, recurse - 1, verbose);
+	if ( (v->recurse > 0) && (next_server != null) ) {
+		v->server = next_server;
+		v->recurse -= 1;
+		process_query (v);
 	}
 	free (next_server);
-}
+} // }}}
 
-int main(int argc, char **argv) {
-	char *server = NULL;
-	char *port = DEFAULT_PORT;
-	char *query = NULL;
-	char *name = NULL;
-	int i, recurse = -1, help = 0, parse = 1;
-	int verbose = 0, timeout = -1;
+int main (int argc, char ** argv) { // {{{
+	char	* name = null;
+	int		i,
+			help = 0,
+			parse = 1;
+	Pquery	qr;
+
+	qr.server  = null;
+	qr.port    = DEFAULT_PORT;
+	qr.query   = null;
+	qr.timeout = -1;
+	qr.recurse = -1;
+	qr.verbose = 0;
 
 	/* support i18n */
 #ifdef ENABLE_NLS
-	i18n_print();
+	i18n_print ();
 #endif
 
 	/* If we got no arguments, we're just going to print out a short
 	 * usage message and quit. */
-	if(argc <= 1) {
+	if ( argc <= 1 )
 		help = 1;
-	}
 
-	while(parse && ((i = getopt(argc, argv, "h:vrnp:Pt:-")) != -1)) {
-		switch(i) {
+	while ( parse && ((i = getopt (argc, argv, "h:vrnp:Pt:-")) != -1) ) {
+		switch (i) {
 			case 'h':
 				/* The -h option for traditional whois specifies
 				 * the server to query. */
-				server = optarg;
+				qr.server = optarg;
 				break;
 			case 'p':
 				/* Use an alternate port.  This can be a name
 				 * or a number. */
-				port = optarg;
+				qr.port = optarg;
 				break;
 			case 'v':
 				/* Be verbose.  Currently this means that we
 				 * print the query for the user when we send
 				 * it. */
-				verbose = 1;
+				qr.verbose = 1;
 				break;
 			case 'r':
 				/* Force chasing on. */
-				recurse = 1;
+				qr.recurse = 1;
 				break;
 			case 'n':
 				/* Force chasing off. */
-				recurse = 0;
+				qr.recurse = 0;
 				break;
 			case 't':
 				/* Use a timeout when querying.  The timeout
 				 * applies to all phases of the query,
 				 * including name resolution. */
-				timeout = atoi(optarg);
+				qr.timeout = atoi (optarg);
 			case '-':
 				parse = 0;
 				break;
@@ -308,27 +332,28 @@ int main(int argc, char **argv) {
 	 * single query string.  Because we only have argv[] to play with, we
 	 * have to guess that a single space will work, otherwise the user has
 	 * to quote it all. */
-	for(i = optind; i < argc; i++) {
-		if(query) {
-			char *p, *q;
-			p = strdup(argv[i]);
-			q = query;
-			query = malloc(strlen(p) + 1 + strlen(q) + 1);
-			strcpy(query, q);
-			strcat(query, " ");
-			strcat(query, p);
-			free(p);
-			free(q);
+	for ( i=optind; i<argc; i++ ) {
+		if ( qr.query ) {
+			char	* p,
+					* q;
+			p = strdup (argv[i]);
+			q = qr.query;
+			qr.query = malloc (strlen (p) + 1 + strlen (q) + 1);
+			strcpy (qr.query, q);
+			strcat (qr.query, " ");
+			strcat (qr.query, p);
+			free (p);
+			free (q);
 		} else {
-			query = strdup(argv[i]);
+			qr.query = strdup (argv[i]);
 		}
 	}
 
 	/* If the help flag was given, or we didn't get anything that looked
 	 * like a query string, print a short help message and quit. */
-	if(help || (query == NULL) || (strlen(query) == 0)) {
+	if ( help || (qr.query == null) || (strlen ( qr.query) == 0) ) {
 		fprintf (stderr, _("Usage: %s [OPTION...] query[@server[:port]]\n"),
-				strchr(argv[0], '/') ? strrchr(argv[0], '/') + 1 : argv[0]);
+				strchr (argv[0], '/') ? strrchr (argv[0], '/') + 1 : argv[0]);
 		fprintf (stderr, _("valid options:\n"));
 		fprintf (stderr, _("       -h server  server name\n"));
 		fprintf (stderr, _("       -p port    server port\n"));
@@ -339,120 +364,115 @@ int main(int argc, char **argv) {
 		fprintf (stderr, _("       --         treat remaining arguments as part of the query\n"));
 		fprintf (stderr, _("default server is %s\n"), DEFAULT_SERVER);
 		fprintf (stderr, "%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
-		exit(1);
+		exit (1);
 	}
 
 	/* If we didn't get an explicit server name, check if the query string
 	 * includes a '@', and use the string to its right if we have one.
 	 * This handles fwhois/finger syntax. */
-	if(server == NULL) {
-		if(strrchr(query, '@') != NULL) {
-			server = strrchr(query, '@');
-			server[0] = '\0';
-			server++;
+	if ( qr.server == null ) {
+		if ( strrchr (qr.query, '@') != null) {
+			qr.server = strrchr (qr.query, '@');
+			qr.server[0] = '\0';
+			qr.server++;
 
 			/* get contry code */
-			extension = strdup (get_tail (query));
+			extension = strdup (get_tail (qr.query));
 		} else {
 			/* get contry code */
-			extension = strdup (get_tail (query));
+			extension = strdup (get_tail (qr.query));
 
 			if ( ! strcmp (extension, "IP ADDRESS") )
-				server = LO_SERVER;
+				qr.server = LO_SERVER;
 
 			/* Nothing there either.  Use the NICNAMESERVER,
 			 * WHOISSERVER, or DEFAULT_SERVER, in that order. */
-			if((server == NULL) && getenv("NICNAMESERVER")) {
-				server = getenv("NICNAMESERVER");
+			if ( (qr.server == null) && getenv ("NICNAMESERVER") ) {
+				qr.server = getenv ("NICNAMESERVER");
 			} else {
-				if((server == NULL) && getenv("WHOISSERVER")) {
-					server = getenv("WHOISSERVER");
+				if ( (qr.server == null) && getenv ("WHOISSERVER") ) {
+					qr.server = getenv ("WHOISSERVER");
 				} else if ( !extension ) {
-					server = DEFAULT_SERVER;
+					qr.server = DEFAULT_SERVER;
 				} else {
-					if ( strlen(extension) == 2 ) {
+					if ( strlen (extension) == 2 ) {
 						char tmphost[50];
-						sprintf(tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
-						server = tmphost;
-					} else if (!strcasecmp(extension, "biz")) {
-						server = BIZ_SERVER;
-					} else if (!strcasecmp(extension, "info")) {
-						server = INFO_SERVER;
-					} else if (!strcasecmp(extension, "name")) {
-						server = NAME_SERVER;
-					} else if (!strcasecmp(extension, "org")) {
-						server = ORG_SERVER;
+						sprintf (tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
+						qr.server = tmphost;
+					} else if (!strcasecmp (extension, "biz")) {
+						qr.server = BIZ_SERVER;
+					} else if (!strcasecmp (extension, "info")) {
+						qr.server = INFO_SERVER;
+					} else if (!strcasecmp (extension, "name")) {
+						qr.server = NAME_SERVER;
+					} else if (!strcasecmp (extension, "org")) {
+						qr.server = ORG_SERVER;
 					} else if ( ! strcmp (extension, "IP ADDRESS") ) {
-						server = LO_SERVER;
+						qr.server = LO_SERVER;
 					} else {
-						server = DEFAULT_SERVER;
+						qr.server = DEFAULT_SERVER;
 					}
 				}
 			}
 		}
 	} else {
 		/* get contry code */
-		extension = strdup (get_tail (query));
+		extension = strdup (get_tail (qr.query));
 	}
 
 	/* If the server name includes a colon, snip the name there and
 	 * assume everything to the right is a port number. */
-	if(strchr(server, ':') != NULL) {
-		port = strchr(server, ':');
-		port[0] = '\0';
-		port++;
+	if ( strchr ( qr.server, ':') != null ) {
+		qr.port = strchr (qr.server, ':');
+		qr.port[0] = '\0';
+		qr.port++;
 	}
 
 	/* If we got neither the -r nor the -n arguments, set the default
 	 * based on which server we're querying. */
-	if(recurse == -1) {
-		if(strcasecmp(DEFAULT_SERVER, server) == 0) {
-			recurse = 1;
-		} else {
-			recurse = 0;
-		}
-	}
+	if ( qr.recurse == -1 )
+		qr.recurse = (! strcasecmp (DEFAULT_SERVER, qr.server)) ? 1 : 0;
 
 #ifdef HAVE_LIBOGC
 	/* use racecode ??? */
 	/*
 	if ( ! check_code (extension) ) {
-		strcpy (name, (char *) convert_punycode (query, 0, verbose));
+		strcpy (name, (char *) convert_punycode (qr.query, 0, qr.verbose));
 	} else {
-		strcpy (name, (char *) convert_racecode (query, 0, verbose));
+		strcpy (name, (char *) convert_racecode (qr.query, 0, qr.verbose));
 	}
 	*/
-	name = strdup (convert_punycode (query, 0, verbose));
+	name = strdup (convert_punycode (qr.query, 0, qr.verbose));
 
 	if ( is_longip (name) )
 		long2ip (&name);
 
-	if (verbose) {
+	if ( qr.verbose ) {
 		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
-		fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, query);
+		fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, qr.query);
 		fprintf (stderr, _("[1;%dmCONV HOST     :[7;0m %s\n"), COLOR, name);
 		fprintf (stderr, _("[1;%dmTAIL          :[7;0m %s\n"), COLOR, extension);
-		fprintf (stderr, _("[1;%dmSERVER        :[7;0m %s\n"), COLOR, server);
-		fprintf (stderr, _("[1;%dmPORT          :[7;0m %s\n"), COLOR, port);
+		fprintf (stderr, _("[1;%dmSERVER        :[7;0m %s\n"), COLOR, qr.server);
+		fprintf (stderr, _("[1;%dmPORT          :[7;0m %s\n"), COLOR, qr.port);
 		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
 	}
 
 	/* Hand it off to the query function. */
-	process_query(server, port, name, timeout, recurse, verbose);
+	process_query (&qr);
 	free (name);
 #else
-	if ( is_longip (query) )
-		long2ip (&query);
+	if ( is_longip (qr.query) )
+		long2ip (&(qr.query));
 
-	process_query(server, port, query, timeout, recurse, verbose);
+	process_query (&qr);
 #endif
-	free (query);
+	free (qr.query);
 	free (extension);
 
 	return 0;
-}
+} // }}}
 
-int check_code ( char *tail ) {
+int check_code (char * tail) { // {{{
 	if ( ! strcasecmp ( tail, "com" ) || ! strcasecmp ( tail, "net" ) ) {
 		return 1;
 	} else if ( ! strcasecmp ( tail, "org" ) || ! strcasecmp ( tail, "info" ) ||
@@ -461,18 +481,18 @@ int check_code ( char *tail ) {
 	}
 
 	return 0;
-}
+} // }}}
 
-int crsCheck ( char *wserv ) {
+int crsCheck (char * wserv) { // {{{
 	if ( ! strcmp ( wserv, DEFAULT_SERVER ) )
 		return 1;
 
 	return 0;
-}
+} // }}}
 
-char * parseQuery ( char *qry, char *wserv ) {
-	static char query[1024];
-	char tmp[1024];
+char * parseQuery (char * qry, char * wserv) { // {{{
+	static char	query[1024];
+	char		tmp[1024];
 
 	memset (query, 0, 1024);
 	memset (tmp, 0, 1024);
@@ -485,11 +505,11 @@ char * parseQuery ( char *qry, char *wserv ) {
 		sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
 
 	return query;
-}
+} // }}}
 
-int is_ipaddr (char *query) {
-	int pos;
-	char point;
+int is_ipaddr (char * query) { // {{{
+	int		pos;
+	char	point;
 
 	pos = strlen (query) - 1;
 	point = query[pos];
@@ -498,23 +518,23 @@ int is_ipaddr (char *query) {
 		return 1;
 
 	return 0;
-}
+} // }}}
 
-char * get_tail (char *query) {
-	char	* gettail = NULL;
+char * get_tail (char * query) { // {{{
+	char	* gettail = null;
 
 	if ( is_ipaddr (query) ) {
 		return "IP ADDRESS";
 	} else {
-		gettail = rindex(query, '.');
-		if ( gettail == NULL )
+		gettail = rindex (query, '.');
+		if ( gettail == null )
 			return "";
 
 		return gettail + 1;
 	}
-}
+} // }}}
 
-int is_longip (char *query) {
+int is_longip (char * query) { // {{{
 	while ( *query != 0 ) {
 		if ( *query < 48 || *query > 57 )
 			return 0;
@@ -522,20 +542,20 @@ int is_longip (char *query) {
 	}
 
 	return 1;
-}
+} // }}}
 
-char * _long2ip (char *ip) {
-	struct in_addr addr;
-	unsigned long longip;
+char * _long2ip (char * ip) { // {{{
+	struct	in_addr addr;
+	ULong	longip;
 
-	longip = strtoul (ip, NULL, 10);
+	longip = strtoul (ip, null, 10);
 
 	addr.s_addr = htonl (longip);
 	return inet_ntoa (addr);
-}
+} // }}}
 
-void long2ip (char **q) {
-	char *p;
+void long2ip (char ** q) { // {{{
+	char	* p;
 
 	if ( ! *q )
 		return;
@@ -545,7 +565,7 @@ void long2ip (char **q) {
 
 	*q = strdup (_long2ip (p));
 	free (p);
-}
+} // }}}
 
 /*
  * Local variables:

@@ -2,12 +2,11 @@
 
 #ifdef ENABLE_NLS
 
-void i18n_print(void)
-{
+void i18n_print(void) {
 	setlocale (LC_CTYPE, "");
 	setlocale (LC_MESSAGES, "");
-	bindtextdomain("kwhois", LANGDIR);
-	textdomain("kwhois");
+	bindtextdomain ("kwhois", LANGDIR);
+	textdomain ("kwhois");
 }
 #endif
 
