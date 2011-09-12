@@ -30,6 +30,12 @@
 	/* This code follows GPL 2 License : END */
 #endif
 
+#ifdef HAVE_ICONV_H
+#	include <iconv.h>
+#endif
+
+int current_charset (void);
+
 #endif
 
 /*

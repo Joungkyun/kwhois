@@ -27,4 +27,7 @@
 #define NAME_SERVER   "whois.nic.name"
 #define PRO_SERVER    "whois.nic.pro"
 
+#define KR_SERVER     "whois.krnic.net"
+#define JP_SERVER     "whois.jprs.jp"
+
 #endif

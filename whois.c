@@ -212,12 +212,72 @@ process_query (Pquery * v) { // {{{
 		exit (1);
 	}
 
+#ifdef HAVE_ICONV_H
+	{
+		iconv_t	cd;
+		ICONV_CONST
+		char	* from;
+		char	* to,
+				* to_utf8,
+				* ext;
+		size_t	flen,
+				tlen;
+		int		ic = current_charset ();
+
+		if ( ! strncasecmp (v->server + 3, "whois-server", 12) ) {
+			if ( ! strncasecmp (v->server, "kr", 2) )
+				ext = "kr";
+			else
+				ext = "";
+		} else if ( ! strcasecmp (v->server, "whois.krnic.net") ) {
+			ext = "kr";
+		} else
+			ext = get_tail (v->server);
+
+		if ( ic == 1 ) {
+			if ( ! strcasecmp (ext, "kr") )
+				cd = iconv_open ("UTF-8", "EUC-KR");
+			else
+				cd = (iconv_t)(-1);
+
+		} else
+			cd = (iconv_t)(-1);
+#endif
 	memset (buf, 0, sizeof (buf));
 	while ( fgets (buf, sizeof (buf) - 1, reader) != null ) {
 		int i;
 
 		/* Give the user the literal string, including the newline. */
+#ifdef HAVE_ICONV_H
+		if ( cd != (iconv_t)(-1) ) {
+			from = buf;
+			flen = strlen (buf);
+			tlen = flen * 4 + 1;
+			if ( (to_utf8 = (char *) malloc (sizeof (char) * tlen)) == NULL ) {
+				printf ("%s", buf);
+				goto skip_iconv;
+			}
+			memset (to_utf8, 0, sizeof (char) * tlen);
+			to = to_utf8;
+
+			iconv (cd, &from, &flen, &to, &tlen);
+			switch (errno) {
+				case E2BIG :
+				case EILSEQ :
+				case EINVAL :
+					printf ("@@@@@@@@@ 5 %d\n", errno);
+					printf ("%s", buf);
+					goto skip_iconv;
+					break;
+			}
+			printf ("%s", to_utf8);
+			free (to_utf8);
+		} else
+			printf ("%s", buf);
+skip_iconv:
+#else
 		printf ("%s", buf);
+#endif
 
 		/* Create an upper-cased copy of the response line. */
 		memset (ubuf, '\0', sizeof (ubuf));
@@ -251,6 +311,12 @@ process_query (Pquery * v) { // {{{
 	}
 	fclose (reader);
 	printf ("\n");
+
+#ifdef HAVE_ICONV_H
+		if ( cd != (iconv_t)(-1) )
+			iconv_close (cd);
+	}
+#endif
 
 	if ( v->timeout > 0 )
 		alarm (0);
@@ -457,9 +523,14 @@ int main (int argc, char ** argv) { // {{{
 		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
 	}
 
+	if ( name != NULL ) {
+		free (qr.query);
+		qr.query = strdup (name);
+		free (name);
+	}
+
 	/* Hand it off to the query function. */
 	process_query (&qr);
-	free (name);
 #else
 	if ( is_longip (qr.query) )
 		long2ip (&(qr.query));

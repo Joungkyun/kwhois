@@ -27,13 +27,14 @@ AM_PO_SUBDIRS
 # Checks for libraries.
 AC_CHECK_LIB(resolv,res_mkquery)
 AX_OLIBC
+AM_ICONV
 
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(
 	sys/signal.h sys/socket.h getopt.h limits.h netinet/in.h \
 	arpa/inet.h arpa/nameser.h netdb.h ctype.h langinfo.h \
-	locale.h libintl.h errno.h error.h
+	locale.h libintl.h errno.h error.h iconv.h
 )
 
 # Checks for typedefs, structures, and compiler characteristics.

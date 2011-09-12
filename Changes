@@ -5,6 +5,7 @@ $Id$
   by JoungKyun Kim <http://oops.org>
   - use automake
   - fixed intent and uncritical bugs
+  - support utf-8 on KRNIC whois server
 
 * Wed Sep  7 2011
   by JoungKyun Kim <http://oops.org>
