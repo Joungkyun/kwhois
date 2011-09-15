@@ -3,6 +3,7 @@ $Id$
 
 * Thu Sep 15 2011
   by JoungKyun Kim <http://oops.org>
+  - update 3.6
   - improve recurse query (-r option)
   - fixed typo and update pot file
 
