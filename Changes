@@ -1,6 +1,11 @@
 Changes by JoungKyun Kim <http://www.oops.org>
 $Id$
 
+* Thu Sep 15 2011
+  by JoungKyun Kim <http://oops.org>
+  - improve recurse query (-r option)
+  - fixed typo and update pot file
+
 * Sun Sep 11 2011
   by JoungKyun Kim <http://oops.org>
   - use automake

@@ -53,7 +53,7 @@ void usage (void) {
 	fprintf (stderr, _("valid options:\n"));
 	fprintf (stderr, _("    -h    help message (this message)\n"));
 	fprintf (stderr, _("    -a    convert EUC-KR to Race code\n"));
-	fprintf (stderr, _("    -u    convert Race code to Euc-kr\n"));
+	fprintf (stderr, _("    -u    convert Race code to EUC-KR\n"));
 	fprintf (stderr, _("    -v    verbose mode\n"));
 	exit (1);
 }

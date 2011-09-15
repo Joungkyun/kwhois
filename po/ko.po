@@ -1,6 +1,6 @@
 # kwhois template file
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# JoungKyun Kim <http://www.oops.org>, 2003.
+# JoungKyun Kim <http://oops.org>, 2011.
 # make by xgettext -d ko -k_ -s whois.c
 # if you merge new version, msgmerge -U old.po new.po
 # $Id$
@@ -8,171 +8,200 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: kwhois 3.0\n"
-"POT-Creation-Date: 2004-02-04 22:58+0900\n"
-"PO-Revision-Date: 2004-02-04 23:02+0900\n"
-"Last-Translator: JoungKyun Kim <http://www.oops.org>\n"
-"Language-Team: OOPS Development Organization <http://devel.oops.org>\n"
+"Project-Id-Version: kwhois 3.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-15 15:22+0900\n"
+"PO-Revision-Date: 2011-09-15 15:26+0900\n"
+"Last-Translator: JoungKyun.Kim <http://oops.org>\n"
+"Language-Team: OOPS.org <http://oops.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=EUC-KR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: whois.c:449 whois.c:455
+#: ../whois.c:539 ../whois.c:545
+#, c-format
 msgid ""
 "\n"
 "------------------- Debug Message --------------------\n"
 "\n"
 msgstr ""
 
-#: whois.c:451
+#: ../whois.c:340
+#, c-format
+msgid "[1;%dm=> Recurse Connection <=[7;0m\n"
+msgstr "[1;%dm=> ì¬ê·€ ì—°ê²° <=[7;0m\n"
+
+#: ../whois.c:541
 #, c-format
 msgid "[1;%dmCONV HOST     :[7;0m %s\n"
-msgstr "[1;%dmº¯È¯ È£½ºÆ®   :[7;0m %s\n"
+msgstr "[1;%dmë³€í™˜ í˜¸ìŠ¤íŠ¸   :[7;0m %s\n"
 
-#: whois.c:450
+#: ../whois.c:342 ../whois.c:540
 #, c-format
 msgid "[1;%dmHOST          :[7;0m %s\n"
-msgstr "[1;%dmÈ£½ºÆ®        :[7;0m %s\n"
+msgstr "[1;%dmí˜¸ìŠ¤íŠ¸        :[7;0m %s\n"
 
-#: whois.c:454
+#: ../whois.c:344 ../whois.c:544
 #, c-format
 msgid "[1;%dmPORT          :[7;0m %s\n"
-msgstr "[1;%dmÆ÷Æ®          :[7;0m %s\n"
+msgstr "[1;%dmí¬íŠ¸          :[7;0m %s\n"
 
-#: whois.c:453
+#: ../whois.c:343 ../whois.c:543
 #, c-format
 msgid "[1;%dmSERVER        :[7;0m %s\n"
-msgstr "[1;%dm¼­¹ö          :[7;0m %s\n"
+msgstr "[1;%dmì„œë²„          :[7;0m %s\n"
 
-#: whois.c:452
+#: ../whois.c:542
 #, c-format
 msgid "[1;%dmTAIL          :[7;0m %s\n"
-msgstr "[1;%dmÈ®ÀåÀÚ        :[7;0m %s\n"
+msgstr "[1;%dmí™•ì¥ì        :[7;0m %s\n"
 
-#: whois.c:364
+#: ../whois.c:452
+#, c-format
 msgid "       --         treat remaining arguments as part of the query\n"
-msgstr "       --         Äõ¸®ÀÇ ÀÏºÎºĞÀ¸·Î Ãë±ŞµÊ\n"
+msgstr "       --         ì¿¼ë¦¬ì˜ ì¼ë¶€ë¶„ìœ¼ë¡œ ì·¨ê¸‰ë¨\n"
 
-#: whois.c:358
-#, fuzzy
+#: ../whois.c:446
+#, c-format
 msgid "       -h server  server name\n"
-msgstr "    -h ¼­¹ö    whois ¼­¹ö ÀÌ¸§\n"
+msgstr "       -h ì„œë²„    whois ì„œë²„ ì´ë¦„\n"
 
-#: whois.c:362
+#: ../whois.c:450
+#, c-format
 msgid "       -n         disable recursion\n"
-msgstr "       -n         ¹İº¹ ÇÏÁö ¾ÊÀ½\n"
+msgstr "       -n         ë°˜ë³µ í•˜ì§€ ì•ŠìŒ\n"
 
-#: whois.c:359
+#: ../whois.c:447
+#, c-format
 msgid "       -p port    server port\n"
-msgstr "       -p Æ÷Æ®    ¼­¹ö Æ÷Æ®\n"
+msgstr "       -p í¬íŠ¸    ì„œë²„ í¬íŠ¸\n"
 
-#: whois.c:361
+#: ../whois.c:449
+#, c-format
 msgid "       -r         force recursion\n"
-msgstr "       -r         ¹İº¹À» °­Çà\n"
+msgstr "       -r         ë°˜ë³µì„ ê°•í–‰\n"
 
-#: whois.c:360
+#: ../whois.c:448
+#, c-format
 msgid "       -t timeout query time limit\n"
-msgstr "       -t ÃÊ      ÁúÀÇ ½Ã°£ Á¦ÇÑ\n"
+msgstr "       -t ì´ˆ      ì§ˆì˜ ì‹œê°„ ì œí•œ\n"
 
-#: whois.c:363
-#, fuzzy
+#: ../whois.c:451
+#, c-format
 msgid "       -v         verbose mode\n"
-msgstr "    -v    µğ¹ö±× ¸ğµå\n"
+msgstr "       -v         ë””ë²„ê·¸ ëª¨ë“œ\n"
 
-#: libidn/idn.c:77
+#: ../libidn/idn.c:77
+#, c-format
 msgid "    -a    convert EUC-KR to Punycode\n"
-msgstr "    -a    EUC-KR À» punycode ·Î º¯È¯\n"
+msgstr "    -a    EUC-KRì„ punycode ë¡œ ë³€í™˜\n"
 
-#: libracode/main.c:55
-#, fuzzy
+#: ../libracode/main.c:55
+#, c-format
 msgid "    -a    convert EUC-KR to Race code\n"
-msgstr "    -a    EUC-KR À» racecode ·Î º¯È¯\n"
+msgstr "    -a    EUC-KRì„ racecode ë¡œ ë³€í™˜\n"
 
-#: libidn/idn.c:76 libracode/main.c:54
+#: ../libracode/main.c:54 ../libidn/idn.c:76
+#, c-format
 msgid "    -h    help message (this message)\n"
-msgstr "    -h    µµ¿ò¸» (ÇöÀç ¸Ş¼¼Áö)\n"
+msgstr "    -h    ë„ì›€ë§ (í˜„ì¬ ë©”ì„¸ì§€)\n"
 
-#: libracode/main.c:56
-#, fuzzy
-msgid "    -u    convert Race code to Euc-kr\n"
-msgstr "    -u    racecode ¸¦ Euc-kr ·Î º¯È¯\n"
+#: ../libracode/main.c:56
+#, c-format
+msgid "    -u    convert Race code to EUC-KR\n"
+msgstr "    -u    racecode ë¥¼ EUC-KRë¡œ ë³€í™˜\n"
 
-#: libidn/idn.c:78
-msgid "    -u    convert punycode to Euc-kr\n"
-msgstr "    -u    punycode ¸¦ Euc-kr ·Î º¯È¯\n"
+#: ../libidn/idn.c:78
+#, c-format
+msgid "    -u    convert punycode to EUC-KR\n"
+msgstr "    -u    punycode ë¥¼ EUC-KRë¡œ ë³€í™˜\n"
 
-#: libidn/idn.c:79 libracode/main.c:57
+#: ../libracode/main.c:57 ../libidn/idn.c:79
+#, c-format
 msgid "    -v    verbose mode\n"
-msgstr "    -v    µğ¹ö±× ¸ğµå\n"
+msgstr "    -v    ë””ë²„ê·¸ ëª¨ë“œ\n"
 
-#: whois.c:196
+#: ../whois.c:188
 #, c-format
 msgid "%s connecting to %s\n"
-msgstr "i%s ÀÇ Á¢¼Ó ¿¡·¯ : %s\n"
+msgstr "i%s ì˜ ì ‘ì† ì—ëŸ¬ : %s\n"
 
-#: whois.c:180
+#: ../whois.c:170
 #, c-format
 msgid "%s initializing protocol stacks?!?\n"
 msgstr ""
 
-#: whois.c:173
+#: ../whois.c:163
 #, c-format
 msgid "%s while getting address for \"%s\"\n"
-msgstr "\"%s\" ¿¡ Á¢¼ÓÇÏ´Â µ¿¾È ¹ß»ıÇÑ ¿¡·¯ : %s\n"
+msgstr "\"%s\" ì— ì ‘ì†í•˜ëŠ” ë™ì•ˆ ë°œìƒí•œ ì—ëŸ¬ : %s\n"
 
-#: whois.c:127
+#: ../whois.c:117
 #, c-format
 msgid "%s while getting connection info for %s:%s\n"
-msgstr "%s:%s ¿¡ Á¢¼ÓÇÏ´Â µ¿¾È ¹ß»ıÇÑ ¿¡·¯ : %s\n"
+msgstr "%s:%s ì— ì ‘ì†í•˜ëŠ” ë™ì•ˆ ë°œìƒí•œ ì—ëŸ¬ : %s\n"
 
-#: whois.c:166
+#: ../whois.c:156
 #, c-format
 msgid "%s while getting service info for %s\n"
-msgstr "%s ¼­ºñ½º¿¡ ¹ß»ıÇÑ ¿¡·¯ : %s\n"
+msgstr "%s ì„œë¹„ìŠ¤ì— ë°œìƒí•œ ì—ëŸ¬ : %s\n"
 
-#: whois.c:213
+#: ../whois.c:211
 #, c-format
 msgid "%s while reading from socket\n"
-msgstr "¼ÒÄÏÀü¼Û ¿¡·¯ : %s\n"
+msgstr "ì†Œì¼“ì „ì†¡ ì—ëŸ¬ : %s\n"
 
-#: whois.c:201
+#: ../whois.c:341
+#, c-format
+msgid "------------------- Debug Message --------------------\n"
+msgstr ""
+
+#: ../whois.c:345
+#, c-format
+msgid ""
+"------------------- Debug Message --------------------\n"
+"\n"
+msgstr ""
+
+#: ../whois.c:198
 #, c-format
 msgid "===> Connect to %s success\n"
-msgstr "===> %s ¿¡ Á¢¼Ó ¼º°ø\n"
+msgstr "===> %s ì— ì ‘ì† ì„±ê³µ\n"
 
-#: whois.c:202
+#: ../whois.c:199
 #, c-format
 msgid ""
 "===> Query %s to server\n"
 "\n"
 msgstr ""
-"===> ¼­¹ö¿¡ %s ¸¦ ÁúÀÇ ÇÔ\n"
+"===> ì„œë²„ì— %s ë¥¼ ì§ˆì˜ í•¨\n"
 "\n"
 
-#: whois.c:100
+#: ../whois.c:89
 msgid "Timeout exceeded.\n"
-msgstr "¿äÃ» ½Ã°£ ÃÊ°ú.\n"
+msgstr "ìš”ì²­ ì‹œê°„ ì´ˆê³¼.\n"
 
-#: whois.c:355
-#, fuzzy, c-format
+#: ../whois.c:443
+#, c-format
 msgid "Usage: %s [OPTION...] query[@server[:port]]\n"
-msgstr "»ç¿ë¹ı: %s [OPTIONS...] º¯È¯µµ¸ŞÀÎ\n"
+msgstr "ì‚¬ìš©ë²•: %s [OPTIONS...] ì§ˆì˜[@ì„œë²„[:í¬íŠ¸]]\n"
 
-#: libidn/idn.c:74 libracode/main.c:52
+#: ../libracode/main.c:52 ../libidn/idn.c:74
 #, c-format
 msgid "Usage: %s [OPTIONS...] convert_domain\n"
-msgstr "»ç¿ë¹ı: %s [OPTIONS...] º¯È¯µµ¸ŞÀÎ\n"
+msgstr "ì‚¬ìš©ë²•: %s [OPTIONS...] ë³€í™˜ë„ë©”ì¸\n"
 
-#: whois.c:365
+#: ../whois.c:453
 #, c-format
 msgid "default server is %s\n"
-msgstr "±âº» ¼­¹ö: %s\n"
+msgstr "ê¸°ë³¸ ì„œë²„: %s\n"
 
-#: whois.c:133
+#: ../whois.c:123
 #, c-format
 msgid "no results while getting connection info for %s:%s\n"
-msgstr "%s:%s ¿¡ Á¢¼ÓÀ» ÇÏ´Â µ¿¾È ¾Æ¹«·± °á°ú¸¦ ¾òÁö ¸øÇÔ\n"
+msgstr "%s:%s ì— ì ‘ì†ì„ í•˜ëŠ” ë™ì•ˆ ì•„ë¬´ëŸ° ê²°ê³¼ë¥¼ ì–»ì§€ ëª»í•¨\n"
 
-#: whois.c:357 libidn/idn.c:75 libracode/main.c:53
+#: ../libracode/main.c:53 ../libidn/idn.c:75 ../whois.c:445
+#, c-format
 msgid "valid options:\n"
-msgstr "À¯È¿ÇÑ ¿É¼Çµé:\n"
+msgstr "ìœ íš¨í•œ ì˜µì…˜ë“¤:\n"
