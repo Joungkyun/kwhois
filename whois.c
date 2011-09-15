@@ -265,8 +265,6 @@ process_query (Pquery * v) { // {{{
 				case E2BIG :
 				case EILSEQ :
 				case EINVAL :
-					printf ("@@@@@@@@@ 5 %d\n", errno);
-					printf ("%s", buf);
 					goto skip_iconv;
 					break;
 			}
@@ -287,7 +285,7 @@ skip_iconv:
 
 		/* If the line includes the magic string, pull out the
 		 * name of the server we should talk to next. */
-		if ( v->recurse && (strstr (ubuf, "WHOIS SERVER:") != null)) {
+		if ( v->recurse && (strstr (ubuf, "WHOIS SERVER:") != null || strstr (ubuf, "COUNTRY:") != null || strstr (ubuf, "COUNTRY CODE :") != null) ) {
 			char	* p = null;
 			next_server = buf;
 			while ( (next_server[0] != '\0') && (next_server[0] != ':') ) {
@@ -306,7 +304,20 @@ skip_iconv:
 				p[-1] = '\0';
 				p--;
 			}
-			next_server = strdup (next_server);
+
+			if ( strchr (next_server, '.') == null ) {
+				char	* q;
+				q = malloc (sizeof (char) * strlen (next_server) + 20);
+				memset (q, strlen (next_server) + 20, 0);
+
+				if ( strlen (next_server) > 1 ) {
+					sprintf (q, "%c%c.WHOIS-SERVERS.NET", next_server[0], next_server[1]);
+					next_server = strdup (q);
+				} else
+					next_server = null;
+				free (q);
+			} else
+				next_server = strdup (next_server);
 		}
 	}
 	fclose (reader);
@@ -324,9 +335,20 @@ skip_iconv:
 	if ( (v->recurse > 0) && (next_server != null) ) {
 		v->server = next_server;
 		v->recurse -= 1;
+
+		if ( v->verbose ) {
+			fprintf (stderr, _("[1;%dm=> Recurse Connection <=[7;0m\n"), COLOR);
+			fprintf (stderr, _("------------------- Debug Message --------------------\n"));
+			fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, v->query);
+			fprintf (stderr, _("[1;%dmSERVER        :[7;0m %s\n"), COLOR, v->server);
+			fprintf (stderr, _("[1;%dmPORT          :[7;0m %s\n"), COLOR, v->port);
+			fprintf (stderr, _("------------------- Debug Message --------------------\n\n"));
+			sleep (1);
+		}
+
 		process_query (v);
+		free (next_server);
 	}
-	free (next_server);
 } // }}}
 
 int main (int argc, char ** argv) { // {{{
