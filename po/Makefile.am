@@ -19,6 +19,7 @@
 # $Id$
 
 CLEANFILES = POTFILES *.mo
+EXTRA_DIST = default.pot ko.po
 
 all:
 	for i in `ls *.po | sed 's/\.po//'`; do \

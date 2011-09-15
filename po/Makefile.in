@@ -159,6 +159,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 CLEANFILES = POTFILES *.mo
+EXTRA_DIST = default.pot ko.po
 all: all-am
 
 .SUFFIXES:

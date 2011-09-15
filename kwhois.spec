@@ -1,3 +1,6 @@
+%define _unpackaged_files_terminate_build 0
+%define svnid $Id$
+
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
@@ -7,7 +10,7 @@ Epoch: 7
 License: GPL
 Group: Applications/Internet
 Url: http://oops.org/
-Source0: ftp://mirror.oops.org/pub/Linux/OOPS/Source/kwhois/kwhois-%{version}.tar.bz2
+Source0: ftp://mirror.oops.org/pub/oops/kwhois/kwhois-%{version}.tar.bz2
 Buildroot: /var/tmp/kwhois-root
 Conflicts: fwhois, whois
 
@@ -27,15 +30,15 @@ kwhois 는 punycode 를 이용한 다국어 도메인을 지원한다.
 
 %build
 %configure
-make
+%{__make} %{?_smp_mflags}
 
 %install
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -fr $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/{man1,ko/man1}}
+[ "$RPM_BUILD_ROOT" != "/" ] && %{__rm} -fr $RPM_BUILD_ROOT
+%{__mkdir_p} $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/{man1,ko/man1}}
 make DESTDIR=$RPM_BUILD_ROOT install
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
@@ -43,10 +46,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/kwhois
 %{_bindir}/punyconv
 %{_bindir}/raceconv
-%{_mandir}/man1/whois.1*
-%{_mandir}/man1/kwhois.1*
-%{_mandir}/ko/man1/whois.1*
-%{_mandir}/ko/man1/kwhois.1*
+%{_mandir}/man1/*.1*
+%{_mandir}/ko/man1/*.1*
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog

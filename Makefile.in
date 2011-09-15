@@ -34,6 +34,7 @@
 # $Id$
 
 
+
 SOURCES = $(kwhois_SOURCES)
 
 srcdir = @srcdir@
@@ -60,7 +61,7 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = kwhois$(EXEEXT)
 DIST_COMMON = $(am__configure_deps) $(dist_doc_DATA) \
-	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(include_HEADERS) $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/config.h.in $(top_srcdir)/configure INSTALL \
 	acconfig.h tools/config.guess tools/config.sub \
 	tools/install-sh tools/missing
@@ -76,7 +77,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(docdir)"
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(docdir)" \
+	"$(DESTDIR)$(includedir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_kwhois_OBJECTS = whois.$(OBJEXT) i18n.$(OBJEXT)
@@ -105,6 +107,8 @@ am__vpath_adj = case $$p in \
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 dist_docDATA_INSTALL = $(INSTALL_DATA)
 DATA = $(dist_doc_DATA)
+includeHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(include_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = $(SUBDIRS)
@@ -213,7 +217,9 @@ docdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)
 dist_doc_DATA = Changes INSTALL LICENSE
 SUBDIRS = . libracode libidn docs po
 AM_CFLAGS = -Wall
+include_HEADERS = i18n.h tld_server.h
 kwhois_SOURCES = whois.c i18n.c
+EXTRA_DIST = kwhois.spec
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -324,6 +330,23 @@ uninstall-dist_docDATA:
 	  f=$(am__strip_dir) \
 	  echo " rm -f '$(DESTDIR)$(docdir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(docdir)/$$f"; \
+	done
+install-includeHEADERS: $(include_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(includedir)" || $(mkdir_p) "$(DESTDIR)$(includedir)"
+	@list='$(include_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(includeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(includedir)/$$f'"; \
+	  $(includeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(includedir)/$$f"; \
+	done
+
+uninstall-includeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(include_HEADERS)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(includedir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(includedir)/$$f"; \
 	done
 
 # This directory's subdirectories are mostly independent; you can cd
@@ -590,10 +613,10 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(PROGRAMS) $(DATA) config.h
+all-am: Makefile $(PROGRAMS) $(DATA) $(HEADERS) config.h
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(docdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-recursive
@@ -641,7 +664,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-dist_docDATA
+install-data-am: install-dist_docDATA install-includeHEADERS
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 
@@ -672,7 +695,7 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-dist_docDATA \
-	uninstall-info-am
+	uninstall-includeHEADERS uninstall-info-am
 
 uninstall-info: uninstall-info-recursive
 
@@ -685,14 +708,15 @@ uninstall-info: uninstall-info-recursive
 	distuninstallcheck dvi dvi-am html html-am info info-am \
 	install install-am install-binPROGRAMS install-data \
 	install-data-am install-data-hook install-dist_docDATA \
-	install-exec install-exec-am install-info install-info-am \
-	install-man install-strip installcheck installcheck-am \
-	installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic maintainer-clean-recursive \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
-	uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-dist_docDATA uninstall-info-am
+	install-exec install-exec-am install-includeHEADERS \
+	install-info install-info-am install-man install-strip \
+	installcheck installcheck-am installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic \
+	maintainer-clean-recursive mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-recursive pdf pdf-am ps ps-am \
+	tags tags-recursive uninstall uninstall-am \
+	uninstall-binPROGRAMS uninstall-dist_docDATA \
+	uninstall-includeHEADERS uninstall-info-am
 
 
 install-data-hook:

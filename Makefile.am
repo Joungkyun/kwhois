@@ -29,9 +29,11 @@ dist_doc_DATA = Changes INSTALL LICENSE
 SUBDIRS = . libracode libidn docs po
 
 AM_CFLAGS = -Wall
+include_HEADERS = i18n.h tld_server.h
 
 bin_PROGRAMS = kwhois
 kwhois_SOURCES = whois.c i18n.c
+EXTRA_DIST = kwhois.spec
 
 install-data-hook:
 	cd $(DESTDIR)$(bindir); \
