@@ -50,7 +50,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
-* Wed Sep  7 2011 JoungKyun.Kim <http://oops.org> 7:3.6-1
+* Thu Sep 15 2011 JoungKyun.Kim <http://oops.org> 7:3.6-1
 - update 3.6
 
 * Wed Jul  9 2008 JoungKyun.Kim <http://oops.org> 6:3.5-1
