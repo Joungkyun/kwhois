@@ -285,39 +285,41 @@ skip_iconv:
 
 		/* If the line includes the magic string, pull out the
 		 * name of the server we should talk to next. */
-		if ( v->recurse && (strstr (ubuf, "WHOIS SERVER:") != null || strstr (ubuf, "COUNTRY:") != null || strstr (ubuf, "COUNTRY CODE :") != null) ) {
-			char	* p = null;
-			next_server = buf;
-			while ( (next_server[0] != '\0') && (next_server[0] != ':') ) {
-				next_server++;
-			}
-			while ( (next_server[0] != '\0') &&
-			      ((next_server[0] == ':') ||
-			       isspace (next_server[0])) ) {
-				next_server++;
-			}
-			p = buf + strlen (buf);
-			while ( (p > buf) &&
-			      ((isspace (p[-1])) ||
-			       (p[-1] == '\r') ||
-			       (p[-1] == '\n')) ) {
-				p[-1] = '\0';
-				p--;
-			}
+		if ( v->recurse && next_server == null ) {
+			if ( strstr (ubuf, "WHOIS SERVER:") != null || strstr (ubuf, "COUNTRY:") != null || strstr (ubuf, "COUNTRY CODE :") != null ) {
+				char	* p = null;
+				next_server = buf;
+				while ( (next_server[0] != '\0') && (next_server[0] != ':') ) {
+					next_server++;
+				}
+				while ( (next_server[0] != '\0') &&
+						((next_server[0] == ':') ||
+						 isspace (next_server[0])) ) {
+					next_server++;
+				}
+				p = buf + strlen (buf);
+				while ( (p > buf) &&
+						((isspace (p[-1])) ||
+						 (p[-1] == '\r') ||
+						 (p[-1] == '\n')) ) {
+					p[-1] = '\0';
+					p--;
+				}
 
-			if ( strchr (next_server, '.') == null ) {
-				char	* q;
-				q = malloc (sizeof (char) * strlen (next_server) + 20);
-				memset (q, strlen (next_server) + 20, 0);
+				if ( strchr (next_server, '.') == null ) {
+					char	* q;
+					q = malloc (sizeof (char) * strlen (next_server) + 20);
+					memset (q, strlen (next_server) + 20, 0);
 
-				if ( strlen (next_server) > 1 ) {
-					sprintf (q, "%c%c.WHOIS-SERVERS.NET", next_server[0], next_server[1]);
-					next_server = strdup (q);
+					if ( strlen (next_server) > 1 ) {
+						sprintf (q, "%c%c.WHOIS-SERVERS.NET", next_server[0], next_server[1]);
+						next_server = strdup (q);
+					} else
+						next_server = null;
+					free (q);
 				} else
-					next_server = null;
-				free (q);
-			} else
-				next_server = strdup (next_server);
+					next_server = strdup (next_server);
+			}
 		}
 	}
 	fclose (reader);

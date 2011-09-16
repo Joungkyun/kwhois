@@ -4,6 +4,7 @@ $Id$
 * Fri Sep 16 2011
   by JoungKyun Kim <http://oops.org>
   - start 3.7
+  - fixed wrong detect recurse server
 
 * Thu Sep 15 2011
   by JoungKyun Kim <http://oops.org>
