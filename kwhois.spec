@@ -4,9 +4,9 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 3.6
+Version: 3.7
 Release: 1
-Epoch: 7
+Epoch: 8
 License: GPL
 Group: Applications/Internet
 Url: http://oops.org/
