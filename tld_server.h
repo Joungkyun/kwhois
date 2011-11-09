@@ -29,5 +29,6 @@
 
 #define KR_SERVER     "whois.krnic.net"
 #define JP_SERVER     "whois.jprs.jp"
+#define CN_SERVER     "whois.cnnic.net.cn"
 
 #endif
