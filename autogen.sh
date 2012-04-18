@@ -12,6 +12,8 @@
 #   cp -af /usr/share/libtool/${i} ./
 #done
 
+echo "This job is required m4 files in gettext!!"
+
 export LIBTOOL=/usr/bin/libtool
 export AUTOMAKE=/usr/bin/automake
 export ACLOCAL=/usr/bin/aclocal

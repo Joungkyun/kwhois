@@ -1,6 +1,10 @@
 Changes by JoungKyun Kim <http://www.oops.org>
 $Id$
 
+* Wed Apr 18 2012
+  by JoungKyun Kim <http://oops.org>
+  - support olibc 1.x
+
 * Fri Sep 16 2011
   by JoungKyun Kim <http://oops.org>
   - start 3.7

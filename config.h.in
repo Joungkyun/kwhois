@@ -47,6 +47,9 @@
 /* Define to 1 if you have the <libintl.h> header file. */
 #undef HAVE_LIBINTL_H
 
+/* Define to 1 if you have under olibc 1.0.0 */
+#undef HAVE_LIBOC_VER
+
 /* Define to 1 if you have the `ogc' library (-logc). */
 #undef HAVE_LIBOGC
 
@@ -136,7 +139,7 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
-/* Define to `unsigned' if <sys/types.h> does not define. */
+/* Define to `unsigned int' if <sys/types.h> does not define. */
 #undef size_t
 
 /* Define to 1 if you have the <GeoIP.h> header file. */

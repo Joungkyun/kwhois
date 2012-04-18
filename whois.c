@@ -62,7 +62,9 @@
 #ifndef null
 #	define null NULL
 #endif
-typedef unsigned long ULong;
+
+// already define from olibc
+//typedef unsigned long ULong;
 
 typedef struct {
 	char	* server;
@@ -524,15 +526,11 @@ int main (int argc, char ** argv) { // {{{
 		qr.recurse = (! strcasecmp (DEFAULT_SERVER, qr.server)) ? 1 : 0;
 
 #ifdef HAVE_LIBOGC
-	/* use racecode ??? */
-	/*
-	if ( ! check_code (extension) ) {
-		strcpy (name, (char *) convert_punycode (qr.query, 0, qr.verbose));
-	} else {
-		strcpy (name, (char *) convert_racecode (qr.query, 0, qr.verbose));
-	}
-	*/
+#if HAVE_LIBOC_VER == 1
+	name = strdup (convert_punycode (qr.query, NULL));
+#else
 	name = strdup (convert_punycode (qr.query, 0, qr.verbose));
+#endif
 
 	if ( is_longip (name) )
 		long2ip (&name);

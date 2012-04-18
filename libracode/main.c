@@ -42,7 +42,9 @@ int main (int argc, char *argv[]) {
 	}
 
 	if (argc - optind < 1 ) usage();
+#if HAVE_LIBOC_VER == 0
 	printf ("%s\n", (char *) convert_racecode ( argv[optind], res, debug ));
+#endif
 
 	return 0;
 }

@@ -64,7 +64,11 @@ int main (int argc, char *argv[]) {
 	if ( argc - optind < 1 )
 		usage();
 
-	printf ("%s\n", (char *) convert_punycode ( argv[optind], res, debug )) ;
+#if HAVE_LIBOC_VER == 1
+	printf ("%s\n", (char *) convert_punycode (argv[optind], NULL)) ;
+#else
+	printf ("%s\n", (char *) convert_punycode (argv[optind], res, debug)) ;
+#endif
 
 	return 0;
 }

@@ -26,7 +26,8 @@ DISTCLEANFILES =
 docdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)
 dist_doc_DATA = Changes INSTALL LICENSE
 
-SUBDIRS = . libracode libidn docs po
+#SUBDIRS = . libracode libidn docs po
+SUBDIRS = . libidn docs po
 
 AM_CFLAGS = -Wall
 include_HEADERS = i18n.h tld_server.h
