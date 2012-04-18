@@ -6940,7 +6940,7 @@ fi
 done
 
 
-ac_config_files="$ac_config_files Makefile po/Makefile docs/Makefile libidn/Makefile libracode/Makefile"
+ac_config_files="$ac_config_files Makefile po/Makefile docs/Makefile libidn/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -7575,7 +7575,6 @@ do
     "po/Makefile") CONFIG_FILES="$CONFIG_FILES po/Makefile" ;;
     "docs/Makefile") CONFIG_FILES="$CONFIG_FILES docs/Makefile" ;;
     "libidn/Makefile") CONFIG_FILES="$CONFIG_FILES libidn/Makefile" ;;
-    "libracode/Makefile") CONFIG_FILES="$CONFIG_FILES libracode/Makefile" ;;
 
   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
