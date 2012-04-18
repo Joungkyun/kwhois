@@ -49,7 +49,6 @@ AC_CHECK_FUNCS(getopt_long,, [AC_LIBOBJ(getopt) AC_LIBOBJ(getopt1)])
 AC_CONFIG_FILES([Makefile
                  po/Makefile
 				 docs/Makefile
-                 libidn/Makefile
-                 libracode/Makefile])
+                 libidn/Makefile])
 
 AC_OUTPUT

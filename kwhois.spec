@@ -2,7 +2,7 @@
 %define svnid $Id$
 
 Summary: Internet whois/nicname client.
-Summary(ko): whois/nicname Å¬¶óÀÌ¾ğÆ® ÇÁ·Î±×·¥
+Summary(ko): whois/nicname í´ë¼ì´ì–¸íŠ¸ í”„ë¡œê·¸ë¨
 Name: kwhois
 Version: 3.7
 Release: 1
@@ -22,8 +22,8 @@ A whois client that accepts both traditional and finger-style queries.
 This support to search multibyte domain based on punycode
 
 %description -l ko
-ÇÎÄ¿ ½ºÅ¸ÀÏ°ú ÀüÅëÀûÀÎ ¹æ½ÄÀ» Áö¿øÇÏ´Â ÈÄÀÌÁî Å¬¶óÀÌ¾ğÆ® ÇÁ·Î±×·¥
-kwhois ´Â punycode ¸¦ ÀÌ¿ëÇÑ ´Ù±¹¾î µµ¸ŞÀÎÀ» Áö¿øÇÑ´Ù.
+í•‘ì»¤ ìŠ¤íƒ€ì¼ê³¼ ì „í†µì ì¸ ë°©ì‹ì„ ì§€ì›í•˜ëŠ” í›„ì´ì¦ˆ í´ë¼ì´ì–¸íŠ¸ í”„ë¡œê·¸ë¨
+kwhois ëŠ” punycode ë¥¼ ì´ìš©í•œ ë‹¤êµ­ì–´ ë„ë©”ì¸ì„ ì§€ì›í•œë‹¤.
 
 %prep
 %setup -q
@@ -33,24 +33,24 @@ kwhois ´Â punycode ¸¦ ÀÌ¿ëÇÑ ´Ù±¹¾î µµ¸ŞÀÎÀ» Áö¿øÇÑ´Ù.
 %{__make} %{?_smp_mflags}
 
 %install
-[ "$RPM_BUILD_ROOT" != "/" ] && %{__rm} -fr $RPM_BUILD_ROOT
-%{__mkdir_p} $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/{man1,ko/man1}}
-make DESTDIR=$RPM_BUILD_ROOT install
+[ "%{buildroot}" != "/" ] && %{__rm} -fr %{buildroot}
+%{__mkdir_p} %{buildroot}{%{_bindir},%{_mandir}/{man1,ko/man1}}
+make DESTDIR=%{buildroot} install
 
 %clean
-%{__rm} -rf $RPM_BUILD_ROOT
+%{__rm} -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%{_bindir}/whois
-%{_bindir}/kwhois
-%{_bindir}/punyconv
-%{_bindir}/raceconv
+%{_bindir}/*
 %{_mandir}/man1/*.1*
 %{_mandir}/ko/man1/*.1*
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
+* Wed Apr 18 2012 JoungKyun.Kim <http://oops.org> 8:3.7-1
+- update 3.7
+
 * Thu Sep 15 2011 JoungKyun.Kim <http://oops.org> 7:3.6-1
 - update 3.6
 
