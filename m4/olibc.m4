@@ -58,6 +58,19 @@ AC_DEFUN([AX_OLIBC],
 					[Define to 1 if you have the `ogc' library (-logc).]
 				)
 				LIBS="-logc $LIBS"
+				AC_CHECK_LIB(
+					ogc, join, [
+						AC_DEFINE(
+							[HAVE_LIBOC_VER], 1,
+							[Define to 0 if you have over olibc 1.0.0]
+						)
+					],[
+						AC_DEFINE(
+							[HAVE_LIBOC_VER], 0,
+							[Define to 1 if you have under olibc 1.0.0]
+						)
+					]
+				)
 			],[
 				AC_MSG_ERROR([Error.. you must need over olibc 1.0.0!])
 			]
