@@ -14,7 +14,7 @@ void i18n_print(void) { // {{{
 #endif
 
 /*
- * If LANG is utf-8, reutnr 1 else return 0
+ * If LANG is ko_KR.eucKR, return 1 else return 0
  */
 int current_charset (void) {
 	char	* lang_env = getenv ("LANG");
@@ -23,7 +23,7 @@ int current_charset (void) {
 	if ( lcharset == NULL )
 		return 0;
 
-	if ( ! strcasecmp (".utf-8", lcharset) || ! strcasecmp (".utf8", lcharset) )
+	if ( ! strncasecmp ("ko_KR.euc", lang_env, 9) )
 		return 1;
 
 	return 0;

@@ -1,6 +1,10 @@
 Changes by JoungKyun Kim <http://www.oops.org>
 $Id$
 
+* Thu Nov 22 2012
+  by JoungKyun Kim <http://oops.org>
+  - support krnic whois renewal (change charset to utf-8)
+
 * Wed Apr 18 2012
   by JoungKyun Kim <http://oops.org>
   - release 3.7

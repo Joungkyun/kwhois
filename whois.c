@@ -220,7 +220,7 @@ process_query (Pquery * v) { // {{{
 		ICONV_CONST
 		char	* from;
 		char	* to,
-				* to_utf8,
+				* to_euc,
 				* ext;
 		size_t	flen,
 				tlen;
@@ -237,9 +237,10 @@ process_query (Pquery * v) { // {{{
 			ext = get_tail (v->server);
 
 		if ( ic == 1 ) {
-			if ( ! strcasecmp (ext, "kr") )
-				cd = iconv_open ("UTF-8", "EUC-KR");
-			else
+			if ( ! strcasecmp (ext, "kr") ) {
+				cd = iconv_open ("EUC-KR", "UTF-8");
+				printf ("Charset: Original charset is UTF-8 and kwhois convert to EUC-KR\n");
+			} else
 				cd = (iconv_t)(-1);
 
 		} else
@@ -254,13 +255,13 @@ process_query (Pquery * v) { // {{{
 		if ( cd != (iconv_t)(-1) ) {
 			from = buf;
 			flen = strlen (buf);
-			tlen = flen * 4 + 1;
-			if ( (to_utf8 = (char *) malloc (sizeof (char) * tlen)) == NULL ) {
+			tlen = flen + 1;
+			if ( (to_euc = (char *) malloc (sizeof (char) * tlen)) == NULL ) {
 				printf ("%s", buf);
 				goto skip_iconv;
 			}
-			memset (to_utf8, 0, sizeof (char) * tlen);
-			to = to_utf8;
+			memset (to_euc, 0, sizeof (char) * tlen);
+			to = to_euc;
 
 			iconv (cd, &from, &flen, &to, &tlen);
 			switch (errno) {
@@ -270,8 +271,8 @@ process_query (Pquery * v) { // {{{
 					goto skip_iconv;
 					break;
 			}
-			printf ("%s", to_utf8);
-			free (to_utf8);
+			printf ("%s", to_euc);
+			free (to_euc);
 		} else
 			printf ("%s", buf);
 skip_iconv:
