@@ -4,7 +4,7 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 3.7
+Version: 3.8
 Release: 1
 Epoch: 8
 License: GPL
@@ -48,6 +48,10 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
+* Thu Nov 22 2012 JoungKyun.Kim <http://oops.org> 8:3.8-1
+- update 3.8
+- support krnic whois renewal (change charset to utf-8)
+
 * Wed Apr 18 2012 JoungKyun.Kim <http://oops.org> 8:3.7-1
 - update 3.7
 
