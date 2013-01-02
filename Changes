@@ -4,6 +4,7 @@ $Id$
 * Mon Jan  2 2013
   by JoungKyun.Kim <http://oops.org>
   - support auto fixed charset about oldwhois.kisa.or.kr
+  - add missing build environment files
 
 * Thu Nov 22 2012
   by JoungKyun.Kim <http://oops.org>
