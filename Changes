@@ -3,6 +3,7 @@ $Id$
 
 * Mon Jan  2 2013
   by JoungKyun.Kim <http://oops.org>
+  - release 3.9
   - support auto fixed charset about oldwhois.kisa.or.kr
   - add missing build environment files
 
