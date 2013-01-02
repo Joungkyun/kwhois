@@ -216,11 +216,11 @@ process_query (Pquery * v) { // {{{
 
 #ifdef HAVE_ICONV_H
 	{
-		iconv_t	cd;
+		iconv_t	cd = (iconv_t)(-1);
 		ICONV_CONST
 		char	* from;
 		char	* to,
-				* to_euc,
+				* to_conv,
 				* ext;
 		size_t	flen,
 				tlen;
@@ -231,20 +231,28 @@ process_query (Pquery * v) { // {{{
 				ext = "kr";
 			else
 				ext = "";
-		} else if ( ! strcasecmp (v->server, "whois.krnic.net") ) {
+		} else if (
+					! strcasecmp (v->server, "whois.krnic.net") ||
+					! strcasecmp (v->server, "whois.kisa.or.kr") ||
+					! strcasecmp (v->server, "whois.kisa.kr") ||
+					! strcasecmp (v->server, "oldwhois.kisa.or.kr")
+				) {
 			ext = "kr";
+
+			if ( ! strncasecmp (v->server, "oldwhois.", 9) ) {
+				if ( ! ic ) {
+					cd = iconv_open ("UTF-8", "EUC-KR");
+					printf ("Charset: Original charset is EUC-KR and kwhois convert to UTF-8\n");
+				}
+			} else {
+				if ( ic ) {
+					cd = iconv_open ("EUC-KR", "UTF-8");
+					printf ("Charset: Original charset is UTF-8 and kwhois convert to EUC-KR\n");
+				}
+			}
 		} else
 			ext = get_tail (v->server);
 
-		if ( ic == 1 ) {
-			if ( ! strcasecmp (ext, "kr") ) {
-				cd = iconv_open ("EUC-KR", "UTF-8");
-				printf ("Charset: Original charset is UTF-8 and kwhois convert to EUC-KR\n");
-			} else
-				cd = (iconv_t)(-1);
-
-		} else
-			cd = (iconv_t)(-1);
 #endif
 	memset (buf, 0, sizeof (buf));
 	while ( fgets (buf, sizeof (buf) - 1, reader) != null ) {
@@ -255,14 +263,15 @@ process_query (Pquery * v) { // {{{
 		if ( cd != (iconv_t)(-1) ) {
 			from = buf;
 			flen = strlen (buf);
-			tlen = flen + 1;
-			if ( (to_euc = (char *) malloc (sizeof (char) * tlen)) == NULL ) {
+			tlen = (flen * 3) + 1;
+			if ( (to_conv = (char *) malloc (sizeof (char) * tlen)) == NULL ) {
 				printf ("%s", buf);
 				goto skip_iconv;
 			}
-			memset (to_euc, 0, sizeof (char) * tlen);
-			to = to_euc;
+			memset (to_conv, 0, sizeof (char) * tlen);
+			to = to_conv;
 
+			errno = 0;
 			iconv (cd, &from, &flen, &to, &tlen);
 			switch (errno) {
 				case E2BIG :
@@ -271,8 +280,8 @@ process_query (Pquery * v) { // {{{
 					goto skip_iconv;
 					break;
 			}
-			printf ("%s", to_euc);
-			free (to_euc);
+			printf ("%s", to_conv);
+			free (to_conv);
 		} else
 			printf ("%s", buf);
 skip_iconv:

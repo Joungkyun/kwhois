@@ -1,6 +1,10 @@
 Changes by JoungKyun.Kim <http://www.oops.org>
 $Id$
 
+* Mon Jan  2 2013
+  by JoungKyun.Kim <http://oops.org>
+  - support auto fixed charset about oldwhois.kisa.or.kr
+
 * Thu Nov 22 2012
   by JoungKyun.Kim <http://oops.org>
   - release 3.8
