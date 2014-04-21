@@ -93,6 +93,48 @@ void alarm_handler (int signum) { // {{{
 	exit (0);
 } // }}}
 
+static void get_next_server (char * buf, char ** server) {
+	char	* p = null;
+	char	* next = buf;
+
+	if ( *server != null )
+		free (*server);
+
+	while ( (next[0] != '\0') && (next[0] != ':') ) {
+		next++;
+	}
+	while ( (next[0] != '\0') &&
+			((next[0] == ':') ||
+			 isspace (next[0])) ) {
+		next++;
+	}
+	p = buf + strlen (buf);
+	while ( (p > buf) &&
+			((isspace (p[-1])) ||
+			 (p[-1] == '\r') ||
+			 (p[-1] == '\n')) ) {
+		p[-1] = '\0';
+		p--;
+	}
+
+	if ( (p = strstr (next, "whois://")) != null )
+		next = p + 8;
+
+	if ( strchr (next, '.') == null ) {
+		char	* q;
+		q = malloc (sizeof (char) * strlen (next) + 20);
+		memset (q, strlen (next) + 20, 0);
+
+		if ( strlen (next) > 1 ) {
+			sprintf (q, "%c%c.WHOIS-SERVERS.NET", next[0], next[1]);
+			*server = strdup (q);
+		} else
+			*server = null;
+		free (q);
+	} else
+		*server = strdup (next);
+}
+
 static void
 process_query (Pquery * v) { // {{{
 	int		sd = -1,
@@ -297,41 +339,16 @@ skip_iconv:
 
 		/* If the line includes the magic string, pull out the
 		 * name of the server we should talk to next. */
+		if ( strstr (ubuf, "REFERRALSERVER:") != null || strstr (ubuf, "WHOIS SERVER:") != null ) {
+			get_next_server (buf, &next_server);
+			v->recurse = 1;
+			if ( next_server == null || strlen (next_server) == 0 )
+				v->recurse = 0;
+		}
+
 		if ( v->recurse && next_server == null ) {
-			if ( strstr (ubuf, "WHOIS SERVER:") != null || strstr (ubuf, "COUNTRY:") != null || strstr (ubuf, "COUNTRY CODE :") != null ) {
-				char	* p = null;
-				next_server = buf;
-				while ( (next_server[0] != '\0') && (next_server[0] != ':') ) {
-					next_server++;
-				}
-				while ( (next_server[0] != '\0') &&
-						((next_server[0] == ':') ||
-						 isspace (next_server[0])) ) {
-					next_server++;
-				}
-				p = buf + strlen (buf);
-				while ( (p > buf) &&
-						((isspace (p[-1])) ||
-						 (p[-1] == '\r') ||
-						 (p[-1] == '\n')) ) {
-					p[-1] = '\0';
-					p--;
-				}
-
-				if ( strchr (next_server, '.') == null ) {
-					char	* q;
-					q = malloc (sizeof (char) * strlen (next_server) + 20);
-					memset (q, strlen (next_server) + 20, 0);
-
-					if ( strlen (next_server) > 1 ) {
-						sprintf (q, "%c%c.WHOIS-SERVERS.NET", next_server[0], next_server[1]);
-						next_server = strdup (q);
-					} else
-						next_server = null;
-					free (q);
-				} else
-					next_server = strdup (next_server);
-			}
+			if ( strstr (ubuf, "COUNTRY:") != null || strstr (ubuf, "COUNTRY CODE :") != null )
+				get_next_server (buf, &next_server);
 		}
 	}
 	fclose (reader);
@@ -346,9 +363,9 @@ skip_iconv:
 	if ( v->timeout > 0 )
 		alarm (0);
 
-	if ( (v->recurse > 0) && (next_server != null) ) {
+	if ( v->recurse > 0 && next_server != null && strcasecmp (next_server, v->server) ) {
 		v->server = next_server;
-		v->recurse -= 1;
+		//v->recurse -= 1;
 
 		if ( v->verbose ) {
 			fprintf (stderr, _("[1;%dm=> Recurse Connection <=[7;0m\n"), COLOR);
@@ -485,7 +502,7 @@ int main (int argc, char ** argv) { // {{{
 			extension = strdup (get_tail (qr.query));
 
 			if ( ! strcmp (extension, "IP ADDRESS") )
-				qr.server = LO_SERVER;
+				qr.server = LU_SERVER;
 
 			/* Nothing there either.  Use the NICNAMESERVER,
 			 * WHOISSERVER, or DEFAULT_SERVER, in that order. */
@@ -501,16 +518,32 @@ int main (int argc, char ** argv) { // {{{
 						char tmphost[50];
 						sprintf (tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
 						qr.server = tmphost;
+					} else if (!strcasecmp (extension, "aero")) {
+						qr.server = AERO_SERVER;
+					} else if (!strcasecmp (extension, "arpa")) {
+						qr.server = ARPA_SERVER;
 					} else if (!strcasecmp (extension, "biz")) {
 						qr.server = BIZ_SERVER;
+					} else if (!strcasecmp (extension, "coop")) {
+						qr.server = COOP_SERVER;
+					} else if (!strcasecmp (extension, "gov")) {
+						qr.server = GOV_SERVER;
 					} else if (!strcasecmp (extension, "info")) {
 						qr.server = INFO_SERVER;
+					} else if (!strcasecmp (extension, "int")) {
+						qr.server = INT_SERVER;
+					} else if (!strcasecmp (extension, "mil")) {
+						qr.server = MIL_SERVER;
+					} else if (!strcasecmp (extension, "museum")) {
+						qr.server = MUSEUM_SERVER;
 					} else if (!strcasecmp (extension, "name")) {
 						qr.server = NAME_SERVER;
 					} else if (!strcasecmp (extension, "org")) {
 						qr.server = ORG_SERVER;
+					} else if (!strcasecmp (extension, "pro")) {
+						qr.server = PRO_SERVER;
 					} else if ( ! strcmp (extension, "IP ADDRESS") ) {
-						qr.server = LO_SERVER;
+						qr.server = LU_SERVER;
 					} else {
 						qr.server = DEFAULT_SERVER;
 					}
@@ -533,7 +566,7 @@ int main (int argc, char ** argv) { // {{{
 	/* If we got neither the -r nor the -n arguments, set the default
 	 * based on which server we're querying. */
 	if ( qr.recurse == -1 )
-		qr.recurse = (! strcasecmp (DEFAULT_SERVER, qr.server)) ? 1 : 0;
+		qr.recurse = (! strcasecmp (DEFAULT_SERVER, qr.server) || ! strcasecmp (LU_SERVER, qr.server) ) ? 1 : 0;
 
 #ifdef HAVE_LIBOGC
 #if HAVE_LIBOC_VER == 1
@@ -604,6 +637,8 @@ char * parseQuery (char * qry, char * wserv) { // {{{
 
 	if ( ! strcmp ("jp", extension) ) {
 		sprintf ( query, "%s/e\r\n", tmp);
+	} else if ( ! strcmp ("IP ADDRESS", extension) && ! strcmp (wserv, LU_SERVER) ) {
+		sprintf ( query, "n %s\r\n", tmp);
 	} else
 		sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
 

@@ -18,7 +18,7 @@
 #define GOV_SERVER    "whois.nic.gov"
 #define INT_SERVER    "whois.iana.org"
 #define MIL_SERVER    "whois.nic.mil"
-#define AERO_SERVER   "whois.information.aero"
+#define AERO_SERVER   "whois.aero"
 #define ARPA_SERVER   "whois.iana.org"
 #define BIZ_SERVER    "whois.nic.biz"
 #define COOP_SERVER   "whois.nic.coop"
