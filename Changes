@@ -1,6 +1,12 @@
 Changes by JoungKyun.Kim <http://www.oops.org>
 $Id$
 
+* Tue Apr 22 2014
+  by JoungKyun.Kim <http://oops.org>
+  - fixed ip address lookup
+  - enhanced ip address lookup
+  - fixed wrong registra
+
 * Mon Jan  2 2013
   by JoungKyun.Kim <http://oops.org>
   - release 3.9

@@ -51,6 +51,7 @@
 
 #ifdef HAVE_LIBOGC
 #	include <olibc/libidn.h>
+#	include <olibc/libpcre.h>
 #endif
 
 #include "tld_server.h"
@@ -516,14 +517,35 @@ int main (int argc, char ** argv) { // {{{
 				} else {
 					if ( strlen (extension) == 2 ) {
 						char tmphost[50];
-						sprintf (tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
+						if ( preg_match ("/co\\.nl$/i", qr.query) )
+							sprintf (tmphost, "%s", CONL_SERVER);
+						else if ( preg_match ("/(ac|gov)\\.uk$/i", qr.query) )
+							sprintf (tmphost, "%s", JANET_SERVER);
+						else if ( !strcasecmp (extension, "bj") )
+							sprintf (tmphost, "%s", BJ_SERVER);
+						else if ( !strcasecmp (extension, "bz") )
+							sprintf (tmphost, "%s", BZ_SERVER);
+						else if ( !strcasecmp (extension, "ng") )
+							sprintf (tmphost, "%s", NG_SERVER);
+						else if ( !strcasecmp (extension, "su") )
+							sprintf (tmphost, "%s", SU_SERVER);
+						else if ( !strcasecmp (extension, "tc") )
+							sprintf (tmphost, "%s", TC_SERVER);
+						else if ( preg_match ("/\\.(cd|dz|so)$/", qr.query) )
+							sprintf (tmphost, "whois.nic.%c%c", extension[0], extension[1]);
+						else
+							sprintf (tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
 						qr.server = tmphost;
+					} else if (!strcasecmp (extension, "asia")) {
+						qr.server = ASIA_SERVER;
 					} else if (!strcasecmp (extension, "aero")) {
 						qr.server = AERO_SERVER;
 					} else if (!strcasecmp (extension, "arpa")) {
 						qr.server = ARPA_SERVER;
 					} else if (!strcasecmp (extension, "biz")) {
 						qr.server = BIZ_SERVER;
+					} else if (!strcasecmp (extension, "cat")) {
+						qr.server = CAT_SERVER;
 					} else if (!strcasecmp (extension, "coop")) {
 						qr.server = COOP_SERVER;
 					} else if (!strcasecmp (extension, "gov")) {
@@ -532,8 +554,12 @@ int main (int argc, char ** argv) { // {{{
 						qr.server = INFO_SERVER;
 					} else if (!strcasecmp (extension, "int")) {
 						qr.server = INT_SERVER;
+					} else if (!strcasecmp (extension, "jobs")) {
+						qr.server = JOBS_SERVER;
 					} else if (!strcasecmp (extension, "mil")) {
 						qr.server = MIL_SERVER;
+					} else if (!strcasecmp (extension, "mobi")) {
+						qr.server = MOVI_SERVER;
 					} else if (!strcasecmp (extension, "museum")) {
 						qr.server = MUSEUM_SERVER;
 					} else if (!strcasecmp (extension, "name")) {
@@ -542,10 +568,20 @@ int main (int argc, char ** argv) { // {{{
 						qr.server = ORG_SERVER;
 					} else if (!strcasecmp (extension, "pro")) {
 						qr.server = PRO_SERVER;
+					} else if (!strcasecmp (extension, "tel")) {
+						qr.server = TEL_SERVER;
+					} else if (!strcasecmp (extension, "travel")) {
+						qr.server = TRAVEL_SERVER;
+					} else if (!strcasecmp (extension, "xxx")) {
+						qr.server = XXX_SERVER;
 					} else if ( ! strcmp (extension, "IP ADDRESS") ) {
 						qr.server = LU_SERVER;
 					} else {
-						qr.server = DEFAULT_SERVER;
+						// 2 depth domain
+						if ( preg_match ("/((br|cn|eu|gb|hu|no|qc|sa|se|uk|us|uy|za)\\.com|(gb|se|uk)\\.net)$/i", qr.query) )
+							qr.server = CENTRALNIC_SERVER;
+						else
+							qr.server = DEFAULT_SERVER;
 					}
 				}
 			}
