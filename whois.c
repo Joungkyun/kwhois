@@ -52,6 +52,7 @@
 #ifdef HAVE_LIBOGC
 #	include <olibc/libidn.h>
 #	include <olibc/libpcre.h>
+#	include <olibc/libstring.h>
 #endif
 
 #include "tld_server.h"
@@ -303,8 +304,6 @@ process_query (Pquery * v) {
 #endif
 	memset (buf, 0, sizeof (buf));
 	while ( fgets (buf, sizeof (buf) - 1, reader) != null ) {
-		int i;
-
 		/* Give the user the literal string, including the newline. */
 #ifdef HAVE_ICONV_H
 		if ( cd != (iconv_t)(-1) ) {
@@ -338,9 +337,16 @@ skip_iconv:
 
 		/* Create an upper-cased copy of the response line. */
 		memset (ubuf, '\0', sizeof (ubuf));
+#ifdef HAVE_LIBOGC
+		strcpy (ubuf, buf);
+		strtoupper (ubuf);
+#else
+		int i;
+
 		for ( i=0; i < strlen (buf); i++ ) {
 			ubuf[i] = toupper (buf[i]);
 		}
+#endif
 
 		/* If the line includes the magic string, pull out the
 		 * name of the server we should talk to next. */
@@ -522,9 +528,12 @@ int main (int argc, char ** argv) {
 				} else {
 					if ( strlen (extension) == 2 ) {
 						char tmphost[50];
+#ifdef HAVE_LIBOGC
 						if ( preg_match ("/co\\.nl$/i", qr.query) )
 							sprintf (tmphost, "%s", CONL_SERVER);
-						else if ( preg_match ("/(ac|gov)\\.uk$/i", qr.query) )
+						else
+#endif
+						if ( preg_match ("/(ac|gov)\\.uk$/i", qr.query) )
 							sprintf (tmphost, "%s", JANET_SERVER);
 						else if ( !strcasecmp (extension, "bj") )
 							sprintf (tmphost, "%s", BJ_SERVER);
@@ -536,8 +545,10 @@ int main (int argc, char ** argv) {
 							sprintf (tmphost, "%s", SU_SERVER);
 						else if ( !strcasecmp (extension, "tc") )
 							sprintf (tmphost, "%s", TC_SERVER);
+#ifdef HAVE_LIBOGC
 						else if ( preg_match ("/\\.(cd|dz|so)$/", qr.query) )
 							sprintf (tmphost, "whois.nic.%c%c", extension[0], extension[1]);
+#endif
 						else
 							sprintf (tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
 						qr.server = tmphost;
@@ -582,10 +593,12 @@ int main (int argc, char ** argv) {
 					} else if ( ! strcmp (extension, "IP ADDRESS") ) {
 						qr.server = LU_SERVER;
 					} else {
+#ifdef HAVE_LIBOGC
 						// 2 depth domain
 						if ( preg_match ("/((br|cn|eu|gb|hu|no|qc|sa|se|uk|us|uy|za)\\.com|(gb|se|uk)\\.net)$/i", qr.query) )
 							qr.server = CENTRALNIC_SERVER;
 						else
+#endif
 							qr.server = DEFAULT_SERVER;
 					}
 				}
