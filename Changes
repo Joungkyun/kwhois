@@ -6,6 +6,7 @@ $Id$
   - fixed ip address lookup
   - enhanced ip address lookup
   - fixed wrong registra
+  - enhanced compare tld servers
 
 * Mon Jan  2 2013
   by JoungKyun.Kim <http://oops.org>
