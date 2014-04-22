@@ -86,7 +86,8 @@ void long2ip (char ** ip);
 
 char * extension = null;
 
-void alarm_handler (int signum) { // {{{
+// {{{ void alarm_handler (int signum)
+void alarm_handler (int signum) {
 	char	* message;
 
 	message = _("Timeout exceeded.\n");
@@ -94,6 +95,7 @@ void alarm_handler (int signum) { // {{{
 	exit (0);
 } // }}}
 
+// {{{ static void get_next_server (char * buf, char ** server)
 static void get_next_server (char * buf, char ** server) {
 	char	* p = null;
 	char	* next = buf;
@@ -135,9 +137,11 @@ static void get_next_server (char * buf, char ** server) {
 	} else
 		*server = strdup (next);
 }
+// }}}
 
+// {{{ static void process_query (Pquery * v)
 static void
-process_query (Pquery * v) { // {{{
+process_query (Pquery * v) {
 	int		sd = -1,
 			ret = 0;
 	FILE	* reader = null;
@@ -383,7 +387,8 @@ skip_iconv:
 	}
 } // }}}
 
-int main (int argc, char ** argv) { // {{{
+// {{{ int main (int argc, char ** argv)
+int main (int argc, char ** argv) {
 	char	* name = null;
 	int		i,
 			help = 0,
@@ -644,7 +649,8 @@ int main (int argc, char ** argv) { // {{{
 	return 0;
 } // }}}
 
-int check_code (char * tail) { // {{{
+// {{{ int check_code (char * tail)
+int check_code (char * tail) {
 	if ( ! strcasecmp ( tail, "com" ) || ! strcasecmp ( tail, "net" ) ) {
 		return 1;
 	} else if ( ! strcasecmp ( tail, "org" ) || ! strcasecmp ( tail, "info" ) ||
@@ -655,14 +661,16 @@ int check_code (char * tail) { // {{{
 	return 0;
 } // }}}
 
-int crsCheck (char * wserv) { // {{{
+// {{{ int crsCheck (char * wserv)
+int crsCheck (char * wserv) {
 	if ( ! strcmp ( wserv, DEFAULT_SERVER ) )
 		return 1;
 
 	return 0;
 } // }}}
 
-char * parseQuery (char * qry, char * wserv) { // {{{
+// {{{ char * parseQuery (char * qry, char * wserv)
+char * parseQuery (char * qry, char * wserv) {
 	static char	query[1024];
 	char		tmp[1024];
 
@@ -681,7 +689,8 @@ char * parseQuery (char * qry, char * wserv) { // {{{
 	return query;
 } // }}}
 
-int is_ipaddr (char * query) { // {{{
+// {{{ int is_ipaddr (char * query)
+int is_ipaddr (char * query) {
 	int		pos;
 	char	point;
 
@@ -694,7 +703,8 @@ int is_ipaddr (char * query) { // {{{
 	return 0;
 } // }}}
 
-char * get_tail (char * query) { // {{{
+// {{{ char * get_tail (char * query)
+char * get_tail (char * query) {
 	char	* gettail = null;
 
 	if ( is_ipaddr (query) ) {
@@ -708,7 +718,8 @@ char * get_tail (char * query) { // {{{
 	}
 } // }}}
 
-int is_longip (char * query) { // {{{
+// {{{ int is_longip (char * query)
+int is_longip (char * query) {
 	while ( *query != 0 ) {
 		if ( *query < 48 || *query > 57 )
 			return 0;
@@ -718,7 +729,8 @@ int is_longip (char * query) { // {{{
 	return 1;
 } // }}}
 
-char * _long2ip (char * ip) { // {{{
+// {{{ char * _long2ip (char * ip)
+char * _long2ip (char * ip) {
 	struct	in_addr addr;
 	ULong	longip;
 
@@ -728,7 +740,8 @@ char * _long2ip (char * ip) { // {{{
 	return inet_ntoa (addr);
 } // }}}
 
-void long2ip (char ** q) { // {{{
+// {{{ void long2ip (char ** q)
+void long2ip (char ** q) {
 	char	* p;
 
 	if ( ! *q )
