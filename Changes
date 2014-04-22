@@ -3,6 +3,7 @@ $Id$
 
 * Tue Apr 22 2014
   by JoungKyun.Kim <http://oops.org>
+  - release 4.0
   - fixed ip address lookup
   - enhanced ip address lookup
   - fixed wrong registra
