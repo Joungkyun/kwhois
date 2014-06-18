@@ -87,7 +87,7 @@ void long2ip (char ** ip);
 void str_tolower (char *buf);
 void str_toupper (char *buf);
 
-char * extension = null;
+char * ex = null;
 
 // {{{ void alarm_handler (int signum)
 void alarm_handler (int signum) {
@@ -514,12 +514,12 @@ int main (int argc, char ** argv) {
 			qr.server++;
 
 			/* get contry code */
-			extension = strdup (get_tail (qr.query));
+			ex = strdup (get_tail (qr.query));
 		} else {
 			/* get contry code */
-			extension = strdup (get_tail (qr.query));
+			ex = strdup (get_tail (qr.query));
 
-			if ( ! strcmp (extension, "ip address") )
+			if ( ! strcmp (ex, "ip address") )
 				qr.server = LU_SERVER;
 
 			/* Nothing there either.  Use the NICNAMESERVER,
@@ -529,10 +529,10 @@ int main (int argc, char ** argv) {
 			} else {
 				if ( (qr.server == null) && getenv ("WHOISSERVER") ) {
 					qr.server = getenv ("WHOISSERVER");
-				} else if ( !extension ) {
+				} else if ( !ex ) {
 					qr.server = DEFAULT_SERVER;
 				} else {
-					if ( strlen (extension) == 2 ) {
+					if ( strlen (ex) == 2 ) {
 						char tmphost[50];
 #ifdef HAVE_LIBOGC
 						if ( preg_match ("/co\\.nl$/i", qr.query) )
@@ -541,62 +541,62 @@ int main (int argc, char ** argv) {
 #endif
 						if ( preg_match ("/(ac|gov)\\.uk$/i", qr.query) )
 							sprintf (tmphost, "%s", JANET_SERVER);
-						else if ( !strcmp (extension, "bj") )
+						else if ( !strcmp (ex, "bj") )
 							sprintf (tmphost, "%s", BJ_SERVER);
-						else if ( !strcmp (extension, "bz") )
+						else if ( !strcmp (ex, "bz") )
 							sprintf (tmphost, "%s", BZ_SERVER);
-						else if ( !strcmp (extension, "ng") )
+						else if ( !strcmp (ex, "ng") )
 							sprintf (tmphost, "%s", NG_SERVER);
-						else if ( !strcmp (extension, "su") )
+						else if ( !strcmp (ex, "su") )
 							sprintf (tmphost, "%s", SU_SERVER);
-						else if ( !strcmp (extension, "tc") )
+						else if ( !strcmp (ex, "tc") )
 							sprintf (tmphost, "%s", TC_SERVER);
 #ifdef HAVE_LIBOGC
 						else if ( preg_match ("/\\.(cd|dz|so)$/", qr.query) )
-							sprintf (tmphost, "whois.nic.%c%c", extension[0], extension[1]);
+							sprintf (tmphost, "whois.nic.%c%c", ex[0], ex[1]);
 #endif
 						else
-							sprintf (tmphost, "%c%c.%s", extension[0], extension[1], LO_SERVER);
+							sprintf (tmphost, "%c%c.%s", ex[0], ex[1], LO_SERVER);
 						qr.server = tmphost;
-					} else if (!strcmp (extension, "asia")) {
+					} else if (!strcmp (ex, "asia")) {
 						qr.server = ASIA_SERVER;
-					} else if (!strcmp (extension, "aero")) {
+					} else if (!strcmp (ex, "aero")) {
 						qr.server = AERO_SERVER;
-					} else if (!strcmp (extension, "arpa")) {
+					} else if (!strcmp (ex, "arpa")) {
 						qr.server = ARPA_SERVER;
-					} else if (!strcmp (extension, "biz")) {
+					} else if (!strcmp (ex, "biz")) {
 						qr.server = BIZ_SERVER;
-					} else if (!strcmp (extension, "cat")) {
+					} else if (!strcmp (ex, "cat")) {
 						qr.server = CAT_SERVER;
-					} else if (!strcmp (extension, "coop")) {
+					} else if (!strcmp (ex, "coop")) {
 						qr.server = COOP_SERVER;
-					} else if (!strcmp (extension, "gov")) {
+					} else if (!strcmp (ex, "gov")) {
 						qr.server = GOV_SERVER;
-					} else if (!strcmp (extension, "info")) {
+					} else if (!strcmp (ex, "info")) {
 						qr.server = INFO_SERVER;
-					} else if (!strcmp (extension, "int")) {
+					} else if (!strcmp (ex, "int")) {
 						qr.server = INT_SERVER;
-					} else if (!strcmp (extension, "jobs")) {
+					} else if (!strcmp (ex, "jobs")) {
 						qr.server = JOBS_SERVER;
-					} else if (!strcmp (extension, "mil")) {
+					} else if (!strcmp (ex, "mil")) {
 						qr.server = MIL_SERVER;
-					} else if (!strcmp (extension, "mobi")) {
+					} else if (!strcmp (ex, "mobi")) {
 						qr.server = MOVI_SERVER;
-					} else if (!strcmp (extension, "museum")) {
+					} else if (!strcmp (ex, "museum")) {
 						qr.server = MUSEUM_SERVER;
-					} else if (!strcmp (extension, "name")) {
+					} else if (!strcmp (ex, "name")) {
 						qr.server = NAME_SERVER;
-					} else if (!strcmp (extension, "org")) {
+					} else if (!strcmp (ex, "org")) {
 						qr.server = ORG_SERVER;
-					} else if (!strcmp (extension, "pro")) {
+					} else if (!strcmp (ex, "pro")) {
 						qr.server = PRO_SERVER;
-					} else if (!strcmp (extension, "tel")) {
+					} else if (!strcmp (ex, "tel")) {
 						qr.server = TEL_SERVER;
-					} else if (!strcmp (extension, "travel")) {
+					} else if (!strcmp (ex, "travel")) {
 						qr.server = TRAVEL_SERVER;
-					} else if (!strcmp (extension, "xxx")) {
+					} else if (!strcmp (ex, "xxx")) {
 						qr.server = XXX_SERVER;
-					} else if ( ! strcmp (extension, "ip address") ) {
+					} else if ( ! strcmp (ex, "ip address") ) {
 						qr.server = LU_SERVER;
 					} else {
 #ifdef HAVE_LIBOGC
@@ -612,7 +612,7 @@ int main (int argc, char ** argv) {
 		}
 	} else {
 		/* get contry code */
-		extension = strdup (get_tail (qr.query));
+		ex = strdup (get_tail (qr.query));
 	}
 
 	/* If the server name includes a colon, snip the name there and
@@ -642,7 +642,7 @@ int main (int argc, char ** argv) {
 		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
 		fprintf (stderr, _("[1;%dmHOST          :[7;0m %s\n"), COLOR, qr.query);
 		fprintf (stderr, _("[1;%dmCONV HOST     :[7;0m %s\n"), COLOR, name);
-		fprintf (stderr, _("[1;%dmTAIL          :[7;0m %s\n"), COLOR, extension);
+		fprintf (stderr, _("[1;%dmTAIL          :[7;0m %s\n"), COLOR, ex);
 		fprintf (stderr, _("[1;%dmSERVER        :[7;0m %s\n"), COLOR, qr.server);
 		fprintf (stderr, _("[1;%dmPORT          :[7;0m %s\n"), COLOR, qr.port);
 		fprintf (stderr, _("\n------------------- Debug Message --------------------\n\n"));
@@ -663,7 +663,7 @@ int main (int argc, char ** argv) {
 	process_query (&qr);
 #endif
 	free (qr.query);
-	free (extension);
+	free (ex);
 
 	return 0;
 } // }}}
@@ -698,9 +698,9 @@ char * parseQuery (char * qry, char * wserv) {
 
 	strncpy (tmp, qry, ( strlen (qry) > 1023 ) ? 1023 : strlen (qry));
 
-	if ( ! strcmp ("jp", extension) ) {
+	if ( ! strcmp ("jp", ex) ) {
 		sprintf ( query, "%s/e\r\n", tmp);
-	} else if ( ! strcmp ("ip address", extension) && ! strcasecmp (wserv, LU_SERVER) ) {
+	} else if ( ! strcmp ("ip address", ex) && ! strcasecmp (wserv, LU_SERVER) ) {
 		sprintf ( query, "n %s\r\n", tmp);
 	} else
 		sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
