@@ -77,7 +77,6 @@ typedef struct {
 	int		verbose;
 } Pquery;
 
-int  check_code (char * tail);
 int  crsCheck (char * wserv);
 int  is_ipaddr (char * query);
 char * get_tail (char * query);
@@ -86,6 +85,7 @@ int  is_longip (char * query);
 void long2ip (char ** ip);
 void str_tolower (char *buf);
 void str_toupper (char *buf);
+char * check_2depth (char * ext);
 
 char * ex = null;
 
@@ -532,16 +532,27 @@ int main (int argc, char ** argv) {
 				} else if ( !ex ) {
 					qr.server = DEFAULT_SERVER;
 				} else {
+					if ( ! strcmp (ex, "ip address") ) {
+						qr.server = LU_SERVER;
+						goto confirm_qrserver;
+					}
+
+					// 2 depth domain
+#ifdef HAVE_LIBOGC
+					const char ** matches = NULL;
+					if ( preg_match_r ("/[^.]+(\\.[^.]+\\.[^.]+)$/", qr.query, &matches) > 0 ) {
+						if ( ex != NULL )
+							free (ex);
+						ex = strdup (matches[1]);
+						qr.server = check_2depth (ex);
+						if ( qr.server != NULL )
+							goto confirm_qrserver;
+					}
+#endif
+
 					if ( strlen (ex) == 2 ) {
 						char tmphost[50];
-#ifdef HAVE_LIBOGC
-						if ( preg_match ("/co\\.nl$/i", qr.query) )
-							sprintf (tmphost, "%s", CONL_SERVER);
-						else
-#endif
-						if ( preg_match ("/(ac|gov)\\.uk$/i", qr.query) )
-							sprintf (tmphost, "%s", JANET_SERVER);
-						else if ( !strcmp (ex, "bj") )
+						if ( !strcmp (ex, "bj") )
 							sprintf (tmphost, "%s", BJ_SERVER);
 						else if ( !strcmp (ex, "bz") )
 							sprintf (tmphost, "%s", BZ_SERVER);
@@ -557,55 +568,30 @@ int main (int argc, char ** argv) {
 #endif
 						else
 							sprintf (tmphost, "%c%c.%s", ex[0], ex[1], LO_SERVER);
+
 						qr.server = tmphost;
-					} else if (!strcmp (ex, "asia")) {
-						qr.server = ASIA_SERVER;
-					} else if (!strcmp (ex, "aero")) {
-						qr.server = AERO_SERVER;
-					} else if (!strcmp (ex, "arpa")) {
-						qr.server = ARPA_SERVER;
-					} else if (!strcmp (ex, "biz")) {
-						qr.server = BIZ_SERVER;
-					} else if (!strcmp (ex, "cat")) {
-						qr.server = CAT_SERVER;
-					} else if (!strcmp (ex, "coop")) {
-						qr.server = COOP_SERVER;
-					} else if (!strcmp (ex, "gov")) {
-						qr.server = GOV_SERVER;
-					} else if (!strcmp (ex, "info")) {
-						qr.server = INFO_SERVER;
-					} else if (!strcmp (ex, "int")) {
-						qr.server = INT_SERVER;
-					} else if (!strcmp (ex, "jobs")) {
-						qr.server = JOBS_SERVER;
-					} else if (!strcmp (ex, "mil")) {
-						qr.server = MIL_SERVER;
-					} else if (!strcmp (ex, "mobi")) {
-						qr.server = MOVI_SERVER;
-					} else if (!strcmp (ex, "museum")) {
-						qr.server = MUSEUM_SERVER;
-					} else if (!strcmp (ex, "name")) {
-						qr.server = NAME_SERVER;
-					} else if (!strcmp (ex, "org")) {
-						qr.server = ORG_SERVER;
-					} else if (!strcmp (ex, "pro")) {
-						qr.server = PRO_SERVER;
-					} else if (!strcmp (ex, "tel")) {
-						qr.server = TEL_SERVER;
-					} else if (!strcmp (ex, "travel")) {
-						qr.server = TRAVEL_SERVER;
-					} else if (!strcmp (ex, "xxx")) {
-						qr.server = XXX_SERVER;
-					} else if ( ! strcmp (ex, "ip address") ) {
-						qr.server = LU_SERVER;
 					} else {
-#ifdef HAVE_LIBOGC
-						// 2 depth domain
-						if ( preg_match ("/((br|cn|eu|gb|hu|no|qc|sa|se|uk|us|uy|za)\\.com|(gb|se|uk)\\.net)$/i", qr.query) )
-							qr.server = CENTRALNIC_SERVER;
-						else
-#endif
-							qr.server = DEFAULT_SERVER;
+						const char **p = NULL;
+
+						for ( p = tlds; *p; p += 2 ) {
+							if ( ! strcasecmp (ex, *p) ) {
+								p++;
+								qr.server = (char *) *p;
+								goto confirm_qrserver;
+							}
+						}
+
+						// new gTlds
+						for ( p = new_tglds; *p; p++ ) {
+							if ( ! strcasecmp (ex, *p) ) {
+								char tmphost[50];
+								sprintf (tmphost, "whois.nic.%s", ex);
+								qr.server = tmphost;
+								goto confirm_qrserver;
+							}
+						}
+
+						qr.server = DEFAULT_SERVER;
 					}
 				}
 			}
@@ -614,6 +600,8 @@ int main (int argc, char ** argv) {
 		/* get contry code */
 		ex = strdup (get_tail (qr.query));
 	}
+
+confirm_qrserver:
 
 	/* If the server name includes a colon, snip the name there and
 	 * assume everything to the right is a port number. */
@@ -664,18 +652,6 @@ int main (int argc, char ** argv) {
 #endif
 	free (qr.query);
 	free (ex);
-
-	return 0;
-} // }}}
-
-// {{{ int check_code (char * tail)
-int check_code (char * tail) {
-	if ( ! strcasecmp ( tail, "com" ) || ! strcasecmp ( tail, "net" ) ) {
-		return 1;
-	} else if ( ! strcasecmp ( tail, "org" ) || ! strcasecmp ( tail, "info" ) ||
-			    ! strcasecmp ( tail, "biz" ) || ! strcasecmp ( tail, "name" ) ) {
-		return 2;
-	}
 
 	return 0;
 } // }}}
@@ -798,6 +774,21 @@ void str_toupper (char *buf) {
 		buf[i] = toupper (buf[i]);
 #endif
 } // }}}
+
+// {{{ char * check_2depth (char * ext)
+char * check_2depth (char * ext) {
+	const char **p = NULL;
+
+	for ( p = two_depth_tlds; *p; p += 2 ) {
+		if ( ! strcasecmp (ext, *p) ) {
+			p++;
+			return (char *) *p;
+		}
+	}
+
+	return NULL;
+}
+// }}}
 
 /*
  * Local variables:

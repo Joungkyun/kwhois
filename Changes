@@ -1,6 +1,10 @@
 Changes by JoungKyun.Kim <http://www.oops.org>
 $Id$
 
+* Wed Jul 16 2014
+  by JoungKyun.Kim <http://oops.org>
+  - support new gTlds
+
 * Wed Jun 18 2014
   by JoungKyun.Kim <http://oops.org>
   - start 4.1 tree
