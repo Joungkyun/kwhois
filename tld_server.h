@@ -31,7 +31,7 @@ const char * tlds[] = {
 	"com", "whois.networksolutions.com",
 	"net", "whois.networksolutions.com",
 	"org", "whois.pir.org",
-	"gov", "whois.nic.gov"
+	"gov", "whois.nic.gov",
 	"asia", "whois.nic.asia",
 	"aero", "whois.aero",
 	"arpa", "whois.iana.org",
@@ -50,6 +50,39 @@ const char * tlds[] = {
 	"tel", "whois.nic.tel",
 	"trabel", "whois.nic.travel",
 	"xxx", "whois.nic.xxx",
+	"xn--3e0b707e", "whois.kr",                  // Korea, Republic of
+	"xn--45brj9c", "whois.inregistry.net",       // India, Bengali AW
+	"xn--80ao21a", "whois.nic.kz",               // Kazakhstan
+	"xn--90a3ac", "whois.rnids.rs",              // Serbia
+	"xn--clchc0ea0b2g2a9gcd", "whois.sgnic.sg",  // Singapore, Tamil
+	"xn--fiqs8s", "cwhois.cnnic.cn",             // China, Simplified Chinese
+	"xn--fiqz9s", "cwhois.cnnic.cn",             // China, Traditional Chinese
+	"xn--fpcrj9c3d", "whois.inregistry.net",     // India, Telugu AW
+	"xn--fzc2c9e2c", "whois.nic.lk",             // Sri Lanka, Sinhala
+	"xn--gecrj9c", "whois.inregistry.net",       // India, Gujarati AW
+	"xn--h2brj9c", "whois.inregistry.net",       // India, Hindi AW
+	"xn--j1amh", "whois.dotukr.com",             // Ukraine
+	"xn--j6w193g", "whois.hkirc.hk",             // Hong Kong
+	"xn--kprw13d", "whois.twnic.net.tw",         // Taiwan, Simplified Chinese
+	"xn--kpry57d", "whois.twnic.net.tw",         // Taiwan, Traditional Chinese
+	"xn--l1acc", "whois.nic.mn",                 // Mongolia AW
+	"xn--lgbbat1ad8j", "whois.nic.dz",           // Algeria
+	"xn--mgb9awbf", "whois.registry.om",         // Oman AW
+	"xn--mgba3a4f16a", "whois.nic.ir",           // Iran
+	"xn--mgbaam7a8h", "whois.aeda.net.ae",       // United Arab Emirates
+	"xn--mgbbh1a71e", "whois.inregistry.net",    // India, Urdu AW
+	"xn--mgberp4a5d4ar", "whois.nic.net.sa",     // Saudi Arabia
+	"xn--mgbx4cd0ab", "whois.domainregistry.my", // Malaysia AW
+	"xn--o3cw4h", "whois.thnic.co.th",           // Thailand
+	"xn--ogbpf8fl", "whois.tld.sy",              // Syria
+	"xn--p1ai", "whois.tcinet.ru",               // Russian Federation
+	"xn--s9brj9c", "whois.inregistry.net",       // India, Punjabi AW
+	"xn--wgbh1c", "whois.dotmasr.eg",            // Egypt
+	"xn--wgbl6a", "whois.registry.qa",           // Qatar
+	"xn--xkc2al3hye2a", "whois.nic.lk",          // Sri Lanka, Tamil
+	"xn--xkc2dl3a5ee0h", "whois.inregistry.net", // India, Tamil AW
+	"xn--yfro4i67o", "whois.sgnic.sg",           // Singapore, Chinese
+	"xn--ygbi2ammx", "whois.pnina.ps",           // Palestinian Territory
 	NULL, NULL
 };
 

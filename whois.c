@@ -712,6 +712,13 @@ char * get_tail (char * query) {
 		if ( gettail == null )
 			return "";
 
+#ifdef HAVE_LIBOGC
+#if HAVE_LIBOC_VER == 1
+		return convert_punycode (gettail + 1, NULL);
+#else
+		return convert_punycode (gettail + 1, 0, 0);
+#endif
+#endif
 		return gettail + 1;
 	}
 } // }}}

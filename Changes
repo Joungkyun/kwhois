@@ -5,6 +5,7 @@ $Id$
   by JoungKyun.Kim <http://oops.org>
   - support new gTlds
   - enhanced recurse processing
+  - enahnced IDN processing
 
 * Wed Jun 18 2014
   by JoungKyun.Kim <http://oops.org>
