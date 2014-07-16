@@ -30,7 +30,7 @@ dist_doc_DATA = Changes INSTALL LICENSE
 SUBDIRS = . libidn docs po
 
 AM_CFLAGS = -Wall
-include_HEADERS = i18n.h tld_server.h
+include_HEADERS = i18n.h tld_server.h new_gtlds.h
 
 bin_PROGRAMS = kwhois
 kwhois_SOURCES = whois.c i18n.c
