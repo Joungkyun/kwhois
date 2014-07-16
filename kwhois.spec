@@ -4,7 +4,7 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 4.1
+Version: 4.2
 Release: 1
 Epoch: 8
 License: GPL
@@ -48,7 +48,10 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
-* Tue Apr 22 2014 JoungKyun.Kim <http://oops.org> 8:40.-1
+* Wed Jul 16 2014 JoungKyun.Kim <http://oops.org> 8:4.1-1
+- update 4.1
+
+* Tue Apr 22 2014 JoungKyun.Kim <http://oops.org> 8:4.0-1
 - update 4.0
 
 * Mon Jan  2 2013 JoungKyun.Kim <http://oops.org> 8:3.9-1
