@@ -125,6 +125,8 @@ static void get_next_server (char * buf, char ** server) {
 
 	if ( (p = strstr (next, "whois://")) != null )
 		next = p + 8;
+	else if ( (p = strstr (next, "http://")) != null )
+		next = p + 7;
 
 	if ( strchr (next, '.') == null ) {
 		char	* q;
@@ -372,6 +374,7 @@ skip_iconv:
 		v->server = next_server;
 		//v->recurse -= 1;
 
+		printf ("\n-------------------------------------------\n");
 		printf ("** Recurse try to ");
 #ifdef HAVE_LIBOGC
 		setansi (stdout, OC_RED, false);

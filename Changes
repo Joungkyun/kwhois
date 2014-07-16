@@ -4,6 +4,7 @@ $Id$
 * Wed Jul 16 2014
   by JoungKyun.Kim <http://oops.org>
   - support new gTlds
+  - enhanced recurse processing
 
 * Wed Jun 18 2014
   by JoungKyun.Kim <http://oops.org>
