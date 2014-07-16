@@ -3,6 +3,7 @@ $Id$
 
 * Wed Jul 16 2014
   by JoungKyun.Kim <http://oops.org>
+  - release 4.1
   - support new gTlds
   - enhanced recurse processing
   - enahnced IDN processing
