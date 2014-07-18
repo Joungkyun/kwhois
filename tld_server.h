@@ -8,7 +8,8 @@
 #define TLD_SERVER_H
 
 #ifndef DEFAULT_SERVER
-#define DEFAULT_SERVER "whois.crsnic.net"
+#define DEFAULT_SERVER "whois.verisign-grs.com"
+//#define DEFAULT_SERVER "whois.crsnic.net"
 #endif
 
 #define LO_SERVER     "whois-servers.net"
@@ -28,8 +29,8 @@
 #include "new_gtlds.h"
 
 const char * tlds[] = {
-	"com", "whois.networksolutions.com",
-	"net", "whois.networksolutions.com",
+	"com", DEFAULT_SERVER,
+	"net", DEFAULT_SERVER,
 	"org", "whois.pir.org",
 	"gov", "whois.nic.gov",
 	"asia", "whois.nic.asia",
