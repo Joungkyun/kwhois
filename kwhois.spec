@@ -48,6 +48,9 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
+* Fri Jul 18 2014 JoungKyun.Kim <http://oops.org> 8:4.2-1
+- update 4.2
+
 * Wed Jul 16 2014 JoungKyun.Kim <http://oops.org> 8:4.1-1
 - update 4.1
 
