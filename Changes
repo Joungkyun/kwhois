@@ -3,6 +3,7 @@ $Id$
 
 * Wed Jul 23 2014
   by JoungKyun.Kim <http://oops.org>
+  - Release 4.3
   - fixed wrong check 2depth domain (ex co.kr)
 
 * Fri Jul 18 2014

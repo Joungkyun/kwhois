@@ -48,6 +48,10 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
+* Wed Jul 23 2014 JoungKyun.Kim <http://oops.org> 8:4.3-1
+- release 4.3
+- fixed wrong check 2depth domain (ex co.kr)
+
 * Fri Jul 18 2014 JoungKyun.Kim <http://oops.org> 8:4.2-1
 - update 4.2
 
