@@ -4,7 +4,7 @@
 # $Id$
 
 AC_PREREQ(2.59)
-AC_INIT([kwhois], [4.3], [http://oops.org])
+AC_INIT([kwhois], [4.4], [http://oops.org])
 
 AC_CONFIG_AUX_DIR([tools])
 AM_INIT_AUTOMAKE([-Wall -Werror -Wno-override foreign no-dependencies])
