@@ -544,12 +544,15 @@ int main (int argc, char ** argv) {
 #ifdef HAVE_LIBOGC
 					const char ** matches = NULL;
 					if ( preg_match_r ("/[^.]+(\\.[^.]+\\.[^.]+)$/", qr.query, &matches) > 0 ) {
-						if ( ex != NULL )
-							free (ex);
-						ex = strdup (matches[1]);
-						qr.server = check_2depth (ex);
-						if ( qr.server != NULL )
+						qr.server = check_2depth (matches[1]);
+
+						if ( qr.server != NULL ) {
+							if ( ex != NULL )
+								free (ex);
+							ex = strdup (matches[1]);
+
 							goto confirm_qrserver;
+						}
 					}
 #endif
 
