@@ -1,8 +1,7 @@
 $Id$
 
 [ ENGLISH MESSAGE ]
-kwhois (korean finger and traditional style whois) by JoungKyun Kim <admin@oops.org>
-                                                    in OOPS development organization
+kwhois (korean finger and traditional style whois) by JoungKyun Kim <http://oops.org>
 
 Installation
 
@@ -12,16 +11,13 @@ Installation
 4. make install
 
 
-                                 LAST Modified 2002.09.13
-                                 JoungKyun Kim <admin@oops.org>
-                                 In OOPS development organization
-                                            <http://www.oops.org>
+                                 LAST Modified 2014.07.23
+                                 JoungKyun Kim <http://oops.org>
 
 
 [ KOREAN MESSAGE ]
 
-kwhois (전통적 방식과 핑커 방식의 whois) by JoungKyun Kim <admin@oops.org>
-                                            in OOPS development organization
+kwhois (전통적 방식과 핑커 방식의 whois) by JoungKyun Kim <http://oops.org>
 
 설치
 
@@ -31,7 +27,5 @@ kwhois (전통적 방식과 핑커 방식의 whois) by JoungKyun Kim <admin@oops.org>
 4. make install
 
 
-                                 마지막 수정 2002.09.13
-                                 김정균 <admin@oops.org>
-                                 In OOPS development organization
-                                            <http://www.oops.org>
+                                 마지막 수정 2014.07.23
+                                 김정균 <http://oops.org>
