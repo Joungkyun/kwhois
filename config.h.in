@@ -50,7 +50,7 @@
 /* Define to 1 if you have under olibc 1.0.0 */
 #undef HAVE_LIBOC_VER
 
-/* Define to 1 if you have the `ogc' library (-logc). */
+/* Define to 1 if you have the `oc' library (-loc). */
 #undef HAVE_LIBOGC
 
 /* Define to 1 if you have the `resolv' library (-lresolv). */
