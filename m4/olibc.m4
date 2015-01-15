@@ -52,12 +52,12 @@ AC_DEFUN([AX_OLIBC],
 		LDFLAGS="$olibc_ldflags"
 
 		AC_CHECK_LIB(
-			oc, convert_punycode, [
+			olibc, convert_punycode, [
 				AC_DEFINE(
 					[HAVE_LIBOGC], 1,
-					[Define to 1 if you have the `oc' library (-loc).]
+					[Define to 1 if you have the `olibc' library (-lolibc).]
 				)
-				LIBS="-loc $LIBS"
+				LIBS="-lolibc $LIBS"
 				AC_CHECK_LIB(
 					olibc, join, [
 						AC_DEFINE(
