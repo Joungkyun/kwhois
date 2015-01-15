@@ -1,6 +1,10 @@
 Changes by JoungKyun.Kim <http://www.oops.org>
 $Id$
 
+* Fri Jan 16 2015
+  by JoungKyun.Kim <http://oops.org>
+  - fixed wrong check olibc version
+
 * Wed Jul 23 2014
   by JoungKyun.Kim <http://oops.org>
   - Release 4.3

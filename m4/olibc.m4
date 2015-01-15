@@ -59,7 +59,7 @@ AC_DEFUN([AX_OLIBC],
 				)
 				LIBS="-logc $LIBS"
 				AC_CHECK_LIB(
-					ogc, join, [
+					olibc, join, [
 						AC_DEFINE(
 							[HAVE_LIBOC_VER], 1,
 							[Define to 0 if you have over olibc 1.0.0]

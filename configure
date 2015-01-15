@@ -4630,13 +4630,13 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 				LIBS="-logc $LIBS"
-				{ $as_echo "$as_me:$LINENO: checking for join in -logc" >&5
-$as_echo_n "checking for join in -logc... " >&6; }
-if test "${ac_cv_lib_ogc_join+set}" = set; then
+				{ $as_echo "$as_me:$LINENO: checking for join in -lolibc" >&5
+$as_echo_n "checking for join in -lolibc... " >&6; }
+if test "${ac_cv_lib_olibc_join+set}" = set; then
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-logc  $LIBS"
+LIBS="-lolibc  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -4680,12 +4680,12 @@ $as_echo "$ac_try_echo") >&5
 	 test "$cross_compiling" = yes ||
 	 $as_test_x conftest$ac_exeext
        }; then
-  ac_cv_lib_ogc_join=yes
+  ac_cv_lib_olibc_join=yes
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_cv_lib_ogc_join=no
+	ac_cv_lib_olibc_join=no
 fi
 
 rm -rf conftest.dSYM
@@ -4693,9 +4693,9 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_ogc_join" >&5
-$as_echo "$ac_cv_lib_ogc_join" >&6; }
-if test "x$ac_cv_lib_ogc_join" = x""yes; then
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_olibc_join" >&5
+$as_echo "$ac_cv_lib_olibc_join" >&6; }
+if test "x$ac_cv_lib_olibc_join" = x""yes; then
 
 
 cat >>confdefs.h <<\_ACEOF
