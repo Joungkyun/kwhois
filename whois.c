@@ -374,6 +374,18 @@ skip_iconv:
 		v->server = next_server;
 		//v->recurse -= 1;
 
+		if ( is_ipaddr (v->query) && ! strcmp (v->server + 3, "whois-servers.net") ) {
+			// support ipaddress query
+			if (
+					strncmp (v->server, "kr", 2) &&
+					strncmp (v->server, "jp", 2) &&
+					strncmp (v->server, "tw", 2) &&
+					strncmp (v->server, "br", 2)
+				) {
+				return;
+			}
+		}
+
 		printf ("\n-------------------------------------------\n");
 		printf ("** Recurse try to ");
 #ifdef HAVE_LIBOGC
@@ -683,7 +695,7 @@ char * parseQuery (char * qry, char * wserv) {
 	if ( ! strcmp ("jp", ex) ) {
 		sprintf ( query, "%s/e\r\n", tmp);
 	} else if ( ! strcmp ("ip address", ex) && ! strcasecmp (wserv, LU_SERVER) ) {
-		sprintf ( query, "n %s\r\n", tmp);
+		sprintf ( query, "n + %s\r\n", tmp);
 	} else
 		sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
 

@@ -1,6 +1,10 @@
 Changes by JoungKyun.Kim <http://www.oops.org>
 $Id$
 
+* Sat Jan 17 2015
+  by JoungKyun.Kim <http://oops.org>
+  - enhanced ip address lookup
+
 * Fri Jan 16 2015
   by JoungKyun.Kim <http://oops.org>
   - fixed wrong check olibc version
