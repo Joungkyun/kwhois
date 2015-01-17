@@ -15,7 +15,7 @@ dnl
 dnl You should have received a copy of the GNU Lesser General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 dnl
-dnl $Id$
+dnl $Id: olibc.m4 124 2015-01-15 15:31:18Z oops $
 
 AC_DEFUN([AX_OLIBC],
 [

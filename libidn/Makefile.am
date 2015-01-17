@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id$
+# $Id: Makefile.am 67 2011-09-10 19:25:25Z oops $
 
 DEFS	     	 = @DEFS@ -DLANGDIR=\"@localedir@\"
 

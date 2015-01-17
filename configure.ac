@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for kwhois
 #
-# $Id$
+# $Id: configure.ac 121 2014-07-23 08:00:33Z oops $
 
 AC_PREREQ(2.59)
 AC_INIT([kwhois], [4.4], [http://oops.org])

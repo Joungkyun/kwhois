@@ -3,7 +3,7 @@
 # JoungKyun Kim <http://oops.org>, 2011.
 # make by xgettext -d ko -k_ -s whois.c
 # if you merge new version, msgmerge -U old.po new.po
-# $Id$
+# $Id: ko.po 79 2011-09-16 07:49:27Z oops $
 #
 #, fuzzy
 msgid ""

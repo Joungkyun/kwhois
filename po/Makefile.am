@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id$
+# $Id: Makefile.am 77 2011-09-15 07:07:43Z oops $
 
 CLEANFILES = POTFILES *.mo
 EXTRA_DIST = default.pot ko.po

@@ -17,7 +17,7 @@
  * along with GNU Libidn; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * $Id$
+ * $Id: idn.c 83 2012-04-18 05:15:15Z oops $
  */
 
 #ifdef HAVE_CONFIG_H

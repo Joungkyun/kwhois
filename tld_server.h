@@ -1,7 +1,7 @@
 /*
  * Name server list per domain extensions.
  *
- * $Id$
+ * $Id: tld_server.h 115 2014-07-18 07:45:25Z oops $
  */
 
 #ifndef TLD_SERVER_H

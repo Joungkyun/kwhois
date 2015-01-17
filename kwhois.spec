@@ -1,5 +1,5 @@
 %define _unpackaged_files_terminate_build 0
-%define svnid $Id$
+%define svnid $Id: kwhois.spec 121 2014-07-23 08:00:33Z oops $
 
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램

@@ -1,6 +1,6 @@
 /*
  * CVS ID Tag
- * $Id$
+ * $Id: acconfig.h 60 2011-05-01 15:35:00Z oops $
  */
 #ifndef CONFIG_H
 #define CONFIG_H
