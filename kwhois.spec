@@ -4,15 +4,16 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 4.4
+Version: 4.5
 Release: 1
 Epoch: 8
 License: GPL
 Group: Applications/Internet
-Url: http://oops.org/
-Source0: ftp://mirror.oops.org/pub/oops/kwhois/kwhois-%{version}.tar.bz2
+Url: https://github.com/Joungkyun/kwhois
+Source0: https://github.com/Joungkyun/kwhois/archive/%{version}/%{name}-%{version}.tar.gz
 Buildroot: /var/tmp/kwhois-root
-Conflicts: fwhois, whois
+Conflicts: fwhois
+Provides: whois
 
 Packager: JoungKyun.Kim <http://oops.org>
 Vendor: OOPS Development ORG
@@ -48,6 +49,9 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
+* Sat Jan 17 2015 JoungKyun.Kim <http://oops.org> 8:4.4-1
+- update 4.4
+
 * Wed Jul 23 2014 JoungKyun.Kim <http://oops.org> 8:4.3-1
 - release 4.3
 - fixed wrong check 2depth domain (ex co.kr)
