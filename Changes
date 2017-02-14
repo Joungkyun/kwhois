@@ -5,6 +5,7 @@ KWHOIS Changelogs
   by JoungKyun.Kim <http://oops.org>
   - fixed #1 Wrong license GPL 2.1
   - fixed #2 segfault occurs when domain ends with a dot
+  - fixed #3 qr.server has gabage data when whois server set with @whois-server format
 
 * Sat Jan 17 2015
   by JoungKyun.Kim <http://oops.org>

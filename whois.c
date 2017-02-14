@@ -272,24 +272,17 @@ process_query (Pquery * v) {
 		ICONV_CONST
 		char	* from;
 		char	* to,
-				* to_conv,
-				* ext;
+				* to_conv;
 		size_t	flen,
 				tlen;
 		int		ic = current_charset ();
 
-		if ( ! strncasecmp (v->server + 3, "whois-server", 12) ) {
-			if ( ! strncasecmp (v->server, "kr", 2) )
-				ext = "kr";
-			else
-				ext = "";
-		} else if (
-					! strcasecmp (v->server, "whois.krnic.net") ||
-					! strcasecmp (v->server, "whois.kisa.or.kr") ||
-					! strcasecmp (v->server, "whois.kisa.kr") ||
-					! strcasecmp (v->server, "oldwhois.kisa.or.kr")
-				) {
-			ext = "kr";
+		if (
+				! strcasecmp (v->server, "whois.krnic.net") ||
+				! strcasecmp (v->server, "whois.kisa.or.kr") ||
+				! strcasecmp (v->server, "whois.kisa.kr") ||
+				! strcasecmp (v->server, "oldwhois.kisa.or.kr")
+			) {
 
 			if ( ! strncasecmp (v->server, "oldwhois.", 9) ) {
 				if ( ! ic ) {
@@ -302,8 +295,7 @@ process_query (Pquery * v) {
 					printf ("Charset: Original charset is UTF-8 and kwhois convert to EUC-KR\n");
 				}
 			}
-		} else
-			ext = get_tail (v->server);
+		}
 
 #endif
 	memset (buf, 0, sizeof (buf));
@@ -413,6 +405,12 @@ skip_iconv:
 	}
 } // }}}
 
+void set_server (Pquery * qr, char * value) {
+	if ( qr->server != null )
+		free (qr->server);
+	qr->server = strdup (value);
+}	
+
 // {{{ int main (int argc, char ** argv)
 int main (int argc, char ** argv) {
 	char	* name = null;
@@ -443,7 +441,7 @@ int main (int argc, char ** argv) {
 			case 'h':
 				/* The -h option for traditional whois specifies
 				 * the server to query. */
-				qr.server = optarg;
+				set_server (&qr, optarg);
 				break;
 			case 'p':
 				/* Use an alternate port.  This can be a name
@@ -524,9 +522,9 @@ int main (int argc, char ** argv) {
 	 * This handles fwhois/finger syntax. */
 	if ( qr.server == null ) {
 		if ( strrchr (qr.query, '@') != null) {
-			qr.server = strrchr (qr.query, '@');
-			qr.server[0] = '\0';
-			qr.server++;
+			char *p = strrchr (qr.query, '@');
+			set_server (&qr, p + 1);
+			*p = 0;
 
 			/* get contry code */
 			ex = strdup (get_tail (qr.query));
@@ -535,20 +533,20 @@ int main (int argc, char ** argv) {
 			ex = strdup (get_tail (qr.query));
 
 			if ( ! strcmp (ex, "ip address") )
-				qr.server = LU_SERVER;
+				set_server (&qr, LU_SERVER);
 
 			/* Nothing there either.  Use the NICNAMESERVER,
 			 * WHOISSERVER, or DEFAULT_SERVER, in that order. */
 			if ( (qr.server == null) && getenv ("NICNAMESERVER") ) {
-				qr.server = getenv ("NICNAMESERVER");
+				set_server (&qr, getenv ("NICNAMESERVER"));
 			} else {
 				if ( (qr.server == null) && getenv ("WHOISSERVER") ) {
-					qr.server = getenv ("WHOISSERVER");
+					set_server (&qr, getenv ("WHOISSERVER"));
 				} else if ( !ex ) {
-					qr.server = DEFAULT_SERVER;
+					set_server (&qr, DEFAULT_SERVER);
 				} else {
 					if ( ! strcmp (ex, "ip address") ) {
-						qr.server = LU_SERVER;
+						set_server (&qr, LU_SERVER);
 						goto confirm_qrserver;
 					}
 
@@ -556,9 +554,11 @@ int main (int argc, char ** argv) {
 #ifdef HAVE_LIBOGC
 					const char ** matches = NULL;
 					if ( preg_match_r ("/[^.]+(\\.[^.]+\\.[^.]+)$/", qr.query, &matches) > 0 ) {
-						qr.server = check_2depth (matches[1]);
+						char *p;
+						p = check_2depth((char *) matches[1]);
 
 						if ( qr.server != NULL ) {
+							set_server (&qr, p);
 							if ( ex != NULL )
 								free (ex);
 							ex = strdup (matches[1]);
@@ -587,14 +587,14 @@ int main (int argc, char ** argv) {
 						else
 							sprintf (tmphost, "%c%c.%s", ex[0], ex[1], LO_SERVER);
 
-						qr.server = tmphost;
+						set_server (&qr, tmphost);
 					} else {
 						const char **p = NULL;
 
 						for ( p = tlds; *p; p += 2 ) {
 							if ( ! strcasecmp (ex, *p) ) {
 								p++;
-								qr.server = (char *) *p;
+								set_server (&qr, (char *) *p);
 								goto confirm_qrserver;
 							}
 						}
@@ -604,12 +604,12 @@ int main (int argc, char ** argv) {
 							if ( ! strcasecmp (ex, *p) ) {
 								char tmphost[50];
 								sprintf (tmphost, "whois.nic.%s", ex);
-								qr.server = tmphost;
+								set_server (&qr, tmphost);
 								goto confirm_qrserver;
 							}
 						}
 
-						qr.server = DEFAULT_SERVER;
+						set_server (&qr, DEFAULT_SERVER);
 					}
 				}
 			}
@@ -625,7 +625,7 @@ confirm_qrserver:
 	 * assume everything to the right is a port number. */
 	if ( strchr ( qr.server, ':') != null ) {
 		qr.port = strchr (qr.server, ':');
-		qr.port[0] = '\0';
+		*qr.port = 0;
 		qr.port++;
 	}
 
@@ -669,6 +669,8 @@ confirm_qrserver:
 	process_query (&qr);
 #endif
 	free (qr.query);
+	if ( qr.server != null )
+		free (qr.server);
 	free (ex);
 
 	return 0;
