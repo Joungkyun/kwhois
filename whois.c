@@ -723,7 +723,12 @@ char * get_tail (char * query) {
 	if ( is_ipaddr (query) ) {
 		return "ip address";
 	} else {
-		gettail = rindex (query, '.');
+		do {
+			if ( gettail != null )
+				*gettail = 0;
+			gettail = rindex (query, '.');
+		} while ( gettail != null && ! strcmp (gettail, ".") );
+
 		if ( gettail == null )
 			return "";
 
