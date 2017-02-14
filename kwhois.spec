@@ -49,6 +49,12 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
+* Wed Feb 15 2017 JoungKyun.Kim <http://oops.org> 8:4.5-1
+- update 4.5
+- fixed #1 Wrong license GPL 2.1
+- fixed #2 segfault occurs when domain ends with a dot
+- fixed #3 qr.server has gabage data when whois server set with @whois-server format
+
 * Sat Jan 17 2015 JoungKyun.Kim <http://oops.org> 8:4.4-1
 - update 4.4
 
