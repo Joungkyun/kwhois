@@ -39,14 +39,23 @@ char *progs = "punyconv";
 void usage (void);
 
 int main (int argc, char *argv[]) {
-	int opt, res = 0, debug = 0;
+	int opt;
+#if HAVE_LIBOC_VER == 0
+	int res = 0, debug = 0;
+#endif
 
 #ifdef ENABLE_NLS
 	i18n_print();
 #endif
 
-	while ((opt = getopt(argc,argv, "auvh?")) != -1) {
+#if HAVE_LIBOC_VER == 0
+	while ( (opt = getopt (argc,argv, "auvh?")) != -1 )
+#else
+	while ( (opt = getopt (argc,argv, "h?")) != -1 )
+#endif
+	{	
 		switch (opt) {
+#if HAVE_LIBOC_VER == 0
 			case 'a' :
 				res = 0;
 				break;
@@ -56,6 +65,7 @@ int main (int argc, char *argv[]) {
 			case 'v' :
 				debug = 1;
 				break;
+#endif
 			default :
 				usage();
 		}
@@ -78,9 +88,11 @@ void usage (void) {
 	fprintf (stderr, _("Usage: %s [OPTIONS...] convert_domain\n"), progs);
 	fprintf (stderr, _("valid options:\n"));
 	fprintf (stderr, _("    -h    help message (this message)\n"));
+#if HAVE_LIBOC_VER == 0
 	fprintf (stderr, _("    -a    convert EUC-KR to Punycode\n"));
 	fprintf (stderr, _("    -u    convert punycode to EUC-KR\n"));
 	fprintf (stderr, _("    -v    verbose mode\n"));
+#endif
 
 	exit (1);
 }
