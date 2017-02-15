@@ -98,6 +98,14 @@ void alarm_handler (int signum) {
 	exit (0);
 } // }}}
 
+// {{{ +-- void set_server (Pquery * qr, char * value)
+void set_server (Pquery * qr, char * value) {
+	if ( qr->server != null )
+		free (qr->server);
+	qr->server = strdup (value);
+}	
+// }}}
+
 // {{{ static void get_next_server (char * buf, char ** server)
 static void get_next_server (char * buf, char ** server) {
 	char	* p = null;
@@ -363,7 +371,7 @@ skip_iconv:
 		alarm (0);
 
 	if ( v->recurse > 0 && next_server != null && strcasecmp (next_server, v->server) ) {
-		v->server = next_server;
+		set_server (v, next_server);
 		//v->recurse -= 1;
 
 		if ( is_ipaddr (v->query) && ! strcmp (v->server + 3, "whois-servers.net") ) {
@@ -404,12 +412,6 @@ skip_iconv:
 		free (next_server);
 	}
 } // }}}
-
-void set_server (Pquery * qr, char * value) {
-	if ( qr->server != null )
-		free (qr->server);
-	qr->server = strdup (value);
-}	
 
 // {{{ int main (int argc, char ** argv)
 int main (int argc, char ** argv) {
