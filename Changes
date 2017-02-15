@@ -3,6 +3,7 @@ KWHOIS Changelogs
 
 * Wed Feb 15 2017
   by JoungKyun.Kim <http://oops.org>
+  - Release 4.5
   - fixed #1 Wrong license GPL 2.1
   - fixed #2 segfault occurs when domain ends with a dot
   - fixed #3 qr.server has gabage data when whois server set with @whois-server format
