@@ -4,7 +4,7 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 4.5
+Version: 4.6
 Release: 1
 Epoch: 8
 License: GPL
