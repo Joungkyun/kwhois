@@ -4,7 +4,7 @@
 Summary: Internet whois/nicname client.
 Summary(ko): whois/nicname 클라이언트 프로그램
 Name: kwhois
-Version: 4.6
+Version: 4.7
 Release: 1
 Epoch: 8
 License: GPL
@@ -49,6 +49,10 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/locale/*/LC_MESSAGES/kwhois.mo
 
 %changelog
+* Wed Feb 15 2017 JoungKyun.Kim <http://oops.org> 8:4.6-1
+- update 4.6
+- fixed #4 If process_query api is recursive, occurs double free
+
 * Wed Feb 15 2017 JoungKyun.Kim <http://oops.org> 8:4.5-1
 - update 4.5
 - fixed #1 Wrong license GPL 2.1
