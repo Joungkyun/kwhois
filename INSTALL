@@ -1,5 +1,3 @@
-$Id$
-
 [ ENGLISH MESSAGE ]
 kwhois (korean finger and traditional style whois) by JoungKyun Kim <http://oops.org>
 
@@ -17,9 +15,9 @@ Installation
 
 [ KOREAN MESSAGE ]
 
-kwhois (ÀüÅëÀû ¹æ½Ä°ú ÇÎÄ¿ ¹æ½ÄÀÇ whois) by JoungKyun Kim <http://oops.org>
+kwhois (ì „í†µì  ë°©ì‹ê³¼ í•‘ì»¤ ë°©ì‹ì˜ whois) by JoungKyun Kim <http://oops.org>
 
-¼³Ä¡
+ì„¤ì¹˜
 
 1. gzip -d kwhois-%version
 2. cd kwhois-%version
@@ -27,5 +25,5 @@ kwhois (ÀüÅëÀû ¹æ½Ä°ú ÇÎÄ¿ ¹æ½ÄÀÇ whois) by JoungKyun Kim <http://oops.org>
 4. make install
 
 
-                                 ¸¶Áö¸· ¼öÁ¤ 2014.07.23
-                                 ±èÁ¤±Õ <http://oops.org>
+                                 ë§ˆì§€ë§‰ ìˆ˜ì • 2014.07.23
+                                 ê¹€ì •ê·  <http://oops.org>
