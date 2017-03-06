@@ -1,7 +1,6 @@
 /*
  * Name server list per domain extensions.
  *
- * $Id$
  */
 
 #ifndef TLD_SERVER_H

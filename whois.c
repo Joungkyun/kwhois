@@ -1,7 +1,7 @@
 /*
- *  Copyright (C) 2015 JoungKyun.Kim <http://oops.org/>
+ *  Copyright (C) 2017 JoungKyun.Kim <http://oops.org>
  *
- *  This file is part of libipcalc.
+ *  This file is part of kwhois.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,6 @@
  *  This program is forked from Nalin Dahyabhai's whois on 2001
  *    Nalin Dahyabhai <nalin@redhat.com>
  */
-#ident "$Id$"
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

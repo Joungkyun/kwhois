@@ -1,7 +1,3 @@
-/*
- * CVS ID Tag
- * $Id$
- */
 #ifndef CONFIG_H
 #define CONFIG_H
 

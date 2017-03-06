@@ -1,7 +1,5 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for kwhois
-#
-# $Id$
 
 AC_PREREQ(2.59)
 AC_INIT([kwhois], [4.7], [https://github.com/Joungkyun/kwhois/issues])
