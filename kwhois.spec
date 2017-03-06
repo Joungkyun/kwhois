@@ -50,6 +50,7 @@ make DESTDIR=%{buildroot} install
 
 %changelog
 * Tue Mar  7 2017 JoungKyun.Kim <http://oops.org> 8:4.7-1
+- update 4.7
 - fixed #5 can't detect godaddy whois server
 
 * Wed Feb 15 2017 JoungKyun.Kim <http://oops.org> 8:4.6-1

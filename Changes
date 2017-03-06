@@ -3,6 +3,7 @@ KWHOIS Changelogs
 
 * Tue Mar  7 2017
   by JoungKyun.Kim <http://oops.org>
+  - Release 4.7
   - fixed #5 can't detect godaddy whois server
 
 * Wed Feb 15 2017
