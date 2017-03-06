@@ -147,6 +147,18 @@ static void get_next_server (char * buf, char ** server) {
 		free (q);
 	} else
 		*server = strdup (next);
+
+	if ( *server != null ) {
+		char * chkbuf = null;
+		if ( (chkbuf = strchr (*server, '/')) != null ) {
+			*chkbuf = 0;
+		}
+
+		if ( strcasecmp (*server, "who.godaddy.com") == 0 ) {
+			free (*server);
+			*server = strdup ("whois.godaddy.com");
+		}
+	}
 }
 // }}}
 
