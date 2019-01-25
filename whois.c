@@ -157,6 +157,10 @@ static void get_next_server (char * buf, char ** server) {
 		if ( strcasecmp (*server, "who.godaddy.com") == 0 ) {
 			free (*server);
 			*server = strdup ("whois.godaddy.com");
+		} else if ( strncasecmp (*server, "www.", 4) == 0 ) {
+			// can't access www.verisigninc.com
+			free (*server);
+			*server = null;
 		}
 	}
 }
@@ -356,7 +360,7 @@ skip_iconv:
 
 		/* If the line includes the magic string, pull out the
 		 * name of the server we should talk to next. */
-		if ( strstr (ubuf, "REFERRALSERVER:") != null || strstr (ubuf, "WHOIS SERVER:") != null ) {
+		if ( strstr (ubuf, "REFERRALSERVER:") != null || strstr (ubuf, "WHOIS SERVER:") != null || strstr (ubuf, "WHOIS:") != null ) {
 			get_next_server (buf, &next_server);
 			v->recurse = 1;
 			if ( next_server == null || strlen (next_server) == 0 )
@@ -582,7 +586,9 @@ int main (int argc, char ** argv) {
 
 					if ( strlen (ex) == 2 ) {
 						char tmphost[50];
-						if ( !strcmp (ex, "bj") )
+						if ( !strcmp (ex, "ax") )
+							sprintf (tmphost, "%s", "whois.ax");
+						else if ( !strcmp (ex, "bj") )
 							sprintf (tmphost, "%s", BJ_SERVER);
 						else if ( !strcmp (ex, "bz") )
 							sprintf (tmphost, "%s", BZ_SERVER);
@@ -597,7 +603,7 @@ int main (int argc, char ** argv) {
 							sprintf (tmphost, "whois.nic.%c%c", ex[0], ex[1]);
 #endif
 						else
-							sprintf (tmphost, "%c%c.%s", ex[0], ex[1], LO_SERVER);
+							sprintf (tmphost, "%c%c.%s", ex[0], ex[1], CC_SERVER);
 
 						set_server (&qr, tmphost);
 					} else {
@@ -690,7 +696,7 @@ confirm_qrserver:
 
 // {{{ int crsCheck (char * wserv)
 int crsCheck (char * wserv) {
-	if ( ! strcmp ( wserv, DEFAULT_SERVER ) )
+	if ( ! strcmp ( wserv, VERISIGN_SERVER ) || ! strcmp ( wserv, "whois.nic.name" ) )
 		return 1;
 
 	return 0;
@@ -708,10 +714,16 @@ char * parseQuery (char * qry, char * wserv) {
 
 	if ( ! strcmp ("jp", ex) ) {
 		sprintf ( query, "%s/e\r\n", tmp);
+	} else if ( ! strcmp ("de", ex) ) {
+		sprintf ( query, "-T dn,ace %s\r\n", tmp);
+	} else if ( ! strcmp ("dk", ex) ) {
+		sprintf ( query, "--show-handles %s\r\n", tmp);
+	} else if ( ! strcmp ("cat", ex) ) {
+		sprintf ( query, "-C US-ASCII ace %s\r\n", tmp);
 	} else if ( ! strcmp ("ip address", ex) && ! strcasecmp (wserv, LU_SERVER) ) {
 		sprintf ( query, "n + %s\r\n", tmp);
 	} else
-		sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "=" : "", tmp);
+		sprintf ( query, "%s%s\r\n", crsCheck (wserv) ? "domain=" : "", tmp);
 
 	return query;
 } // }}}

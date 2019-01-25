@@ -1,63 +1,66 @@
 KWHOIS Changelogs
 
+* Sat Jan 26 2019
+  by JoungKyun.Kim <hostmaster@oops.org>
+  - fixed #6 add missing new gtdls
 
 * Tue Mar  7 2017
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - Release 4.7
   - fixed #5 can't detect godaddy whois server
 
 * Wed Feb 15 2017
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - Release 4.6
   - fixed #4 If process_query api is recursive, occurs double free
 
 * Wed Feb 15 2017
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - Release 4.5
   - fixed #1 Wrong license GPL 2.1
   - fixed #2 segfault occurs when domain ends with a dot
   - fixed #3 qr.server has gabage data when whois server set with @whois-server format
 
 * Sat Jan 17 2015
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - Release 4.4
   - enhanced ip address lookup
 
 * Fri Jan 16 2015
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - fixed wrong check olibc version
 
 * Wed Jul 23 2014
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - Release 4.3
   - fixed wrong check 2depth domain (ex co.kr)
 
 * Fri Jul 18 2014
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - start 4.3 tree
 
 * Fri Jul 18 2014
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - Release 4.2
   - fixed wrong search com/net extension
 
 * Wed Jul 16 2014
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - start 4.2 tree
 
 * Wed Jul 16 2014
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 4.1
   - support new gTlds
   - enhanced recurse processing
   - enahnced IDN processing
 
 * Wed Jun 18 2014
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - start 4.1 tree
 
 * Tue Apr 22 2014
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 4.0
   - fixed ip address lookup
   - enhanced ip address lookup
@@ -65,66 +68,66 @@ KWHOIS Changelogs
   - enhanced compare tld servers
 
 * Mon Jan  2 2013
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.9
   - support auto fixed charset about oldwhois.kisa.or.kr
   - add missing build environment files
 
 * Thu Nov 22 2012
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.8
   - support krnic whois renewal (change charset to utf-8)
 
 * Wed Apr 18 2012
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.7
   - support olibc 1.x
 
 * Fri Sep 16 2011
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - start 3.7
   - fixed wrong detect recurse server
 
 * Thu Sep 15 2011
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.6
   - improve recurse query (-r option)
   - fixed typo and update pot file
 
 * Sun Sep 11 2011
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - use automake
   - fixed intent and uncritical bugs
   - support utf-8 on KRNIC whois server
 
 * Wed Sep  7 2011
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - update LICENSE version to GPL 2.1
 
 * Wed Jul  9 2008
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.5
   - support long ip format
   - fixed memory corruption
 
 * Fri Sep  3 2004
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - fixed typo libidn.h
 
 * Tue Aug 10 2004
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.4
   - added olibc option on configure
   - changed ip address check
 
 * Tue Jun  8 2004
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - start 3.4
   - added crsnic check function
   - changed query parsing
 
 * Thu Jun  3 2004
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.3
   - changed query format for miss search domain
   - fixed some compile warning message
@@ -132,13 +135,13 @@ KWHOIS Changelogs
   - fixed library miss link
 
 * Wed Feb 11 2004
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.2
   - changed whois org server to pir.org
   - enabled support non case sensitive domain
 
 * Wed Feb  4 2004
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.1
   - removed idn library and linked olibc
   - changed convert method from race to puny on dot com multibyte domain
@@ -146,45 +149,45 @@ KWHOIS Changelogs
   - rewrite Makefile
 
 * Fri Aug 22 2003
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 3.0
   - supported to search multibyte domain (current only euc-kr)
   한글.kr          => convert punycode with -P option with gnu libidn
   한글.com/net/org => automatic convert racecode with libracode
 
 * Wed Mar 23 2003
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 2.3
   - fixed segmantfault in case of no tail
 
 * Fri Feb  7 2003
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 2.2
   - changed org registra server to whois.networksolutions.com
 
 * Sun Sep 15 2002
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 2.1
   - enable whole local domain in default
   - modified man file
 
 * Thu Sep 13 2002
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release 2.0
   - added traditional query type
   - added tv, biz, info whois server as default server
 
 * Thu Dec 02 1999
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release version 1.2
   - fixed Internic whois server to whois.networksolutions.com from rs.internic.net
 
 * Fri Nov 08 1999
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - release version 1.1
   - fixed search Handle ID
   - added ko locale
 
 * Fri Oct 29 1999
-  by JoungKyun.Kim <http://oops.org>
+  by JoungKyun.Kim <hostmaster@oops.org>
   - packaging kwhois-1.0-1 based on whois of redhat
