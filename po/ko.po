@@ -8,17 +8,18 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: kwhois 3.7\n"
+"Project-Id-Version: kwhois 4.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-15 15:22+0900\n"
-"PO-Revision-Date: 2011-09-15 15:26+0900\n"
-"Last-Translator: JoungKyun.Kim <http://oops.org>\n"
-"Language-Team: OOPS.org <http://oops.org>\n"
+"POT-Creation-Date: 2019-01-26 04:17+0900\n"
+"PO-Revision-Date: 2019-01-26 04:34+0900\n"
+"Last-Translator: JoungKyun.Kim <hostmaster@oops.org>\n"
+"Language-Team: OOPS.org <https://oops.org/>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../whois.c:539 ../whois.c:545
+#: ../whois.c:691 ../whois.c:697
 #, c-format
 msgid ""
 "\n"
@@ -26,149 +27,155 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../whois.c:340
+#: ../whois.c:436
 #, c-format
 msgid "[1;%dm=> Recurse Connection <=[7;0m\n"
 msgstr "[1;%dm=> 재귀 연결 <=[7;0m\n"
 
-#: ../whois.c:541
+#: ../whois.c:693
 #, c-format
 msgid "[1;%dmCONV HOST     :[7;0m %s\n"
 msgstr "[1;%dm변환 호스트   :[7;0m %s\n"
 
-#: ../whois.c:342 ../whois.c:540
+#: ../whois.c:438 ../whois.c:692
 #, c-format
 msgid "[1;%dmHOST          :[7;0m %s\n"
 msgstr "[1;%dm호스트        :[7;0m %s\n"
 
-#: ../whois.c:344 ../whois.c:544
+#: ../whois.c:440 ../whois.c:696
 #, c-format
 msgid "[1;%dmPORT          :[7;0m %s\n"
 msgstr "[1;%dm포트          :[7;0m %s\n"
 
-#: ../whois.c:343 ../whois.c:543
+#: ../whois.c:439 ../whois.c:695
 #, c-format
 msgid "[1;%dmSERVER        :[7;0m %s\n"
 msgstr "[1;%dm서버          :[7;0m %s\n"
 
-#: ../whois.c:542
+#: ../whois.c:694
 #, c-format
 msgid "[1;%dmTAIL          :[7;0m %s\n"
 msgstr "[1;%dm확장자        :[7;0m %s\n"
 
-#: ../whois.c:452
+#: ../whois.c:554
 #, c-format
-msgid "       --         treat remaining arguments as part of the query\n"
-msgstr "       --         쿼리의 일부분으로 취급됨\n"
+msgid ""
+"       --                 treat remaining arguments as part of the query\n"
+msgstr "       --                 쿼리의 일부분으로 취급됨\n"
 
-#: ../whois.c:446
+#: ../whois.c:555
 #, c-format
-msgid "       -h server  server name\n"
-msgstr "       -h 서버    whois 서버 이름\n"
+msgid "       -?|--help          print this messages\n"
+msgstr "       -?|--help          도움말 (현재 메세지)\n"
 
-#: ../whois.c:450
+#: ../whois.c:548
 #, c-format
-msgid "       -n         disable recursion\n"
-msgstr "       -n         반복 하지 않음\n"
+msgid "       -h|--host=server   server name\n"
+msgstr "       -h|--host=server   whois 서버\n"
 
-#: ../whois.c:447
+#: ../whois.c:552
 #, c-format
-msgid "       -p port    server port\n"
-msgstr "       -p 포트    서버 포트\n"
+msgid "       -n|--recurse-off   disable recursion\n"
+msgstr "       -n|--recurse-off   반복 하지 않음\n"
 
-#: ../whois.c:449
+#: ../whois.c:549
 #, c-format
-msgid "       -r         force recursion\n"
-msgstr "       -r         반복을 강행\n"
+msgid "       -p|--post=port     server port\n"
+msgstr "       -p|--post=port     서버 포트\n"
 
-#: ../whois.c:448
+#: ../whois.c:551
 #, c-format
-msgid "       -t timeout query time limit\n"
-msgstr "       -t 초      질의 시간 제한\n"
+msgid "       -r|--recurse-force force recursion\n"
+msgstr "       -r|--recurse-force 반복을 강행\n"
 
-#: ../whois.c:451
+#: ../whois.c:550
 #, c-format
-msgid "       -v         verbose mode\n"
-msgstr "       -v         디버그 모드\n"
+msgid "       -t|--tmout=timeout query time limit\n"
+msgstr "       -t|--tmout=timeout 질의 시간 제한\n"
 
-#: ../libidn/idn.c:77
+#: ../whois.c:553
+#, c-format
+msgid "       -v|--verbose       verbose mode\n"
+msgstr "       -v|--verbose       디버그 모드\n"
+
+#: ../libidn/idn.c:89
 #, c-format
 msgid "    -a    convert EUC-KR to Punycode\n"
 msgstr "    -a    EUC-KR을 punycode 로 변환\n"
 
-#: ../libracode/main.c:55
+#: ../libracode/main.c:57
 #, c-format
 msgid "    -a    convert EUC-KR to Race code\n"
 msgstr "    -a    EUC-KR을 racecode 로 변환\n"
 
-#: ../libracode/main.c:54 ../libidn/idn.c:76
+#: ../libidn/idn.c:87 ../libracode/main.c:56
 #, c-format
 msgid "    -h    help message (this message)\n"
 msgstr "    -h    도움말 (현재 메세지)\n"
 
-#: ../libracode/main.c:56
+#: ../libracode/main.c:58
 #, c-format
 msgid "    -u    convert Race code to EUC-KR\n"
 msgstr "    -u    racecode 를 EUC-KR로 변환\n"
 
-#: ../libidn/idn.c:78
+#: ../libidn/idn.c:90
 #, c-format
 msgid "    -u    convert punycode to EUC-KR\n"
 msgstr "    -u    punycode 를 EUC-KR로 변환\n"
 
-#: ../libracode/main.c:57 ../libidn/idn.c:79
+#: ../libidn/idn.c:91 ../libracode/main.c:59
 #, c-format
 msgid "    -v    verbose mode\n"
 msgstr "    -v    디버그 모드\n"
 
-#: ../whois.c:188
+#: ../whois.c:284
 #, c-format
 msgid "%s connecting to %s\n"
 msgstr "i%s 의 접속 에러 : %s\n"
 
-#: ../whois.c:170
+#: ../whois.c:266
 #, c-format
 msgid "%s initializing protocol stacks?!?\n"
 msgstr ""
 
-#: ../whois.c:163
+#: ../whois.c:259
 #, c-format
 msgid "%s while getting address for \"%s\"\n"
 msgstr "\"%s\" 에 접속하는 동안 발생한 에러 : %s\n"
 
-#: ../whois.c:117
+#: ../whois.c:213
 #, c-format
 msgid "%s while getting connection info for %s:%s\n"
 msgstr "%s:%s 에 접속하는 동안 발생한 에러 : %s\n"
 
-#: ../whois.c:156
+#: ../whois.c:252
 #, c-format
 msgid "%s while getting service info for %s\n"
 msgstr "%s 서비스에 발생한 에러 : %s\n"
 
-#: ../whois.c:211
+#: ../whois.c:307
 #, c-format
 msgid "%s while reading from socket\n"
 msgstr "소켓전송 에러 : %s\n"
 
-#: ../whois.c:341
+#: ../whois.c:437
 #, c-format
 msgid "------------------- Debug Message --------------------\n"
 msgstr ""
 
-#: ../whois.c:345
+#: ../whois.c:441
 #, c-format
 msgid ""
 "------------------- Debug Message --------------------\n"
 "\n"
 msgstr ""
 
-#: ../whois.c:198
+#: ../whois.c:294
 #, c-format
 msgid "===> Connect to %s success\n"
 msgstr "===> %s 에 접속 성공\n"
 
-#: ../whois.c:199
+#: ../whois.c:295
 #, c-format
 msgid ""
 "===> Query %s to server\n"
@@ -177,31 +184,31 @@ msgstr ""
 "===> 서버에 %s 를 질의 함\n"
 "\n"
 
-#: ../whois.c:89
+#: ../whois.c:114
 msgid "Timeout exceeded.\n"
 msgstr "요청 시간 초과.\n"
 
-#: ../whois.c:443
+#: ../whois.c:545
 #, c-format
 msgid "Usage: %s [OPTION...] query[@server[:port]]\n"
 msgstr "사용법: %s [OPTIONS...] 질의[@서버[:포트]]\n"
 
-#: ../libracode/main.c:52 ../libidn/idn.c:74
+#: ../libidn/idn.c:85 ../libracode/main.c:54
 #, c-format
 msgid "Usage: %s [OPTIONS...] convert_domain\n"
 msgstr "사용법: %s [OPTIONS...] 변환도메인\n"
 
-#: ../whois.c:453
+#: ../whois.c:556
 #, c-format
 msgid "default server is %s\n"
 msgstr "기본 서버: %s\n"
 
-#: ../whois.c:123
+#: ../whois.c:219
 #, c-format
 msgid "no results while getting connection info for %s:%s\n"
 msgstr "%s:%s 에 접속을 하는 동안 아무런 결과를 얻지 못함\n"
 
-#: ../libracode/main.c:53 ../libidn/idn.c:75 ../whois.c:445
+#: ../whois.c:547 ../libidn/idn.c:86 ../libracode/main.c:55
 #, c-format
 msgid "valid options:\n"
 msgstr "유효한 옵션들:\n"

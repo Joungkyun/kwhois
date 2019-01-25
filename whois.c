@@ -47,6 +47,10 @@
 #include <netdb.h>
 #include <ctype.h>
 
+#ifdef HAVE_GETOPT_H
+#include <getopt.h>
+#endif
+
 #ifdef HAVE_LIBOGC
 #	include <olibc/libidn.h>
 #	include <olibc/libpcre.h>
@@ -86,6 +90,22 @@ void str_toupper (char *buf);
 char * check_2depth (char * ext);
 
 char * ex = null;
+
+#ifdef HAVE_GETOPT_LONG
+static struct option long_options [] = { // {{{
+	/* Options without arguments: */
+	{ "help",          no_argument,       NULL, '?' },
+	{ "verbose",       no_argument,       NULL, 'v' },
+	{ "recurse-force", no_argument,       NULL, 'r' },
+	{ "recurse-off",   no_argument,       NULL, 'n' },
+
+	/* Options accepting an argument: */
+	{ "host",          required_argument, NULL, 'h' },
+	{ "port",          required_argument, NULL, 'p' },
+	{ "tmout",         required_argument, NULL, 't' },
+	{ 0, 0, 0, 0 }
+}; // }}}
+#endif
 
 // {{{ void alarm_handler (int signum)
 void alarm_handler (int signum) {
@@ -452,7 +472,11 @@ int main (int argc, char ** argv) {
 	if ( argc <= 1 )
 		help = 1;
 
-	while ( parse && ((i = getopt (argc, argv, "h:vrnp:Pt:-")) != -1) ) {
+#ifdef HAVE_GETOPT_LONG
+	while ( parse && ((i = getopt_long (argc, argv, "h:vrnp:t:-?", long_options, (int *) 0)) != -1) ) {
+#else
+	while ( parse && ((i = getopt (argc, argv, "h:vrnp:t:-?")) != -1) ) {
+#endif
 		switch (i) {
 			case 'h':
 				/* The -h option for traditional whois specifies
@@ -521,13 +545,14 @@ int main (int argc, char ** argv) {
 		fprintf (stderr, _("Usage: %s [OPTION...] query[@server[:port]]\n"),
 				strchr (argv[0], '/') ? strrchr (argv[0], '/') + 1 : argv[0]);
 		fprintf (stderr, _("valid options:\n"));
-		fprintf (stderr, _("       -h server  server name\n"));
-		fprintf (stderr, _("       -p port    server port\n"));
-		fprintf (stderr, _("       -t timeout query time limit\n"));
-		fprintf (stderr, _("       -r         force recursion\n"));
-		fprintf (stderr, _("       -n         disable recursion\n"));
-		fprintf (stderr, _("       -v         verbose mode\n"));
-		fprintf (stderr, _("       --         treat remaining arguments as part of the query\n"));
+		fprintf (stderr, _("       -h|--host=server   server name\n"));
+		fprintf (stderr, _("       -p|--post=port     server port\n"));
+		fprintf (stderr, _("       -t|--tmout=timeout query time limit\n"));
+		fprintf (stderr, _("       -r|--recurse-force force recursion\n"));
+		fprintf (stderr, _("       -n|--recurse-off   disable recursion\n"));
+		fprintf (stderr, _("       -v|--verbose       verbose mode\n"));
+		fprintf (stderr, _("       --                 treat remaining arguments as part of the query\n"));
+		fprintf (stderr, _("       -?|--help          print this messages\n"));
 		fprintf (stderr, _("default server is %s\n"), DEFAULT_SERVER);
 		fprintf (stderr, "%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
 		exit (1);
